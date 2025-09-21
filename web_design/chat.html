@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>المحادثة - مساعد كفو</title>
+
+    <!-- Bootstrap 5.3.3 RTL -->
+    <link rel="stylesheet" type="text/css" id="themestylesheet" href="assets/css/ksa.bootstrap.rtl.css" />
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/d27eb6fc68.js" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap"
+        rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/chat.css" />
+    <link rel="stylesheet" href="assets/css/user-profile.css" />
+    <link rel="stylesheet" href="assets/css/theme-support.css" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-resizer" id="sidebarResizer"></div>
+        <div class="sidebar-header">
+            <a href="index.html" class="sidebar-brand">
+                <i class="kfu-icon kfu-icon-primary me-2"></i>
+                مساعد كفو
+            </a>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Fixed Top Buttons -->
+            <div class="sidebar-fixed-top">
+                <button class="new-chat-btn p-2" onclick="startNewChat()">
+                    <i class="fa-solid fa-comment-medical float-start me-2"></i>
+                    محادثة جديدة
+                </button>
+                <button class="btn btn-outline-primary p-2" onclick="searchManager.openSearchModal()">
+                    <i class="fa-solid fa-search float-start me-2"></i>
+                    بحث
+                </button>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="sidebar-scrollable">
+                <!-- Folders Section -->
+                <div class="folders-section">
+                    <div class="folders-header p-3 border-bottom d-flex justify-content-between align-items-center"
+                        onclick="folderManager.toggleAccordion('folders')">
+                        <h6 class="text-muted mb-0">
+                            <i class="fa-duotone fa-light fa-folder text-primary me-2"></i>
+                            المجلدات
+                        </h6>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary" onclick="folderManager.addNewFolder()"
+                                title="إضافة مجلد جديد">
+                                <i class="fa-duotone fa-light fa-plus"></i>
+                            </button>
+                            <button class="btn btn-sm me-1" onclick="folderManager.toggleAccordion('folders')"
+                                title="طي/عرض المجلدات">
+                                <i class="fa-duotone fa-light fa-angle-down"></i>
+                            </button>
+                            <!-- <button
+                                class="btn btn-sm btn-outline-secondary me-1"
+                                onclick="folderManager.openAllAccordions()"
+                                title="فتح الكل">
+                                <i class="fa-duotone fa-light fa-angles-down"></i>
+                            </button>
+                            <button
+                                class="btn btn-sm btn-outline-secondary me-1"
+                                onclick="folderManager.closeAllAccordions()"
+                                title="إغلاق الكل">
+                                <i class="fa-duotone fa-light fa-angles-up"></i>
+                            </button> -->
+                        </div>
+                    </div>
+
+                    <div id="foldersAccordionBody">
+                        <div class="folder-item folder-item-fixed" id="folder-academic"
+                            onclick="folderManager.openFolder('academic', event)">
+                            <div class="folder-icon">
+                                <i class="fa-duotone fa-light fa-graduation-cap"></i>
+                            </div>
+                            <div class="folder-content">
+                                <div class="folder-name">الشؤون الأكاديمية</div>
+                                <div class="folder-count">2 محادثات</div>
+                            </div>
+                            <div class="folder-actions">
+                                <button class="btn">
+                                    <i class="fa-duotone fa-light fa-lock-keyhole"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="folder-item folder-item-fixed" id="folder-archived"
+                            onclick="folderManager.openFolder('archived', event)">
+                            <div class="folder-icon">
+                                <i class="fa-duotone fa-light  fa-archive"></i>
+                            </div>
+                            <div class="folder-content">
+                                <div class="folder-name">الأرشيف</div>
+                                <div class="folder-count">0 محادثات</div>
+                            </div>
+                            <div class="folder-actions">
+                                <button class="btn">
+                                    <i class="fa-duotone fa-light fa-lock-keyhole"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="folder-list">
+                            <div class="folder-item" id="folder-all" onclick="folderManager.openFolder('all', event)">
+                                <div class="folder-icon">
+                                    <i class="fa-duotone fa-light fa-inbox"></i>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="folder-name">جميع المحادثات</div>
+                                    <div class="folder-count">4 محادثات</div>
+                                </div>
+                                <div class="folder-actions">
+                                    <a href="chat-history.html" class="btn" title="عرض سجل المحادثات">
+                                        <i class="fa-duotone fa-light fa-history"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="folder-item" id="folder-programming"
+                                onclick="folderManager.openFolder('programming', event)">
+                                <div class="folder-icon">
+                                    <i class="fa-duotone fa-light fa-code"></i>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="folder-name">البرمجة</div>
+                                    <div class="folder-count">1 محادثة</div>
+                                </div>
+                                <div class="folder-actions">
+                                    <button class="btn" onclick="toggleFolderDropdown(event, 'programming')">
+                                        <i class="fa-duotone fa-light fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="folder-dropdown-menu" id="folder-dropdown-programming">
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.renameFolder('programming')">
+                                            <i class="fa-duotone fa-light fa-edit"></i>
+                                            إعادة تسمية
+                                        </div>
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.openIconModal('programming')">
+                                            <i class="fa-duotone fa-light fa-palette"></i>
+                                            تغيير الأيقونة
+                                        </div>
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.deleteFolder('programming')">
+                                            <i class="fa-duotone fa-light fa-trash"></i>
+                                            حذف المجلد
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="folder-item" id="folder-datastructures"
+                                onclick="folderManager.openFolder('datastructures', event)">
+                                <div class="folder-icon">
+                                    <i class="fa-duotone fa-light fa-sitemap"></i>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="folder-name">هياكل البيانات</div>
+                                    <div class="folder-count">1 محادثة</div>
+                                </div>
+                                <div class="folder-actions">
+                                    <button class="btn" onclick="toggleFolderDropdown(event, 'datastructures')">
+                                        <i class="fa-duotone fa-light fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="folder-dropdown-menu" id="folder-dropdown-datastructures">
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.renameFolder('datastructures')">
+                                            <i class="fa-duotone fa-light fa-edit"></i>
+                                            إعادة تسمية
+                                        </div>
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.openIconModal('datastructures')">
+                                            <i class="fa-duotone fa-light fa-palette"></i>
+                                            تغيير الأيقونة
+                                        </div>
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.deleteFolder('datastructures')">
+                                            <i class="fa-duotone fa-light fa-trash"></i>
+                                            حذف المجلد
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="folder-item" id="folder-algorithms"
+                                onclick="folderManager.openFolder('algorithms', event)">
+                                <div class="folder-icon">
+                                    <i class="fa-duotone fa-light fa-brain"></i>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="folder-name">الخوارزميات</div>
+                                    <div class="folder-count">0 محادثات</div>
+                                </div>
+                                <div class="folder-actions">
+                                    <button class="btn"
+                                        onclick="folderManager.toggleFolderDropdown(event, 'algorithms')">
+                                        <i class="fa-duotone fa-light fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="folder-dropdown-menu" id="folder-dropdown-algorithms">
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.renameFolder('algorithms')">
+                                            <i class="fa-duotone fa-light fa-edit"></i>
+                                            إعادة تسمية
+                                        </div>
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.openIconModal('algorithms')">
+                                            <i class="fa-duotone fa-light fa-palette"></i>
+                                            تغيير الأيقونة
+                                        </div>
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.deleteFolder('algorithms')">
+                                            <i class="fa-duotone fa-light fa-trash"></i>
+                                            حذف المجلد
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="folder-item" id="folder-databases"
+                                onclick="folderManager.openFolder('databases', event)">
+                                <div class="folder-icon">
+                                    <i class="fa-duotone fa-light fa-database"></i>
+                                </div>
+                                <div class="folder-content">
+                                    <div class="folder-name">قواعد البيانات</div>
+                                    <div class="folder-count">0 محادثات</div>
+                                </div>
+                                <div class="folder-actions">
+                                    <button class="btn"
+                                        onclick="folderManager.toggleFolderDropdown(event, 'databases')">
+                                        <i class="fa-duotone fa-light fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="folder-dropdown-menu" id="folder-dropdown-databases">
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.renameFolder('databases')">
+                                            <i class="fa-duotone fa-light fa-edit"></i>
+                                            إعادة تسمية
+                                        </div>
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.openIconModal('databases')">
+                                            <i class="fa-duotone fa-light fa-palette"></i>
+                                            تغيير الأيقونة
+                                        </div>
+                                        <div class="folder-dropdown-item"
+                                            onclick="folderManager.deleteFolder('databases')">
+                                            <i class="fa-duotone fa-light fa-trash"></i>
+                                            حذف المجلد
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-history">
+                    <div class="folders-header p-3 border-bottom d-flex justify-content-between align-items-center"
+                        onclick="folderManager.toggleAccordion('chat')">
+                        <h6 class="text-muted mb-0">
+                            <i class="fa-duotone fa-light fa-comments text-primary me-2"></i>
+                            المحادثات الأخيرة
+                        </h6>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary" onclick="startNewChat()"
+                                title="محادثة جديدة">
+                                <i class="fa-duotone fa-light fa-plus"></i>
+                            </button>
+                            <button class="btn btn-sm" onclick="folderManager.toggleAccordion('chat')"
+                                title="طي/عرض المحادثات">
+                                <i class="fa-duotone fa-light fa-angle-down"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="chatHistoryAccordionBody">
+                        <a href="#" class="chat-item" onclick="loadChat('chat1', event)">
+                            <div class="chat-item-icon">
+                                <i class="fa-duotone fa-light fa-comments"></i>
+                            </div>
+                            <div class="chat-item-content">
+                                <div class="chat-item-title">مساعدة في البرمجة</div>
+                                <div class="chat-item-preview">أحتاج مساعدة في حل مشكلة برمجية...</div>
+                            </div>
+                            <div class="chat-item-actions">
+                                <button class="btn" onclick="toggleChatDropdown(event, 'chat1')">
+                                    <i class="fa-duotone fa-light fa-ellipsis-v"></i>
+                                </button>
+                                <div class="chat-dropdown-menu" id="dropdown-chat1">
+                                    <div class="chat-dropdown-item" onclick="shareChatItem('chat1')">
+                                        <i class="fa-duotone fa-light fa-share"></i>
+                                        مشاركة
+                                    </div>
+                                    <div class="chat-dropdown-item" onclick="renameChat('chat1')">
+                                        <i class="fa-duotone fa-light fa-edit"></i>
+                                        إعادة تسمية
+                                    </div>
+                                    <div class="chat-dropdown-item chat-dropdown-submenu">
+                                        <i class="fa-duotone fa-light fa-folder-plus"></i>
+                                        إضافة إلى مجلد
+                                        <i class="fa-duotone fa-light fa-chevron-left ms-auto"></i>
+                                        <div class="chat-dropdown-menu">
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat1', 'new')">
+                                                <i class="fa-duotone fa-light fa-plus"></i>
+                                                مجلد جديد
+                                            </div>
+                                            <div class="chat-dropdown-divider"></div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat1', 'programming')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                البرمجة
+                                            </div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat1', 'datastructures')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                هياكل البيانات
+                                            </div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat1', 'algorithms')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                الخوارزميات
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat1', 'databases')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                قواعد البيانات
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat1', 'academic')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                الشؤون الأكاديمية
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat1', 'new')">
+                                                <i class="fa-duotone fa-light fa-plus"></i>
+                                                إضافة إلى مجلد جديد
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chat-dropdown-item" onclick="archiveChat('chat1')">
+                                        <i class="fa-duotone fa-light fa-archive"></i>
+                                        أرشيف
+                                    </div>
+                                    <div class="chat-dropdown-divider"></div>
+                                    <div class="chat-dropdown-item danger" onclick="deleteChat(event, 'chat1')">
+                                        <i class="fa-duotone fa-light fa-trash"></i>
+                                        حذف
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#" class="chat-item" onclick="loadChat('chat2', event)">
+                            <div class="chat-item-icon">
+                                <i class="fa-duotone fa-light fa-comments"></i>
+                            </div>
+                            <div class="chat-item-content">
+                                <div class="chat-item-title">مراجعة هياكل البيانات</div>
+                                <div class="chat-item-preview">شرح الأشجار الثنائية والبحث...</div>
+                            </div>
+                            <div class="chat-item-actions">
+                                <button class="btn" onclick="toggleChatDropdown(event, 'chat2')">
+                                    <i class="fa-duotone fa-light fa-ellipsis-v"></i>
+                                </button>
+                                <div class="chat-dropdown-menu" id="dropdown-chat2">
+                                    <div class="chat-dropdown-item" onclick="shareChatItem('chat2')">
+                                        <i class="fa-duotone fa-share"></i>
+                                        مشاركة
+                                    </div>
+                                    <div class="chat-dropdown-item" onclick="renameChat('chat2')">
+                                        <i class="fa-duotone fa-light fa-edit"></i>
+                                        إعادة تسمية
+                                    </div>
+                                    <div class="chat-dropdown-item chat-dropdown-submenu">
+                                        <i class="fa-duotone fa-light fa-folder-plus"></i>
+                                        إضافة إلى مجلد
+                                        <i class="fa-duotone fa-light fa-chevron-left ms-auto"></i>
+                                        <div class="chat-dropdown-menu">
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat2', 'new')">
+                                                <i class="fa-duotone fa-light fa-plus"></i>
+                                                مجلد جديد
+                                            </div>
+                                            <div class="chat-dropdown-divider"></div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat2', 'programming')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                البرمجة
+                                            </div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat2', 'datastructures')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                هياكل البيانات
+                                            </div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat2', 'algorithms')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                الخوارزميات
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat2', 'databases')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                قواعد البيانات
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat2', 'academic')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                الشؤون الأكاديمية
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat2', 'new')">
+                                                <i class="fa-duotone fa-light fa-plus"></i>
+                                                إضافة إلى مجلد جديد
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chat-dropdown-item" onclick="archiveChat('chat2')">
+                                        <i class="fa-duotone fa-light fa-archive"></i>
+                                        أرشيف
+                                    </div>
+                                    <div class="chat-dropdown-divider"></div>
+                                    <div class="chat-dropdown-item danger" onclick="deleteChat(event, 'chat2')">
+                                        <i class="fa-duotone fa-light fa-trash"></i>
+                                        حذف
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#" class="chat-item" onclick="loadChat('chat3', event)">
+                            <div class="chat-item-icon">
+                                <i class="fa-duotone fa-light fa-comments"></i>
+                            </div>
+                            <div class="chat-item-content">
+                                <div class="chat-item-title">المواعيد الأكاديمية</div>
+                                <div class="chat-item-preview">متى موعد التسجيل للفصل القادم؟</div>
+                            </div>
+                            <div class="chat-item-actions">
+                                <button class="btn" onclick="toggleChatDropdown(event, 'chat3')">
+                                    <i class="fa-duotone fa-light fa-ellipsis-v"></i>
+                                </button>
+                                <div class="chat-dropdown-menu" id="dropdown-chat3">
+                                    <div class="chat-dropdown-item" onclick="shareChatItem('chat3')">
+                                        <i class="fa-duotone fa-light fa-share"></i>
+                                        مشاركة
+                                    </div>
+                                    <div class="chat-dropdown-item" onclick="renameChat('chat3')">
+                                        <i class="fa-duotone fa-light fa-edit"></i>
+                                        إعادة تسمية
+                                    </div>
+                                    <div class="chat-dropdown-item chat-dropdown-submenu">
+                                        <i class="fa-duotone fa-light fa-folder-plus"></i>
+                                        إضافة إلى مجلد
+                                        <i class="fa-duotone fa-light fa-chevron-left ms-auto"></i>
+                                        <div class="chat-dropdown-menu">
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat3', 'new')">
+                                                <i class="fa-duotone fa-light fa-plus"></i>
+                                                مجلد جديد
+                                            </div>
+                                            <div class="chat-dropdown-divider"></div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat3', 'programming')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                البرمجة
+                                            </div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat3', 'datastructures')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                هياكل البيانات
+                                            </div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat3', 'algorithms')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                الخوارزميات
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat3', 'databases')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                قواعد البيانات
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat3', 'academic')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                الشؤون الأكاديمية
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat3', 'new')">
+                                                <i class="fa-duotone fa-light fa-plus"></i>
+                                                إضافة إلى مجلد جديد
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chat-dropdown-item" onclick="archiveChat('chat3')">
+                                        <i class="fa-duotone fa-light fa-archive"></i>
+                                        أرشيف
+                                    </div>
+                                    <div class="chat-dropdown-divider"></div>
+                                    <div class="chat-dropdown-item danger" onclick="deleteChat(event, 'chat3')">
+                                        <i class="fa-duotone fa-light fa-trash"></i>
+                                        حذف
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#" class="chat-item" onclick="loadChat('chat4', event)">
+                            <div class="chat-item-icon">
+                                <i class="fa-duotone fa-light fa-comments"></i>
+                            </div>
+                            <div class="chat-item-content">
+                                <div class="chat-item-title">نصائح البرمجة</div>
+                                <div class="chat-item-preview">كيف أحسن مهاراتي في البرمجة؟</div>
+                            </div>
+                            <div class="chat-item-actions">
+                                <button class="btn" onclick="toggleChatDropdown(event, 'chat4')">
+                                    <i class="fa-duotone fa-light fa-ellipsis-v"></i>
+                                </button>
+                                <div class="chat-dropdown-menu" id="dropdown-chat4">
+                                    <div class="chat-dropdown-item" onclick="shareChatItem('chat4')">
+                                        <i class="fa-duotone fa-light fa-share"></i>
+                                        مشاركة
+                                    </div>
+                                    <div class="chat-dropdown-item" onclick="renameChat('chat4')">
+                                        <i class="fa-duotone fa-light fa-edit"></i>
+                                        إعادة تسمية
+                                    </div>
+                                    <div class="chat-dropdown-item chat-dropdown-submenu">
+                                        <i class="fa-duotone fa-light fa-folder-plus"></i>
+                                        إضافة إلى مجلد
+                                        <i class="fa-duotone fa-light fa-chevron-left ms-auto"></i>
+                                        <div class="chat-dropdown-menu">
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat4', 'new')">
+                                                <i class="fa-duotone fa-light fa-plus"></i>
+                                                مجلد جديد
+                                            </div>
+                                            <div class="chat-dropdown-divider"></div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat4', 'programming')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                البرمجة
+                                            </div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat4', 'datastructures')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                هياكل البيانات
+                                            </div>
+                                            <div class="chat-dropdown-item"
+                                                onclick="addToFolder('chat4', 'algorithms')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                الخوارزميات
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat4', 'databases')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                قواعد البيانات
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat4', 'academic')">
+                                                <i class="fa-duotone fa-light fa-folder"></i>
+                                                الشؤون الأكاديمية
+                                            </div>
+                                            <div class="chat-dropdown-item" onclick="addToFolder('chat4', 'new')">
+                                                <i class="fa-duotone fa-light fa-plus"></i>
+                                                إضافة إلى مجلد جديد
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chat-dropdown-item" onclick="archiveChat('chat4')">
+                                        <i class="fa-duotone fa-light fa-archive"></i>
+                                        أرشيف
+                                    </div>
+                                    <div class="chat-dropdown-divider"></div>
+                                    <div class="chat-dropdown-item danger" onclick="deleteChat(event, 'chat4')">
+                                        <i class="fa-duotone fa-light fa-trash"></i>
+                                        حذف
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div> <!-- End sidebar-scrollable -->
+        </div> <!-- End sidebar-content -->
+
+        <!-- Footer جديد -->
+        <div class="sidebar-footer-new" id="sidebarFooterNew">
+            <div class="footer-content">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="settings.html" class="sidebar-menu-link">
+                            <i class="fas fa-cog sidebar-menu-icon"></i>
+                            الإعدادات
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="help.html" class="sidebar-menu-link">
+                            <i class="fas fa-question-circle sidebar-menu-icon"></i>
+                            المساعدة
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="feedback.html" class="sidebar-menu-link">
+                            <i class="fas fa-comment-dots sidebar-menu-icon"></i>
+                            إرسال ملاحظات
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="index.html" class="sidebar-menu-link">
+                            <i class="fas fa-home sidebar-menu-icon"></i>
+                            الصفحة الرئيسية
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link" onclick="logout()">
+                            <i class="fas fa-sign-out-alt sidebar-menu-icon"></i>
+                            تسجيل الخروج
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- User Profile Section -->
+        <div class="user-profile-section">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fa-duotone fa-light fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">أحمد محمد</div>
+                    <div class="user-role">طالب</div>
+                </div>
+                <div class="user-dropdown-toggle">
+                    <i class="fa-duotone fa-light fa-chevron-up"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="main-chat">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fa-duotone fa-light fa-bars"></i>
+                </button>
+                <h5 class="chat-title" id="chatTitle">مساعدة في الرياضيات</h5>
+            </div>
+            <div class="chat-actions">
+                <button class="chat-action-btn" onclick="clearChat()" title="مسح المحادثة">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="chat-action-btn" onclick="exportChat()" title="تصدير المحادثة">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button class="chat-action-btn" onclick="shareChat()" title="مشاركة المحادثة">
+                    <i class="fas fa-share"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <!-- Welcome Message -->
+            <div class="welcome-message" id="welcomeMessage">
+                <div class="welcome-icon">
+                    <i class="kfu-icon kfu-icon-primary"></i>
+                </div>
+                <h2 class="welcome-title">مرحباً بك في مساعد كفو!</h2>
+                <p class="welcome-text">
+                    أنا مساعدك الذكي. يمكنني مساعدتك في المذاكرة، الشؤون الأكاديمية، وحل المشاكل الدراسية.
+                </p>
+                <!-- Suggestion Cards -->
+                <div class="suggestion-cards">
+                    <div class="suggestion-card" onclick="simulateAIResponse('أريد مساعدة في حل مشكلة برمجية')">
+                        <div style="font-size: 1.5rem; color: var(--bs-primary); margin-bottom: 10px">📖</div>
+                        <h6>المقررات الدراسية</h6>
+                        <p class="text-muted small mb-0">مساعدة في أحد المقررات الدراسة</p>
+                    </div>
+                    <div class="suggestion-card" onclick="simulateAIResponse('متى موعد الامتحانات النهائية؟')">
+                        <div style="font-size: 1.5rem; color: var(--bs-primary); margin-bottom: 10px">📅</div>
+                        <h6>الجداول الدراسية</h6>
+                        <p class="text-muted small mb-0">معرفة مواعيد الامتحانات والمحاضرات</p>
+                    </div>
+                    <div class="suggestion-card" onclick="simulateAIResponse('كيف أستعلم عن درجاتي؟')">
+                        <div style="font-size: 1.5rem; color: var(--bs-primary); margin-bottom: 10px">📊</div>
+                        <h6>الدرجات والتقديرات</h6>
+                        <p class="text-muted small mb-0">الاستعلام عن النتائج والدرجات</p>
+                    </div>
+                    <div class="suggestion-card" onclick="simulateAIResponse('أريد أن أستفسر عن موضوع بخصوص الحضور')">
+                        <div style="font-size: 1.5rem; color: var(--bs-primary); margin-bottom: 10px">🎓</div>
+                        <h6>الشؤون الأكاديمية</h6>
+                        <p class="text-muted small mb-0">الاستفسار عن الشؤون الأكاديمية</p>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <a href="#" class="quick-action-btn"
+                        onclick="simulateAIResponse('أحتاج مساعدة في حل مشكلة برمجية')">
+                        <i class="fa-duotone fa-light fa-code me-2"></i>
+                        مساعدة في البرمجة
+                    </a>
+                    <a href="#" class="quick-action-btn"
+                        onclick="simulateAIResponse('ما هي المواعيد المهمة للفصل الدراسي؟')">
+                        <i class="fa-duotone fa-light fa-calendar me-2"></i>
+                        المواعيد الأكاديمية
+                    </a>
+                    <a href="#" class="quick-action-btn" onclick="simulateAIResponse('كيف أحسن مهاراتي في البرمجة؟')">
+                        <i class="fa-duotone fa-light fa-brain me-2"></i>
+                        نصائح البرمجة
+                    </a>
+                    <a href="#" class="quick-action-btn" onclick="simulateAIResponse('أحتاج شرح لهياكل البيانات')">
+                        <i class="fa-duotone fa-light fa-sitemap me-2"></i>
+                        هياكل البيانات
+                    </a>
+                </div>
+            </div>
+
+            <!-- Chat Messages Container -->
+            <div id="messagesContainer" style="display: none">
+                <!-- سيتم إضافة الرسائل ديناميكياً هنا -->
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="message-avatar">
+                    <i class="kfu-icon kfu-icon-white"></i>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span class="me-2">مساعد كفو يكتب...</span>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <textarea class="chat-input" id="chatInput"
+                    placeholder="اكتب رسالتك هنا... اضغط Enter للإرسال، Shift+Enter للسطر الجديد" rows="1"></textarea>
+                <div class="chat-input-actions">
+                    <button class="input-action-btn" onclick="attachFile()" title="إرفاق ملف">
+                        <i class="fa-duotone fa-light fa-paperclip"></i>
+                    </button>
+                    <button class="input-action-btn" onclick="recordVoice()" title="تسجيل صوتي">
+                        <i class="fa-duotone fa-light fa-microphone"></i>
+                    </button>
+                </div>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                    <i class="fa-duotone fa-light fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="text-center">
+                <small class="text-muted">
+                    <i class="fa fa-info-circle me-2"></i>
+                    مساعد كفو قد يرتكب أخطاء. يرجى التحقق من المعلومات المهمة.
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Folder Modal -->
+    <div class="modal fade" id="addFolderModal" tabindex="-1" aria-labelledby="addFolderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFolderModalLabel">
+                        <i class="fa-duotone fa-light fa-folder-plus me-2"></i>
+                        إضافة مجلد جديد
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addFolderForm">
+                        <div class="mb-3">
+                            <label for="folderName" class="form-label">اسم المجلد</label>
+                            <input type="text" class="form-control" id="folderName" placeholder="أدخل اسم المجلد"
+                                required />
+                            <div class="form-text">أدخل اسماً وصفياً للمجلد الجديد</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="folderIcon" class="form-label">أيقونة المجلد</label>
+                            <select class="form-select" id="folderIcon">
+                                <option value="fa-duotone fa-light fa-folder">📁 مجلد عادي</option>
+                                <option value="fa-duotone fa-light fa-code">💻 برمجة</option>
+                                <option value="fa-duotone fa-light fa-database">🗄️ قاعدة بيانات</option>
+                                <option value="fa-duotone fa-light fa-brain">🧠 خوارزميات</option>
+                                <option value="fa-duotone fa-light fa-sitemap">🔗 هياكل بيانات</option>
+                                <option value="fa-duotone fa-light fa-graduation-cap">🎓 أكاديمي</option>
+                                <option value="fa-duotone fa-light fa-book">📚 دراسة</option>
+                                <option value="fa-duotone fa-light fa-lightbulb">💡 أفكار</option>
+                                <option value="fa-duotone fa-light fa-star">⭐ مهم</option>
+                                <option value="fa-duotone fa-light fa-heart">❤️ مفضل</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" onclick="folderManager.createNewFolder()">
+                        <i class="fa-duotone fa-light fa-plus me-2"></i>
+                        إنشاء المجلد
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Icon Modal -->
+    <div class="modal fade" id="changeIconModal" tabindex="-1" aria-labelledby="changeIconModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changeIconModalLabel">
+                        <i class="fa-duotone fa-light fa-palette me-2"></i>
+                        تغيير أيقونة المجلد
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="icon-categories">
+                        <div class="category-tabs">
+                            <button class="category-tab active" data-category="programming">
+                                <i class="fa-duotone fa-light fa-code"></i>
+                                البرمجة
+                            </button>
+                            <button class="category-tab" data-category="mathematics">
+                                <i class="fa-duotone fa-light fa-square-root-alt"></i>
+                                الرياضيات
+                            </button>
+                            <button class="category-tab" data-category="science">
+                                <i class="fa-duotone fa-light fa-flask"></i>
+                                العلوم
+                            </button>
+                            <button class="category-tab" data-category="study">
+                                <i class="fa-duotone fa-light fa-book"></i>
+                                الدراسة
+                            </button>
+                            <button class="category-tab" data-category="creativity">
+                                <i class="fa-duotone fa-light fa-paint-brush"></i>
+                                الإبداع
+                            </button>
+                            <button class="category-tab" data-category="collaboration">
+                                <i class="fa-duotone fa-light fa-users"></i>
+                                العمل الجماعي
+                            </button>
+                        </div>
+
+                        <div class="category-content">
+                            <div class="category-panel active" id="panel-programming">
+                                <div class="icon-grid" id="icon-grid-programming-modal">
+                                    <!-- سيتم تحميل الأيقونات ديناميكياً -->
+                                </div>
+                            </div>
+                            <div class="category-panel" id="panel-mathematics">
+                                <div class="icon-grid" id="icon-grid-mathematics-modal">
+                                    <!-- سيتم تحميل الأيقونات ديناميكياً -->
+                                </div>
+                            </div>
+                            <div class="category-panel" id="panel-science">
+                                <div class="icon-grid" id="icon-grid-science-modal">
+                                    <!-- سيتم تحميل الأيقونات ديناميكياً -->
+                                </div>
+                            </div>
+                            <div class="category-panel" id="panel-study">
+                                <div class="icon-grid" id="icon-grid-study-modal">
+                                    <!-- سيتم تحميل الأيقونات ديناميكياً -->
+                                </div>
+                            </div>
+                            <div class="category-panel" id="panel-creativity">
+                                <div class="icon-grid" id="icon-grid-creativity-modal">
+                                    <!-- سيتم تحميل الأيقونات ديناميكياً -->
+                                </div>
+                            </div>
+                            <div class="category-panel" id="panel-collaboration">
+                                <div class="icon-grid" id="icon-grid-collaboration-modal">
+                                    <!-- سيتم تحميل الأيقونات ديناميكياً -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa-duotone fa-light fa-times me-2"></i>
+                        إلغاء
+                    </button>
+                    <button type="button" class="btn btn-primary" id="applyIconBtn" disabled>
+                        <i class="fa-duotone fa-light fa-check me-2"></i>
+                        تطبيق الأيقونة
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-body border-0">
+                    <!-- صندوق البحث في الهيدر -->
+                    <div class="search-container w-100 me-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control" id="searchInput" placeholder="ابحث في المحادثات..."
+                                autocomplete="off">
+                            <button class="btn btn-outline-secondary" type="button" id="clearSearchBtn">
+                                <i class="fa-duotone fa-light fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body">
+
+                    <!-- نتائج البحث -->
+                    <div class="search-results">
+                        <div class="search-tabs">
+                            <button class="search-tab active" data-tab="recent">
+                                <i class="fa-duotone fa-light fa-clock me-2"></i>
+                                المحادثات الأخيرة
+                            </button>
+                            <button class="search-tab" data-tab="all">
+                                <i class="fa-duotone fa-light fa-search me-2"></i>
+                                البحث الشامل
+                            </button>
+                        </div>
+
+                        <div class="search-content">
+                            <!-- المحادثات الأخيرة -->
+                            <div class="search-panel active" id="panel-recent">
+                                <div class="recent-chats" id="recentChatsList">
+                                    <!-- سيتم تحميل المحادثات الأخيرة ديناميكياً -->
+                                </div>
+                            </div>
+
+                            <!-- البحث الشامل -->
+                            <div class="search-panel" id="panel-all">
+                                <div class="search-results-list" id="searchResultsList">
+                                    <!-- نتائج البحث ستظهر هنا -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="assets/js/icons.js"></script>
+    <script src="assets/js/kfu-icon.js"></script>
+    <script src="assets/js/theme-switcher.js"></script>
+    <script src="assets/js/settings-manager.js"></script>
+    <script src="assets/js/font-manager.js"></script>
+    <script src="assets/js/notification-manager.js"></script>
+    <script src="assets/js/user-profile.js"></script>
+    <script src="assets/js/folders.js"></script>
+    <script src="assets/js/chat-manager.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/chat.js"></script>
+    <script src="assets/js/search-manager.js"></script>
+</body>
+
+</html>

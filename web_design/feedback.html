@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إرسال ملاحظات - مساعد كفو</title>
+
+    <!-- Bootstrap 5.3.3 RTL -->
+    <link rel="stylesheet" type="text/css" id="themestylesheet" href="assets/css/ksa.bootstrap.rtl.css" />
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/d27eb6fc68.js" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap"
+        rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/chat.css" />
+    <link rel="stylesheet" href="assets/css/user-profile.css" />
+    <link rel="stylesheet" href="assets/css/feedback.css" />
+    <link rel="stylesheet" href="assets/css/theme-support.css" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-resizer" id="sidebarResizer"></div>
+        <div class="sidebar-header">
+            <a href="index.html" class="sidebar-brand">
+                <i class="kfu-icon kfu-icon-primary me-2"></i>
+                مساعد كفو
+            </a>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="feedback-nav">
+                <div class="p-3 border-bottom">
+                    <h6 class="text-muted mb-0">
+                        <i class="fas fa-comment-dots me-2"></i>
+                        إرسال الملاحظات
+                    </h6>
+                </div>
+
+                <div class="feedback-menu">
+                    <a href="#feedback-form" class="feedback-menu-item active"
+                        onclick="showFeedbackSection('feedback-form')">
+                        <i class="fas fa-edit"></i>
+                        <span>نموذج الملاحظات</span>
+                    </a>
+                    <a href="#my-feedback" class="feedback-menu-item" onclick="showFeedbackSection('my-feedback')">
+                        <i class="fas fa-history"></i>
+                        <span>ملاحظاتي السابقة</span>
+                    </a>
+                    <a href="#contact-info" class="feedback-menu-item" onclick="showFeedbackSection('contact-info')">
+                        <i class="fas fa-info-circle"></i>
+                        <span>معلومات التواصل</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer جديد -->
+        <div class="sidebar-footer-new" id="sidebarFooterNew">
+            <div class="footer-content">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="chat.html" class="sidebar-menu-link">
+                            <i class="fas fa-comments sidebar-menu-icon"></i>
+                            العودة للمحادثة
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="help.html" class="sidebar-menu-link">
+                            <i class="fas fa-question-circle sidebar-menu-icon"></i>
+                            المساعدة
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="settings.html" class="sidebar-menu-link">
+                            <i class="fas fa-cog sidebar-menu-icon"></i>
+                            الإعدادات
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="index.html" class="sidebar-menu-link">
+                            <i class="fas fa-home sidebar-menu-icon"></i>
+                            الصفحة الرئيسية
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link" onclick="logout()">
+                            <i class="fas fa-sign-out-alt sidebar-menu-icon"></i>
+                            تسجيل الخروج
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- User Profile Section -->
+        <div class="user-profile-section">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fa-duotone fa-light fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">أحمد محمد</div>
+                    <div class="user-role">طالب</div>
+                </div>
+                <div class="user-dropdown-toggle">
+                    <i class="fa-duotone fa-light fa-chevron-up"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Feedback Area -->
+    <div class="main-feedback">
+        <!-- Feedback Header -->
+        <div class="feedback-header">
+            <div class="feedback-header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h4 class="feedback-title" id="feedbackTitle">نموذج الملاحظات</h4>
+            </div>
+            <div class="feedback-actions">
+                <button class="btn btn-outline-primary me-2" onclick="clearForm()">
+                    <i class="fas fa-eraser me-2"></i>
+                    مسح النموذج
+                </button>
+                <button class="btn btn-primary" onclick="saveDraft()">
+                    <i class="fas fa-save me-2"></i>
+                    حفظ كمسودة
+                </button>
+            </div>
+        </div>
+
+        <!-- Feedback Content -->
+        <div class="feedback-content">
+            <!-- Feedback Form Section -->
+            <div class="feedback-section active" id="feedback-form-section">
+                <div class="feedback-card">
+                    <div class="feedback-card-header">
+                        <h5><i class="fas fa-edit me-2"></i>نموذج إرسال الملاحظات</h5>
+                        <p class="text-muted">شاركنا ملاحظاتك واقتراحاتك لتحسين التطبيق</p>
+                    </div>
+                    <div class="feedback-card-body">
+                        <form id="feedbackForm" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="feedbackName" class="form-label">الاسم <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="feedbackName" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="feedbackEmail" class="form-label">البريد الإلكتروني <span
+                                                class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="feedbackEmail" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="feedbackType" class="form-label">نوع الملاحظة <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-select" id="feedbackType" required>
+                                            <option value="">اختر نوع الملاحظة</option>
+                                            <option value="bug">الإبلاغ عن خطأ</option>
+                                            <option value="feature">طلب ميزة جديدة</option>
+                                            <option value="improvement">اقتراح تحسين</option>
+                                            <option value="complaint">شكوى</option>
+                                            <option value="compliment">إشادة</option>
+                                            <option value="other">أخرى</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="feedbackPriority" class="form-label">الأولوية</label>
+                                        <select class="form-select" id="feedbackPriority">
+                                            <option value="low">منخفضة</option>
+                                            <option value="medium" selected>متوسطة</option>
+                                            <option value="high">عالية</option>
+                                            <option value="urgent">عاجلة</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="feedbackSubject" class="form-label">الموضوع <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="feedbackSubject" required
+                                    placeholder="أدخل عنوان مختصر للملاحظة">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="feedbackMessage" class="form-label">الملاحظة <span
+                                        class="text-danger">*</span></label>
+                                <textarea class="form-control" id="feedbackMessage" rows="6" required
+                                    placeholder="اكتب ملاحظتك بالتفصيل..."></textarea>
+                                <div class="form-text">يمكنك وصف المشكلة أو الاقتراح بالتفصيل لمساعدتنا في فهم احتياجاتك
+                                    بشكل أفضل.</div>
+                            </div>
+
+                            <!-- Image Upload Section -->
+                            <div class="mb-3">
+                                <label class="form-label">إضافة صور (اختياري)</label>
+                                <div class="image-upload-container">
+                                    <div class="image-upload-area" id="imageUploadArea">
+                                        <div class="upload-placeholder">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <p>اسحب وأفلت الصور هنا أو انقر للاختيار</p>
+                                            <small class="text-muted">الحد الأقصى: 5 صور، كل صورة حتى 5 ميجابايت</small>
+                                        </div>
+                                        <input type="file" id="imageInput" multiple accept="image/*"
+                                            style="display: none;">
+                                    </div>
+                                    <div class="image-preview-container" id="imagePreviewContainer"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="feedbackBrowser" class="form-label">المتصفح</label>
+                                        <input type="text" class="form-control" id="feedbackBrowser" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="feedbackDevice" class="form-label">نوع الجهاز</label>
+                                        <input type="text" class="form-control" id="feedbackDevice" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="feedbackConsent" required>
+                                    <label class="form-check-label" for="feedbackConsent">
+                                        أوافق على مشاركة معلوماتي مع فريق التطوير لتحسين الخدمة
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="feedback-form-actions">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>
+                                    إرسال الملاحظة
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-lg" onclick="saveDraft()">
+                                    <i class="fas fa-save me-2"></i>
+                                    حفظ كمسودة
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Feedback Section -->
+            <div class="feedback-section" id="my-feedback-section">
+                <div class="feedback-card">
+                    <div class="feedback-card-header">
+                        <h5><i class="fas fa-history me-2"></i>ملاحظاتي السابقة</h5>
+                        <p class="text-muted">عرض جميع الملاحظات التي أرسلتها سابقاً</p>
+                    </div>
+                    <div class="feedback-card-body">
+                        <div class="feedback-history">
+                            <div class="feedback-filters">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select class="form-select" id="statusFilter">
+                                            <option value="">جميع الحالات</option>
+                                            <option value="pending">في الانتظار</option>
+                                            <option value="in-progress">قيد المعالجة</option>
+                                            <option value="resolved">تم الحل</option>
+                                            <option value="closed">مغلق</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-select" id="typeFilter">
+                                            <option value="">جميع الأنواع</option>
+                                            <option value="bug">أخطاء</option>
+                                            <option value="feature">ميزات جديدة</option>
+                                            <option value="improvement">تحسينات</option>
+                                            <option value="complaint">شكاوى</option>
+                                            <option value="compliment">إشادات</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-outline-primary w-100"
+                                            onclick="refreshFeedbackHistory()">
+                                            <i class="fas fa-sync-alt me-2"></i>
+                                            تحديث
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="feedback-list" id="feedbackList">
+                                <!-- Feedback items will be loaded here -->
+                            </div>
+
+                            <div class="feedback-empty" id="feedbackEmpty" style="display: none;">
+                                <div class="empty-state">
+                                    <i class="fas fa-inbox"></i>
+                                    <h6>لا توجد ملاحظات سابقة</h6>
+                                    <p>لم تقم بإرسال أي ملاحظات بعد. ابدأ بإرسال ملاحظتك الأولى!</p>
+                                    <button class="btn btn-primary" onclick="showFeedbackSection('feedback-form')">
+                                        <i class="fas fa-plus me-2"></i>
+                                        إرسال ملاحظة جديدة
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Info Section -->
+            <div class="feedback-section" id="contact-info-section">
+                <div class="feedback-card">
+                    <div class="feedback-card-header">
+                        <h5><i class="fas fa-info-circle me-2"></i>معلومات التواصل</h5>
+                        <p class="text-muted">طرق التواصل مع فريق الدعم الفني</p>
+                    </div>
+                    <div class="feedback-card-body">
+                        <div class="contact-content">
+                            <div class="contact-info">
+                                <h6>طرق التواصل:</h6>
+
+                                <div class="contact-method">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="contact-details">
+                                        <h6>البريد الإلكتروني</h6>
+                                        <p>support@kfu.edu.sa</p>
+                                        <small class="text-muted">الرد خلال 24 ساعة متاحة خلال ساعات العمل</small>
+                                    </div>
+                                </div>
+
+                                <div class="contact-method">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div class="contact-details">
+                                        <h6>الهاتف</h6>
+                                        <p>920002366</p>
+                                        <small class="text-muted">الأحد - الخميس: 8 ص - 2 م</small>
+                                    </div>
+                                </div>
+
+                                <div class="contact-method">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                    <div class="contact-details">
+                                        <h6>الدردشة المباشرة</h6>
+                                        <p>متاحة خلال ساعات العمل</p>
+                                        <small class="text-muted">للحصول على مساعدة فورية</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="contact-guidelines">
+                                <h6>إرشادات إرسال الملاحظات</h6>
+                                <ul>
+                                    <li>
+                                        <i class="fas fa-bullseye me-2"></i>
+                                        <strong>كن محدداً:</strong> اكتب وصفاً واضحاً للمشكلة أو الاقتراح
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-image me-2"></i>
+                                        <strong>أضف الصور:</strong> الصور تساعد في فهم المشكلة بشكل أفضل
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-list-ol me-2"></i>
+                                        <strong>اذكر الخطوات:</strong> اكتب الخطوات التي أدت إلى المشكلة
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-user-check me-2"></i>
+                                        <strong>أدخل معلوماتك:</strong> تأكد من صحة معلومات التواصل
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-clock me-2"></i>
+                                        <strong>تحلى بالصبر:</strong> سنقوم بالرد عليك في أقرب وقت ممكن
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/icons.js"></script>
+    <script src="assets/js/kfu-icon.js"></script>
+    <script src="assets/js/theme-switcher.js"></script>
+    <script src="assets/js/settings-manager.js"></script>
+    <script src="assets/js/font-manager.js"></script>
+    <script src="assets/js/notification-manager.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/user-profile.js"></script>
+    <script src="assets/js/folders.js"></script>
+    <script src="assets/js/feedback.js"></script>
+    <!-- User Profile functionality is now handled by user-profile.js -->
+</body>
+
+</html>

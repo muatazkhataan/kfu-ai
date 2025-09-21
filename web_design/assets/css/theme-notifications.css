@@ -1,0 +1,48 @@
+/**
+ * Theme Notifications CSS
+ * أنماط إشعارات تبديل المظهر
+ */
+
+/* ===== أنماط الإشعارات ===== */
+.theme-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    padding: 1rem 1.5rem;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 300px;
+}
+
+.theme-notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--bs-body-color);
+}
+
+.notification-content i {
+    color: var(--bs-success);
+    font-size: 1.25rem;
+}
+
+/* ===== التصميم المتجاوب ===== */
+@media (max-width: 768px) {
+    .theme-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}

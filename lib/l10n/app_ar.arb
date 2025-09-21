@@ -1,0 +1,491 @@
+{
+  "@@locale": "ar",
+  "@@context": "KFU AI Assistant App - Arabic Localization",
+  
+  "appName": "مساعد كفو",
+  "@appName": {
+    "description": "اسم التطبيق"
+  },
+  
+  "appDescription": "مساعد ذكي للطلبة - جامعة الملك فيصل",
+  "@appDescription": {
+    "description": "وصف التطبيق"
+  },
+  
+  "authLogin": "تسجيل الدخول",
+  "@authLogin": {
+    "description": "عنوان شاشة تسجيل الدخول"
+  },
+  
+  "authUsername": "الرقم الجامعي",
+  "@authUsername": {
+    "description": "حقل اسم المستخدم/الرقم الجامعي"
+  },
+  
+  "authPassword": "رمز المرور",
+  "@authPassword": {
+    "description": "حقل كلمة المرور"
+  },
+  
+  "authNext": "التالي",
+  "@authNext": {
+    "description": "زر الانتقال للخطوة التالية"
+  },
+  
+  "authPrevious": "السابق",
+  "@authPrevious": {
+    "description": "زر العودة للخطوة السابقة"
+  },
+  
+  "authEnter": "دخول",
+  "@authEnter": {
+    "description": "زر تسجيل الدخول"
+  },
+  
+  "authRememberMe": "تذكر رمز المرور",
+  "@authRememberMe": {
+    "description": "خيار تذكر كلمة المرور"
+  },
+  
+  "chatNew": "محادثة جديدة",
+  "@chatNew": {
+    "description": "إنشاء محادثة جديدة"
+  },
+  
+  "chatTitleDefault": "مساعدة في الرياضيات",
+  "@chatTitleDefault": {
+    "description": "عنوان افتراضي للمحادثة"
+  },
+  
+  "chatClear": "مسح المحادثة",
+  "@chatClear": {
+    "description": "مسح جميع الرسائل في المحادثة"
+  },
+  
+  "chatExport": "تصدير المحادثة",
+  "@chatExport": {
+    "description": "تصدير المحادثة إلى ملف"
+  },
+  
+  "chatShare": "مشاركة",
+  "@chatShare": {
+    "description": "مشاركة المحادثة"
+  },
+  
+  "chatTyping": "مساعد كفو يكتب...",
+  "@chatTyping": {
+    "description": "مؤشر الكتابة"
+  },
+  
+  "chatMessagePlaceholder": "اكتب رسالتك هنا...",
+  "@chatMessagePlaceholder": {
+    "description": "نص توضيحي لحقل إدخال الرسالة"
+  },
+  
+  "chatHistoryTitle": "سجل المحادثات",
+  "@chatHistoryTitle": {
+    "description": "عنوان شاشة سجل المحادثات"
+  },
+  
+  "chatHistorySearchPlaceholder": "ابحث في المحادثات...",
+  "@chatHistorySearchPlaceholder": {
+    "description": "نص توضيحي لحقل البحث"
+  },
+  
+  "chatHistoryFilterAll": "جميع المحادثات",
+  "@chatHistoryFilterAll": {
+    "description": "فلتر عرض جميع المحادثات"
+  },
+  
+  "chatHistoryFilterRecent": "المحادثات الأخيرة",
+  "@chatHistoryFilterRecent": {
+    "description": "فلتر المحادثات الأخيرة"
+  },
+  
+  "chatHistoryFilterArchived": "المحادثات المؤرشفة",
+  "@chatHistoryFilterArchived": {
+    "description": "فلتر المحادثات المؤرشفة"
+  },
+  
+  "chatHistorySortBy": "ترتيب حسب",
+  "@chatHistorySortBy": {
+    "description": "عنوان قائمة الترتيب"
+  },
+  
+  "chatHistorySortDateDesc": "الأحدث أولاً",
+  "@chatHistorySortDateDesc": {
+    "description": "ترتيب حسب التاريخ تنازلي"
+  },
+  
+  "chatHistorySortDateAsc": "الأقدم أولاً",
+  "@chatHistorySortDateAsc": {
+    "description": "ترتيب حسب التاريخ تصاعدي"
+  },
+  
+  "chatHistorySortTitle": "الاسم",
+  "@chatHistorySortTitle": {
+    "description": "ترتيب حسب اسم المحادثة"
+  },
+  
+  "chatHistorySortMessages": "عدد الرسائل",
+  "@chatHistorySortMessages": {
+    "description": "ترتيب حسب عدد الرسائل"
+  },
+  
+  "chatHistoryRefresh": "تحديث",
+  "@chatHistoryRefresh": {
+    "description": "تحديث قائمة المحادثات"
+  },
+  
+  "chatHistoryToggleView": "تبديل العرض",
+  "@chatHistoryToggleView": {
+    "description": "تبديل بين عرض القائمة والشبكة"
+  },
+  
+  "chatHistoryBackToChat": "العودة للمحادثة",
+  "@chatHistoryBackToChat": {
+    "description": "العودة لشاشة المحادثة الرئيسية"
+  },
+  
+  "chatHistoryDelete": "حذف المحادثة",
+  "@chatHistoryDelete": {
+    "description": "حذف محادثة"
+  },
+  
+  "chatHistoryArchive": "أرشفة",
+  "@chatHistoryArchive": {
+    "description": "أرشفة محادثة"
+  },
+  
+  "chatHistoryMoveToFolder": "نقل إلى مجلد",
+  "@chatHistoryMoveToFolder": {
+    "description": "نقل محادثة إلى مجلد"
+  },
+  
+  "chatHistoryEmptyState": "لا توجد محادثات",
+  "@chatHistoryEmptyState": {
+    "description": "رسالة الحالة الفارغة"
+  },
+  
+  "chatHistoryClearFilters": "مسح المرشحات",
+  "@chatHistoryClearFilters": {
+    "description": "مسح جميع المرشحات"
+  },
+  
+  "chatHistoryMessagesCount": "{count} رسالة",
+  "@chatHistoryMessagesCount": {
+    "description": "عدد الرسائل في المحادثة",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  
+  "chatHistoryConfirmDelete": "هل أنت متأكد من حذف هذه المحادثة؟",
+  "@chatHistoryConfirmDelete": {
+    "description": "رسالة تأكيد الحذف"
+  },
+  
+  "chatHistoryConfirmArchive": "هل تريد أرشفة هذه المحادثة؟",
+  "@chatHistoryConfirmArchive": {
+    "description": "رسالة تأكيد الأرشفة"
+  },
+  
+  "chatHistorySearchResults": "نتائج البحث: {count} محادثة",
+  "@chatHistorySearchResults": {
+    "description": "عدد نتائج البحث",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  
+  "foldersTitle": "المجلدات",
+  "@foldersTitle": {
+    "description": "عنوان قسم المجلدات"
+  },
+  
+  "foldersCreate": "إنشاء مجلد",
+  "@foldersCreate": {
+    "description": "إنشاء مجلد جديد"
+  },
+  
+  "foldersRename": "إعادة تسمية",
+  "@foldersRename": {
+    "description": "إعادة تسمية مجلد"
+  },
+  
+  "foldersDelete": "حذف مجلد",
+  "@foldersDelete": {
+    "description": "حذف مجلد"
+  },
+  
+  "foldersChangeIcon": "تغيير الأيقونة",
+  "@foldersChangeIcon": {
+    "description": "تغيير أيقونة المجلد"
+  },
+  
+  "foldersProgramming": "البرمجة",
+  "@foldersProgramming": {
+    "description": "مجلد البرمجة"
+  },
+  
+  "foldersDataStructures": "هياكل البيانات",
+  "@foldersDataStructures": {
+    "description": "مجلد هياكل البيانات"
+  },
+  
+  "foldersAlgorithms": "الخوارزميات",
+  "@foldersAlgorithms": {
+    "description": "مجلد الخوارزميات"
+  },
+  
+  "foldersAcademic": "الشؤون الأكاديمية",
+  "@foldersAcademic": {
+    "description": "مجلد الشؤون الأكاديمية"
+  },
+  
+  "settingsTitle": "الإعدادات",
+  "@settingsTitle": {
+    "description": "عنوان شاشة الإعدادات"
+  },
+  
+  "settingsGeneral": "عام",
+  "@settingsGeneral": {
+    "description": "قسم الإعدادات العامة"
+  },
+  
+  "settingsAppearance": "المظهر",
+  "@settingsAppearance": {
+    "description": "قسم إعدادات المظهر"
+  },
+  
+  "settingsLanguage": "اللغة",
+  "@settingsLanguage": {
+    "description": "إعداد اللغة"
+  },
+  
+  "settingsTheme": "السمة",
+  "@settingsTheme": {
+    "description": "إعداد السمة"
+  },
+  
+  "settingsThemeLight": "فاتح",
+  "@settingsThemeLight": {
+    "description": "السمة الفاتحة"
+  },
+  
+  "settingsThemeDark": "داكن",
+  "@settingsThemeDark": {
+    "description": "السمة الداكنة"
+  },
+  
+  "settingsThemeAuto": "تلقائي",
+  "@settingsThemeAuto": {
+    "description": "السمة التلقائية"
+  },
+  
+  "settingsFontSize": "حجم الخط",
+  "@settingsFontSize": {
+    "description": "إعداد حجم الخط"
+  },
+  
+  "settingsNotifications": "الإشعارات",
+  "@settingsNotifications": {
+    "description": "إعدادات الإشعارات"
+  },
+  
+  "settingsPrivacy": "الخصوصية",
+  "@settingsPrivacy": {
+    "description": "إعدادات الخصوصية"
+  },
+  
+  "settingsData": "البيانات",
+  "@settingsData": {
+    "description": "إعدادات البيانات"
+  },
+  
+  "settingsAbout": "حول التطبيق",
+  "@settingsAbout": {
+    "description": "معلومات حول التطبيق"
+  },
+  
+  "helpTitle": "المساعدة",
+  "@helpTitle": {
+    "description": "عنوان شاشة المساعدة"
+  },
+  
+  "helpQuickStart": "البدء السريع",
+  "@helpQuickStart": {
+    "description": "دليل البدء السريع"
+  },
+  
+  "helpFeatures": "الميزات",
+  "@helpFeatures": {
+    "description": "دليل الميزات"
+  },
+  
+  "helpChatGuide": "دليل المحادثة",
+  "@helpChatGuide": {
+    "description": "دليل استخدام المحادثة"
+  },
+  
+  "helpFoldersGuide": "إدارة المجلدات",
+  "@helpFoldersGuide": {
+    "description": "دليل إدارة المجلدات"
+  },
+  
+  "helpChatHistoryGuide": "سجل المحادثات",
+  "@helpChatHistoryGuide": {
+    "description": "دليل استخدام سجل المحادثات"
+  },
+  
+  "helpSettingsGuide": "الإعدادات",
+  "@helpSettingsGuide": {
+    "description": "دليل الإعدادات"
+  },
+  
+  "helpFAQ": "الأسئلة الشائعة",
+  "@helpFAQ": {
+    "description": "الأسئلة الشائعة"
+  },
+  
+  "feedbackTitle": "إرسال ملاحظات",
+  "@feedbackTitle": {
+    "description": "عنوان شاشة إرسال الملاحظات"
+  },
+  
+  "feedbackName": "الاسم",
+  "@feedbackName": {
+    "description": "حقل الاسم"
+  },
+  
+  "feedbackEmail": "البريد الإلكتروني",
+  "@feedbackEmail": {
+    "description": "حقل البريد الإلكتروني"
+  },
+  
+  "feedbackType": "نوع الملاحظة",
+  "@feedbackType": {
+    "description": "نوع الملاحظة"
+  },
+  
+  "feedbackPriority": "الأولوية",
+  "@feedbackPriority": {
+    "description": "أولوية الملاحظة"
+  },
+  
+  "feedbackSubject": "الموضوع",
+  "@feedbackSubject": {
+    "description": "موضوع الملاحظة"
+  },
+  
+  "feedbackMessage": "الوصف",
+  "@feedbackMessage": {
+    "description": "وصف الملاحظة"
+  },
+  
+  "feedbackAttachImages": "إرفاق صور",
+  "@feedbackAttachImages": {
+    "description": "إرفاق صور"
+  },
+  
+  "feedbackSubmit": "إرسال",
+  "@feedbackSubmit": {
+    "description": "إرسال الملاحظة"
+  },
+  
+  "feedbackSaveDraft": "حفظ كمسودة",
+  "@feedbackSaveDraft": {
+    "description": "حفظ كمسودة"
+  },
+  
+  "feedbackClear": "مسح النموذج",
+  "@feedbackClear": {
+    "description": "مسح النموذج"
+  },
+  
+  "commonCancel": "إلغاء",
+  "@commonCancel": {
+    "description": "زر الإلغاء"
+  },
+  
+  "commonConfirm": "تأكيد",
+  "@commonConfirm": {
+    "description": "زر التأكيد"
+  },
+  
+  "commonSave": "حفظ",
+  "@commonSave": {
+    "description": "زر الحفظ"
+  },
+  
+  "commonDelete": "حذف",
+  "@commonDelete": {
+    "description": "زر الحذف"
+  },
+  
+  "commonEdit": "تعديل",
+  "@commonEdit": {
+    "description": "زر التعديل"
+  },
+  
+  "commonAdd": "إضافة",
+  "@commonAdd": {
+    "description": "زر الإضافة"
+  },
+  
+  "commonRemove": "إزالة",
+  "@commonRemove": {
+    "description": "زر الإزالة"
+  },
+  
+  "commonSearch": "بحث",
+  "@commonSearch": {
+    "description": "زر البحث"
+  },
+  
+  "commonFilter": "تصفية",
+  "@commonFilter": {
+    "description": "زر التصفية"
+  },
+  
+  "commonSort": "ترتيب",
+  "@commonSort": {
+    "description": "زر الترتيب"
+  },
+  
+  "commonLoading": "جاري التحميل...",
+  "@commonLoading": {
+    "description": "رسالة التحميل"
+  },
+  
+  "commonError": "حدث خطأ",
+  "@commonError": {
+    "description": "رسالة الخطأ العامة"
+  },
+  
+  "commonRetry": "إعادة المحاولة",
+  "@commonRetry": {
+    "description": "زر إعادة المحاولة"
+  },
+  
+  "commonSuccess": "تم بنجاح",
+  "@commonSuccess": {
+    "description": "رسالة النجاح"
+  },
+  
+  "commonNoData": "لا توجد بيانات",
+  "@commonNoData": {
+    "description": "رسالة عدم وجود بيانات"
+  },
+  
+  "commonNoResults": "لا توجد نتائج",
+  "@commonNoResults": {
+    "description": "رسالة عدم وجود نتائج"
+  }
+}

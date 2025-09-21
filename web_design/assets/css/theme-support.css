@@ -1,0 +1,391 @@
+/**
+ * Theme Support CSS - دعم المظاهر
+ * ضمان دعم الوضع الداكن والفاتح لجميع العناصر
+ */
+
+/* ===== متغيرات الألوان الإضافية ===== */
+:root {
+    /* ألوان إضافية للوضع الفاتح */
+    --bs-white-rgb: 255, 255, 255;
+    --bs-black-rgb: 0, 0, 0;
+    --bs-gray-25: #f8f9fa;
+    --bs-gray-50: #f9fafb;
+    --bs-gray-100: #f3f4f6;
+    --bs-gray-200: #e5e7eb;
+    --bs-gray-300: #d1d5db;
+    --bs-gray-400: #9ca3af;
+    --bs-gray-500: #6b7280;
+    --bs-gray-600: #4b5563;
+    --bs-gray-700: #374151;
+    --bs-gray-800: #1f2937;
+    --bs-gray-900: #111827;
+    
+    /* ألوان الحالة */
+    --bs-primary-25: rgba(37, 147, 95, 0.1);
+    --bs-success-25: rgba(37, 147, 95, 0.1);
+    --bs-info-25: rgba(13, 202, 240, 0.1);
+    --bs-warning-25: rgba(255, 193, 7, 0.1);
+    --bs-danger-25: rgba(220, 53, 69, 0.1);
+    
+    /* متغيرات أحجام الخطوط */
+    --app-font-size: 1rem;
+    --app-font-size-small: 0.875rem;
+    --app-font-size-large: 1.125rem;
+    --app-font-size-xlarge: 1.25rem;
+    
+    /* متغيرات الرسوم المتحركة */
+    --animation-duration: 0.3s;
+    --animation-timing: ease;
+}
+
+/* ===== الوضع الداكن ===== */
+[data-bs-theme="dark"] {
+    /* ألوان إضافية للوضع الداكن */
+    --bs-white-rgb: 255, 255, 255;
+    --bs-black-rgb: 0, 0, 0;
+    --bs-gray-25: #1a1a1a;
+    --bs-gray-50: #2d2d2d;
+    --bs-gray-100: #404040;
+    --bs-gray-200: #525252;
+    --bs-gray-300: #666666;
+    --bs-gray-400: #808080;
+    --bs-gray-500: #999999;
+    --bs-gray-600: #b3b3b3;
+    --bs-gray-700: #cccccc;
+    --bs-gray-800: #e6e6e6;
+    --bs-gray-900: #1a1a1a;
+    
+    /* ألوان الحالة للوضع الداكن */
+    --bs-primary-25: rgba(37, 147, 95, 0.2);
+    --bs-success-25: rgba(37, 147, 95, 0.2);
+    --bs-info-25: rgba(13, 202, 240, 0.2);
+    --bs-warning-25: rgba(255, 193, 7, 0.2);
+    --bs-danger-25: rgba(220, 53, 69, 0.2);
+}
+
+/* ===== تطبيق أحجام الخطوط المتغيرة ===== */
+html {
+    font-size: var(--app-font-size);
+}
+
+body {
+    font-size: var(--app-font-size);
+    line-height: 1.6;
+}
+
+/* أحجام خطوط مخصصة للعناصر المختلفة */
+.chat-title,
+.help-title,
+.feedback-title,
+.settings-title {
+    font-size: var(--app-font-size-large);
+    font-weight: 600;
+}
+
+.message-content,
+.sidebar-menu-link,
+.form-label,
+.btn {
+    font-size: var(--app-font-size);
+}
+
+.modal-title,
+.card-title {
+    font-size: var(--app-font-size-large);
+    font-weight: 600;
+}
+
+.small-text {
+    font-size: var(--app-font-size-small);
+}
+
+.large-text {
+    font-size: var(--app-font-size-large);
+}
+
+.xlarge-text {
+    font-size: var(--app-font-size-xlarge);
+}
+
+/* ===== تحسينات للوضع الداكن ===== */
+[data-bs-theme="dark"] .chat-container,
+[data-bs-theme="dark"] .feedback-card,
+[data-bs-theme="dark"] .help-card,
+[data-bs-theme="dark"] .stats-card {
+    background: var(--bs-gray-25);
+    border: 1px solid var(--bs-gray-200);
+}
+
+/* ===== تحسينات للصفحة الرئيسية ===== */
+[data-bs-theme="dark"] .feature-card {
+    background: var(--bs-gray-25);
+    border: 1px solid var(--bs-gray-200);
+}
+
+[data-bs-theme="dark"] .stats-section {
+    background: var(--bs-gray-25);
+}
+
+/* ===== تحسين خلفيات الأقسام للوضع الداكن ===== */
+[data-bs-theme="dark"] #features {
+    background: var(--bs-gray-100);
+}
+
+[data-bs-theme="dark"] #about {
+    background: var(--bs-gray-100);
+}
+
+[data-bs-theme="dark"] .navbar {
+    background: var(--bs-body-bg) !important;
+    border-bottom: 1px solid var(--bs-gray-200);
+}
+
+/* ===== تحسين الفوتر للوضع الداكن ===== */
+[data-bs-theme="dark"] .footer {
+    background: var(--bs-gray-900);
+    color: var(--bs-white);
+}
+
+[data-bs-theme="dark"] .footer a {
+    color: var(--bs-gray-300);
+}
+
+[data-bs-theme="dark"] .footer a:hover {
+    color: var(--bs-primary);
+}
+
+/* ===== تحسينات للرسوم المتحركة ===== */
+.animations-enabled * {
+    transition: all var(--animation-duration) var(--animation-timing);
+}
+
+.no-animations * {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* ===== دعم تقليل الحركة ===== */
+.reduced-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+}
+
+/* ===== تحسينات للأجهزة المحمولة ===== */
+@media (max-width: 768px) {
+    :root {
+        --app-font-size: 0.95rem;
+        --app-font-size-small: 0.85rem;
+        --app-font-size-large: 1.05rem;
+        --app-font-size-xlarge: 1.15rem;
+    }
+    
+    .chat-title,
+    .help-title,
+    .feedback-title,
+    .settings-title {
+        font-size: var(--app-font-size-large);
+    }
+}
+
+@media (max-width: 576px) {
+    :root {
+        --app-font-size: 0.9rem;
+        --app-font-size-small: 0.8rem;
+        --app-font-size-large: 1rem;
+        --app-font-size-xlarge: 1.1rem;
+    }
+}
+
+/* ===== تحسينات للطباعة ===== */
+@media print {
+    :root {
+        --app-font-size: 12pt;
+        --app-font-size-small: 10pt;
+        --app-font-size-large: 14pt;
+        --app-font-size-xlarge: 16pt;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* ===== تحسينات للوصول ===== */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --animation-duration: 0.01ms;
+    }
+    
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== تحسينات للتباين العالي ===== */
+@media (prefers-contrast: high) {
+    :root {
+        --bs-primary: #006400;
+        --bs-secondary: #4a4a4a;
+        --bs-success: #006400;
+        --bs-danger: #cc0000;
+        --bs-warning: #cc6600;
+        --bs-info: #0066cc;
+    }
+}
+
+/* ===== تحسينات للخطوط المخصصة ===== */
+.font-size-small {
+    font-size: var(--app-font-size-small) !important;
+}
+
+.font-size-medium {
+    font-size: var(--app-font-size) !important;
+}
+
+.font-size-large {
+    font-size: var(--app-font-size-large) !important;
+}
+
+.font-size-xlarge {
+    font-size: var(--app-font-size-xlarge) !important;
+}
+
+/* ===== تحسينات للعناصر التفاعلية ===== */
+.btn,
+.form-control,
+.form-select {
+    font-size: var(--app-font-size);
+}
+
+.btn-sm {
+    font-size: var(--app-font-size-small);
+}
+
+.btn-lg {
+    font-size: var(--app-font-size-large);
+}
+
+/* ===== تحسينات للقوائم ===== */
+.list-group-item {
+    font-size: var(--app-font-size);
+}
+
+.dropdown-item {
+    font-size: var(--app-font-size);
+}
+
+/* ===== تحسينات للجداول ===== */
+.table {
+    font-size: var(--app-font-size);
+}
+
+.table th,
+.table td {
+    font-size: var(--app-font-size);
+}
+
+/* ===== تحسينات للتنبيهات ===== */
+.alert {
+    font-size: var(--app-font-size);
+}
+
+.alert-heading {
+    font-size: var(--app-font-size-large);
+}
+
+/* ===== تحسينات للبطاقات ===== */
+.card {
+    font-size: var(--app-font-size);
+}
+
+.card-header {
+    font-size: var(--app-font-size);
+}
+
+.card-title {
+    font-size: var(--app-font-size-large);
+}
+
+.card-subtitle {
+    font-size: var(--app-font-size-small);
+}
+
+/* ===== تحسينات للشريط الجانبي ===== */
+.sidebar {
+    font-size: var(--app-font-size);
+}
+
+.sidebar-brand {
+    font-size: var(--app-font-size-large);
+}
+
+.sidebar-menu-link {
+    font-size: var(--app-font-size);
+}
+
+/* ===== تحسينات للمحادثة ===== */
+.chat-messages {
+    font-size: var(--app-font-size);
+}
+
+.message-content {
+    font-size: var(--app-font-size);
+}
+
+.chat-input {
+    font-size: var(--app-font-size);
+}
+
+/* ===== تحسينات للنماذج ===== */
+.form-label {
+    font-size: var(--app-font-size);
+}
+
+.form-text {
+    font-size: var(--app-font-size-small);
+}
+
+.form-control,
+.form-select {
+    font-size: var(--app-font-size);
+}
+
+/* ===== تحسينات للتنبيهات والإشعارات ===== */
+.toast {
+    font-size: var(--app-font-size);
+}
+
+.toast-header {
+    font-size: var(--app-font-size);
+}
+
+.toast-body {
+    font-size: var(--app-font-size);
+}
+
+.snackbar {
+    font-size: var(--app-font-size);
+}
+
+/* ===== تحسينات للشاشات الصغيرة ===== */
+@media (max-width: 480px) {
+    :root {
+        --app-font-size: 0.85rem;
+        --app-font-size-small: 0.75rem;
+        --app-font-size-large: 0.95rem;
+        --app-font-size-xlarge: 1.05rem;
+    }
+}
+
+/* ===== تحسينات للشاشات الكبيرة ===== */
+@media (min-width: 1200px) {
+    :root {
+        --app-font-size: 1.05rem;
+        --app-font-size-small: 0.95rem;
+        --app-font-size-large: 1.15rem;
+        --app-font-size-xlarge: 1.3rem;
+    }
+}

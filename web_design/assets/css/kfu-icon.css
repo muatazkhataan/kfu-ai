@@ -1,0 +1,86 @@
+/* KFU Mosa3ed Icon - أيقونة مساعد كفو */
+.kfu-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin: 0.2em;
+    background-color: currentColor;
+    mask: url("../images/mosa3ed_kfu_icon.svg") no-repeat center;
+    mask-size: contain;
+    -webkit-mask: url("../images/mosa3ed_kfu_icon.svg") no-repeat center;
+    -webkit-mask-size: contain;
+    vertical-align: middle;
+}
+
+/* KFU Icon with specific colors */
+.kfu-icon-white {
+    color: var(--bs-white);
+}
+
+.kfu-icon-primary {
+    color: var(--bs-primary);
+}
+
+.kfu-icon-success {
+    color: var(--bs-success);
+}
+
+.kfu-icon-info {
+    color: var(--bs-info);
+}
+
+.kfu-icon-warning {
+    color: var(--bs-warning);
+}
+
+.kfu-icon-danger {
+    color: var(--bs-danger);
+}
+
+.kfu-icon-dark {
+    color: var(--bs-dark);
+}
+
+.kfu-icon-light {
+    color: var(--bs-light);
+}
+
+/* KFU Icon sizes */
+.kfu-icon-sm {
+    width: 0.875em;
+    height: 0.875em;
+}
+
+.kfu-icon-lg {
+    width: 1.33em;
+    height: 1.33em;
+}
+
+.kfu-icon-xl {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.kfu-icon-2x {
+    width: 2em;
+    height: 2em;
+}
+
+.kfu-icon-3x {
+    width: 3em;
+    height: 3em;
+}
+
+/* KFU Icon in message avatar for index page */
+.message-avatar .kfu-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--bs-white);
+}
+
+/* KFU Icon in typing indicator for index page */
+.typing-indicator .kfu-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--bs-primary);
+}

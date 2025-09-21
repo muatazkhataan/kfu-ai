@@ -1,0 +1,491 @@
+{
+  "@@locale": "en",
+  "@@context": "KFU AI Assistant App - English Localization",
+  
+  "appName": "KFU AI Assistant",
+  "@appName": {
+    "description": "Application name"
+  },
+  
+  "appDescription": "Smart Assistant for Students - King Faisal University",
+  "@appDescription": {
+    "description": "Application description"
+  },
+  
+  "authLogin": "Login",
+  "@authLogin": {
+    "description": "Login screen title"
+  },
+  
+  "authUsername": "Student ID",
+  "@authUsername": {
+    "description": "Username/Student ID field"
+  },
+  
+  "authPassword": "Password",
+  "@authPassword": {
+    "description": "Password field"
+  },
+  
+  "authNext": "Next",
+  "@authNext": {
+    "description": "Next step button"
+  },
+  
+  "authPrevious": "Previous",
+  "@authPrevious": {
+    "description": "Previous step button"
+  },
+  
+  "authEnter": "Enter",
+  "@authEnter": {
+    "description": "Login button"
+  },
+  
+  "authRememberMe": "Remember Password",
+  "@authRememberMe": {
+    "description": "Remember password option"
+  },
+  
+  "chatNew": "New Chat",
+  "@chatNew": {
+    "description": "Create new chat"
+  },
+  
+  "chatTitleDefault": "Math Help",
+  "@chatTitleDefault": {
+    "description": "Default chat title"
+  },
+  
+  "chatClear": "Clear Chat",
+  "@chatClear": {
+    "description": "Clear all messages in chat"
+  },
+  
+  "chatExport": "Export Chat",
+  "@chatExport": {
+    "description": "Export chat to file"
+  },
+  
+  "chatShare": "Share",
+  "@chatShare": {
+    "description": "Share chat"
+  },
+  
+  "chatTyping": "KFU AI is typing...",
+  "@chatTyping": {
+    "description": "Typing indicator"
+  },
+  
+  "chatMessagePlaceholder": "Type your message here...",
+  "@chatMessagePlaceholder": {
+    "description": "Message input field placeholder"
+  },
+  
+  "chatHistoryTitle": "Chat History",
+  "@chatHistoryTitle": {
+    "description": "Chat history screen title"
+  },
+  
+  "chatHistorySearchPlaceholder": "Search chats...",
+  "@chatHistorySearchPlaceholder": {
+    "description": "Search field placeholder"
+  },
+  
+  "chatHistoryFilterAll": "All Chats",
+  "@chatHistoryFilterAll": {
+    "description": "Filter to show all chats"
+  },
+  
+  "chatHistoryFilterRecent": "Recent Chats",
+  "@chatHistoryFilterRecent": {
+    "description": "Filter for recent chats"
+  },
+  
+  "chatHistoryFilterArchived": "Archived Chats",
+  "@chatHistoryFilterArchived": {
+    "description": "Filter for archived chats"
+  },
+  
+  "chatHistorySortBy": "Sort by",
+  "@chatHistorySortBy": {
+    "description": "Sort menu title"
+  },
+  
+  "chatHistorySortDateDesc": "Newest First",
+  "@chatHistorySortDateDesc": {
+    "description": "Sort by date descending"
+  },
+  
+  "chatHistorySortDateAsc": "Oldest First",
+  "@chatHistorySortDateAsc": {
+    "description": "Sort by date ascending"
+  },
+  
+  "chatHistorySortTitle": "Name",
+  "@chatHistorySortTitle": {
+    "description": "Sort by chat name"
+  },
+  
+  "chatHistorySortMessages": "Message Count",
+  "@chatHistorySortMessages": {
+    "description": "Sort by message count"
+  },
+  
+  "chatHistoryRefresh": "Refresh",
+  "@chatHistoryRefresh": {
+    "description": "Refresh chat list"
+  },
+  
+  "chatHistoryToggleView": "Toggle View",
+  "@chatHistoryToggleView": {
+    "description": "Toggle between list and grid view"
+  },
+  
+  "chatHistoryBackToChat": "Back to Chat",
+  "@chatHistoryBackToChat": {
+    "description": "Back to main chat screen"
+  },
+  
+  "chatHistoryDelete": "Delete Chat",
+  "@chatHistoryDelete": {
+    "description": "Delete chat"
+  },
+  
+  "chatHistoryArchive": "Archive",
+  "@chatHistoryArchive": {
+    "description": "Archive chat"
+  },
+  
+  "chatHistoryMoveToFolder": "Move to Folder",
+  "@chatHistoryMoveToFolder": {
+    "description": "Move chat to folder"
+  },
+  
+  "chatHistoryEmptyState": "No chats found",
+  "@chatHistoryEmptyState": {
+    "description": "Empty state message"
+  },
+  
+  "chatHistoryClearFilters": "Clear Filters",
+  "@chatHistoryClearFilters": {
+    "description": "Clear all filters"
+  },
+  
+  "chatHistoryMessagesCount": "{count} messages",
+  "@chatHistoryMessagesCount": {
+    "description": "Number of messages in chat",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  
+  "chatHistoryConfirmDelete": "Are you sure you want to delete this chat?",
+  "@chatHistoryConfirmDelete": {
+    "description": "Delete confirmation message"
+  },
+  
+  "chatHistoryConfirmArchive": "Do you want to archive this chat?",
+  "@chatHistoryConfirmArchive": {
+    "description": "Archive confirmation message"
+  },
+  
+  "chatHistorySearchResults": "Search results: {count} chats",
+  "@chatHistorySearchResults": {
+    "description": "Number of search results",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "compact"
+      }
+    }
+  },
+  
+  "foldersTitle": "Folders",
+  "@foldersTitle": {
+    "description": "Folders section title"
+  },
+  
+  "foldersCreate": "Create Folder",
+  "@foldersCreate": {
+    "description": "Create new folder"
+  },
+  
+  "foldersRename": "Rename",
+  "@foldersRename": {
+    "description": "Rename folder"
+  },
+  
+  "foldersDelete": "Delete Folder",
+  "@foldersDelete": {
+    "description": "Delete folder"
+  },
+  
+  "foldersChangeIcon": "Change Icon",
+  "@foldersChangeIcon": {
+    "description": "Change folder icon"
+  },
+  
+  "foldersProgramming": "Programming",
+  "@foldersProgramming": {
+    "description": "Programming folder"
+  },
+  
+  "foldersDataStructures": "Data Structures",
+  "@foldersDataStructures": {
+    "description": "Data Structures folder"
+  },
+  
+  "foldersAlgorithms": "Algorithms",
+  "@foldersAlgorithms": {
+    "description": "Algorithms folder"
+  },
+  
+  "foldersAcademic": "Academic Affairs",
+  "@foldersAcademic": {
+    "description": "Academic Affairs folder"
+  },
+  
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Settings screen title"
+  },
+  
+  "settingsGeneral": "General",
+  "@settingsGeneral": {
+    "description": "General settings section"
+  },
+  
+  "settingsAppearance": "Appearance",
+  "@settingsAppearance": {
+    "description": "Appearance settings section"
+  },
+  
+  "settingsLanguage": "Language",
+  "@settingsLanguage": {
+    "description": "Language setting"
+  },
+  
+  "settingsTheme": "Theme",
+  "@settingsTheme": {
+    "description": "Theme setting"
+  },
+  
+  "settingsThemeLight": "Light",
+  "@settingsThemeLight": {
+    "description": "Light theme"
+  },
+  
+  "settingsThemeDark": "Dark",
+  "@settingsThemeDark": {
+    "description": "Dark theme"
+  },
+  
+  "settingsThemeAuto": "Auto",
+  "@settingsThemeAuto": {
+    "description": "Auto theme"
+  },
+  
+  "settingsFontSize": "Font Size",
+  "@settingsFontSize": {
+    "description": "Font size setting"
+  },
+  
+  "settingsNotifications": "Notifications",
+  "@settingsNotifications": {
+    "description": "Notifications settings"
+  },
+  
+  "settingsPrivacy": "Privacy",
+  "@settingsPrivacy": {
+    "description": "Privacy settings"
+  },
+  
+  "settingsData": "Data",
+  "@settingsData": {
+    "description": "Data settings"
+  },
+  
+  "settingsAbout": "About",
+  "@settingsAbout": {
+    "description": "About app information"
+  },
+  
+  "helpTitle": "Help",
+  "@helpTitle": {
+    "description": "Help screen title"
+  },
+  
+  "helpQuickStart": "Quick Start",
+  "@helpQuickStart": {
+    "description": "Quick start guide"
+  },
+  
+  "helpFeatures": "Features",
+  "@helpFeatures": {
+    "description": "Features guide"
+  },
+  
+  "helpChatGuide": "Chat Guide",
+  "@helpChatGuide": {
+    "description": "Chat usage guide"
+  },
+  
+  "helpFoldersGuide": "Folder Management",
+  "@helpFoldersGuide": {
+    "description": "Folder management guide"
+  },
+  
+  "helpChatHistoryGuide": "Chat History",
+  "@helpChatHistoryGuide": {
+    "description": "Chat history usage guide"
+  },
+  
+  "helpSettingsGuide": "Settings",
+  "@helpSettingsGuide": {
+    "description": "Settings guide"
+  },
+  
+  "helpFAQ": "FAQ",
+  "@helpFAQ": {
+    "description": "Frequently Asked Questions"
+  },
+  
+  "feedbackTitle": "Send Feedback",
+  "@feedbackTitle": {
+    "description": "Feedback screen title"
+  },
+  
+  "feedbackName": "Name",
+  "@feedbackName": {
+    "description": "Name field"
+  },
+  
+  "feedbackEmail": "Email",
+  "@feedbackEmail": {
+    "description": "Email field"
+  },
+  
+  "feedbackType": "Feedback Type",
+  "@feedbackType": {
+    "description": "Feedback type"
+  },
+  
+  "feedbackPriority": "Priority",
+  "@feedbackPriority": {
+    "description": "Feedback priority"
+  },
+  
+  "feedbackSubject": "Subject",
+  "@feedbackSubject": {
+    "description": "Feedback subject"
+  },
+  
+  "feedbackMessage": "Description",
+  "@feedbackMessage": {
+    "description": "Feedback description"
+  },
+  
+  "feedbackAttachImages": "Attach Images",
+  "@feedbackAttachImages": {
+    "description": "Attach images"
+  },
+  
+  "feedbackSubmit": "Submit",
+  "@feedbackSubmit": {
+    "description": "Submit feedback"
+  },
+  
+  "feedbackSaveDraft": "Save Draft",
+  "@feedbackSaveDraft": {
+    "description": "Save as draft"
+  },
+  
+  "feedbackClear": "Clear Form",
+  "@feedbackClear": {
+    "description": "Clear form"
+  },
+  
+  "commonCancel": "Cancel",
+  "@commonCancel": {
+    "description": "Cancel button"
+  },
+  
+  "commonConfirm": "Confirm",
+  "@commonConfirm": {
+    "description": "Confirm button"
+  },
+  
+  "commonSave": "Save",
+  "@commonSave": {
+    "description": "Save button"
+  },
+  
+  "commonDelete": "Delete",
+  "@commonDelete": {
+    "description": "Delete button"
+  },
+  
+  "commonEdit": "Edit",
+  "@commonEdit": {
+    "description": "Edit button"
+  },
+  
+  "commonAdd": "Add",
+  "@commonAdd": {
+    "description": "Add button"
+  },
+  
+  "commonRemove": "Remove",
+  "@commonRemove": {
+    "description": "Remove button"
+  },
+  
+  "commonSearch": "Search",
+  "@commonSearch": {
+    "description": "Search button"
+  },
+  
+  "commonFilter": "Filter",
+  "@commonFilter": {
+    "description": "Filter button"
+  },
+  
+  "commonSort": "Sort",
+  "@commonSort": {
+    "description": "Sort button"
+  },
+  
+  "commonLoading": "Loading...",
+  "@commonLoading": {
+    "description": "Loading message"
+  },
+  
+  "commonError": "An error occurred",
+  "@commonError": {
+    "description": "General error message"
+  },
+  
+  "commonRetry": "Retry",
+  "@commonRetry": {
+    "description": "Retry button"
+  },
+  
+  "commonSuccess": "Success",
+  "@commonSuccess": {
+    "description": "Success message"
+  },
+  
+  "commonNoData": "No data available",
+  "@commonNoData": {
+    "description": "No data message"
+  },
+  
+  "commonNoResults": "No results found",
+  "@commonNoResults": {
+    "description": "No results message"
+  }
+}

@@ -1,0 +1,702 @@
+/* Chat History Page CSS - متوافق مع إطار chat.html */
+
+/* Search and Filter Bar */
+
+/* Search and Filter Bar - تصميم مبسط */
+.search-filter-bar {
+    background: var(--bs-body-bg);
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2rem;
+    margin-bottom: 1rem;
+}
+
+.search-box .input-group {
+    max-width: 350px;
+    border-radius: 50px;
+    border: 1px solid var(--bs-border-color);
+    overflow: hidden;
+}
+
+.search-box .input-group:focus-within {
+    box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), 0.1), 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    border-color: var(--bs-primary);
+}
+
+.search-box .input-group-text {
+    background: var(--bs-body-bg);
+    color: var(--bs-gray-500);
+    border: none;
+}
+
+.search-box .form-control {
+    border: none;
+    padding: 12px 16px;
+    font-size: 16px;
+    background: var(--bs-body-bg);
+}
+
+.search-box .form-control:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(37, 147, 95, 0.25);
+}
+
+.search-box .btn {
+    border: none;
+    padding: 12px 16px;
+    background: var(--bs-body-bg);
+    color: var(--bs-gray-500);
+}
+
+.search-box .btn:hover {
+    background: var(--bs-gray-100);
+    color: var(--bs-gray-700);
+}
+
+.filter-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.filter-buttons .btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--bs-border-color);
+    background: none;
+    color: var(--bs-secondary);
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: none;
+}
+
+.filter-buttons .btn:hover {
+    background: var(--bs-gray-100);
+    color: var(--bs-primary);
+}
+
+.filter-buttons .btn.active {
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: var(--bs-white);
+}
+
+.sort-dropdown .dropdown-toggle {
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid var(--bs-border-color);
+    background: none;
+    color: var(--bs-primary);
+    transition: none;
+}
+
+/* استخدام Bootstrap classes للقائمة المنسدلة */
+
+/* Chat History List */
+.chat-history-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Chat History Item */
+.chat-history-item {
+    background: var(--bs-body-bg);
+    border: none;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    z-index: 1;
+}
+
+.chat-history-item::before {
+    content: '';
+    position: absolute;
+    bottom: 55px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--bs-primary), var(--bs-teal));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.chat-history-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: 1px solid var(--bs-primary);
+}
+
+.chat-history-item:hover::before {
+    transform: scaleX(1);
+}
+
+.chat-item-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.chat-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(var(--bs-primary-rgb),0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bs-primary);
+    font-size: 1.25rem;
+}
+
+/* تم إزالة chat-actions لأن الأزرار الآن في الفوتر */
+
+/* تم إزالة action-btn لأن الأزرار الآن في الفوتر */
+
+/* تم إزالة action-btn لأن الأزرار الآن في الفوتر */
+
+.dropdown-menu {
+    border: 1px solid var(--bs-border-color);
+    box-shadow: none;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0;
+    min-width: 180px;
+    background: var(--bs-body-bg);
+    position: absolute;
+    z-index: 9999;
+    top: 100%;
+    right: 0;
+    margin-top: 0.25rem;
+}
+
+.dropdown-item {
+    border-radius: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    transition: none;
+    border: none;
+    background: none;
+}
+
+.dropdown-item:hover {
+    background: var(--bs-gray-100);
+    color: var(--bs-body-color);
+}
+
+.dropdown-divider {
+    margin: 0.25rem 0;
+    border-color: var(--bs-border-color);
+}
+
+/* Chat Item Content */
+.chat-item-content {
+    flex: 1;
+}
+
+/* Chat Item Footer */
+.chat-item-footer {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chat-date {
+    font-size: 0.75rem;
+    color: var(--bs-gray-500);
+    font-weight: 500;
+}
+
+.footer-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.footer-actions .dropdown {
+    position: relative;
+}
+
+.chat-history-item:hover {
+    z-index: 10;
+}
+
+.footer-actions .dropdown.show {
+    z-index: 10000;
+}
+
+/* أزرار بسمات خاصة - أيقونات فقط */
+.chat-item-footer .btn {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    width: 45px;
+    height: 35px;
+    display: inline-block;
+    color: var(--bs-secondary);
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+}
+
+.chat-item-footer .btn:hover {
+    background: rgba(var(--bs-secondary-rgb), 0.1);
+    color: var(--bs-secondary);
+    transform: scale(1.1);
+}
+
+.chat-item-footer .btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(var(--bs-secondary-rgb), 0.3);
+}
+
+.chat-item-footer .btn:active {
+    transform: scale(0.95);
+}
+
+.chat-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.chat-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--bs-body-color);
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+
+.chat-preview {
+    font-size: 0.875rem;
+    color: var(--bs-gray-600);
+    line-height: 1.5;
+    margin-bottom: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 1rem;
+    font-weight: 500;
+}
+
+/* تم نقل chat-date إلى الفوتر */
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    text-align: center;
+    padding: 2rem;
+}
+
+.empty-state-content {
+    max-width: 400px;
+}
+
+.empty-state-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--bs-gray-200), var(--bs-gray-300));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    color: var(--bs-gray-500);
+    font-size: 2rem;
+}
+
+.empty-state-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--bs-body-color);
+    margin-bottom: 0.75rem;
+}
+
+.empty-state-text {
+    color: var(--bs-gray-600);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chat-history-list {
+        padding: 1rem;
+    }
+    
+    .search-filter-bar {
+        padding: 1rem;
+    }
+    
+    .chat-item-footer {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .chat-item-footer .btn {
+        flex: 1;
+        min-width: 80px;
+    }
+    
+    .filter-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: stretch;
+    }
+    
+    .filter-actions .btn-group {
+        width: 100%;
+    }
+    
+    .filter-actions .btn-group .btn {
+        flex: 1;
+    }
+    
+    .sort-dropdown {
+        width: 100%;
+    }
+    
+    .sort-dropdown .dropdown-toggle {
+        width: 100%;
+    }
+    
+    .chat-history-item {
+        padding: 1rem;
+    }
+    
+    .chat-item-header {
+        margin-bottom: 0.75rem;
+    }
+    
+    .chat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .chat-actions {
+        opacity: 1;
+    }
+    
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .chat-history-list {
+        padding: 0.5rem;
+    }
+    
+    .search-filter-bar {
+        padding: 0.5rem;
+    }
+    
+    .chat-history-item {
+        padding: 1rem;
+    }
+    
+    .chat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .chat-item-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .chat-item-footer .btn {
+        width: 100%;
+    }
+}
+
+/* Pagination Styles */
+.pagination-container {
+    margin: 2rem 0;
+    padding: 0 2rem;
+}
+
+.pagination {
+    margin: 0;
+}
+
+.pagination .page-item .page-link {
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    padding: 0.5rem 0.75rem;
+    margin: 0 0.125rem;
+    border-radius: 0.375rem;
+    transition: none;
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.pagination .page-item .page-link:hover {
+    background: var(--bs-gray-100);
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: var(--bs-white);
+}
+
+.pagination .page-item.disabled .page-link {
+    background: var(--bs-gray-100);
+    border-color: var(--bs-border-color);
+    color: var(--bs-gray-500);
+    cursor: not-allowed;
+}
+
+.pagination .page-item.disabled .page-link:hover {
+    background: var(--bs-gray-100);
+    border-color: var(--bs-border-color);
+    color: var(--bs-gray-500);
+}
+
+/* تحسين أزرار الأسهم */
+.pagination .page-item .page-link i {
+    font-size: 0.875rem;
+    line-height: 1;
+}
+
+/* ضمان أن أزرار الأسهم بنفس حجم أزرار الأرقام */
+.pagination .page-item:first-child .page-link,
+.pagination .page-item:last-child .page-link {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    padding: 0;
+}
+
+/* Dark Mode Support */
+/* [data-bs-theme="dark"] .chat-history-item {
+    background: var(--bs-dark);
+    border-color: var(--bs-gray-700);
+} */
+
+[data-bs-theme="dark"] .chat-history-item:hover {
+    border-color: var(--bs-primary);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+[data-bs-theme="dark"] .search-box .input-group-text {
+    background: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .search-box .form-control {
+    background: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .action-btn {
+    background: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+}
+
+[data-bs-theme="dark"] .pagination .page-item .page-link {
+    background: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .pagination .page-item .page-link:hover {
+    background: var(--bs-gray-800);
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+}
+
+[data-bs-theme="dark"] .pagination .page-item.active .page-link {
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: var(--bs-white);
+}
+
+[data-bs-theme="dark"] .pagination .page-item.disabled .page-link {
+    background: var(--bs-gray-800);
+    border-color: var(--bs-border-color);
+    color: var(--bs-gray-500);
+}
+
+[data-bs-theme="dark"] .pagination .page-item.disabled .page-link:hover {
+    background: var(--bs-gray-800);
+    border-color: var(--bs-border-color);
+    color: var(--bs-gray-500);
+}
+
+/* تحسين أزرار الأسهم في Dark Mode */
+[data-bs-theme="dark"] .pagination .page-item:first-child .page-link,
+[data-bs-theme="dark"] .pagination .page-item:last-child .page-link {
+    background: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .pagination .page-item:first-child .page-link:hover,
+[data-bs-theme="dark"] .pagination .page-item:last-child .page-link:hover {
+    background: var(--bs-gray-800);
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+}
+
+[data-bs-theme="dark"] .action-btn:hover {
+    background: var(--bs-primary);
+    color: var(--bs-white);
+}
+
+[data-bs-theme="dark"] .dropdown-menu {
+    background: var(--bs-dark);
+    border-color: var(--bs-gray-700);
+}
+
+[data-bs-theme="dark"] .dropdown-item {
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover {
+    background: var(--bs-primary);
+    color: var(--bs-white);
+}
+
+[data-bs-theme="dark"] .empty-state-icon {
+    background: linear-gradient(135deg, var(--bs-gray-700), var(--bs-gray-600));
+    color: var(--bs-gray-400);
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--bs-primary);
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Focus States for Accessibility */
+.chat-history-item:focus {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+}
+
+.action-btn:focus {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .chat-history-header,
+    .search-filter-bar,
+    .chat-actions {
+        display: none !important;
+    }
+    
+    .chat-history-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .chat-history-item {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+}

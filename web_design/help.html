@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>المساعدة - مساعد كفو</title>
+
+    <!-- Bootstrap 5.3.3 RTL -->
+    <link rel="stylesheet" type="text/css" id="themestylesheet" href="assets/css/ksa.bootstrap.rtl.css" />
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/d27eb6fc68.js" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap"
+        rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/chat.css" />
+    <link rel="stylesheet" href="assets/css/user-profile.css" />
+    <link rel="stylesheet" href="assets/css/help.css" />
+    <link rel="stylesheet" href="assets/css/theme-support.css" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-resizer" id="sidebarResizer"></div>
+        <div class="sidebar-header">
+            <a href="index.html" class="sidebar-brand">
+                <i class="kfu-icon kfu-icon-primary me-2"></i>
+                مساعد كفو
+            </a>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="help-nav">
+                <div class="p-3 border-bottom">
+                    <h6 class="text-muted mb-0">
+                        <i class="fas fa-question-circle me-2"></i>
+                        المساعدة والدعم
+                    </h6>
+                </div>
+
+                <div class="help-menu">
+                    <a href="#getting-started" class="help-menu-item active"
+                        onclick="showHelpSection('getting-started')">
+                        <i class="fas fa-rocket"></i>
+                        <span>البدء السريع</span>
+                    </a>
+                    <a href="#features" class="help-menu-item" onclick="showHelpSection('features')">
+                        <i class="fas fa-star"></i>
+                        <span>الميزات الرئيسية</span>
+                    </a>
+                    <a href="#chat-guide" class="help-menu-item" onclick="showHelpSection('chat-guide')">
+                        <i class="fas fa-comments"></i>
+                        <span>دليل المحادثة</span>
+                    </a>
+                    <a href="#folders" class="help-menu-item" onclick="showHelpSection('folders')">
+                        <i class="fas fa-folder"></i>
+                        <span>إدارة المجلدات</span>
+                    </a>
+                    <a href="#settings" class="help-menu-item" onclick="showHelpSection('settings')">
+                        <i class="fas fa-cog"></i>
+                        <span>الإعدادات</span>
+                    </a>
+                    <a href="#faq" class="help-menu-item" onclick="showHelpSection('faq')">
+                        <i class="fas fa-question"></i>
+                        <span>الأسئلة الشائعة</span>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer جديد -->
+        <div class="sidebar-footer-new" id="sidebarFooterNew">
+            <div class="footer-content">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="chat.html" class="sidebar-menu-link">
+                            <i class="fas fa-comments sidebar-menu-icon"></i>
+                            العودة للمحادثة
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="settings.html" class="sidebar-menu-link">
+                            <i class="fas fa-cog sidebar-menu-icon"></i>
+                            الإعدادات
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="feedback.html" class="sidebar-menu-link">
+                            <i class="fas fa-comment-dots sidebar-menu-icon"></i>
+                            إرسال ملاحظات
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="index.html" class="sidebar-menu-link">
+                            <i class="fas fa-home sidebar-menu-icon"></i>
+                            الصفحة الرئيسية
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link" onclick="logout()">
+                            <i class="fas fa-sign-out-alt sidebar-menu-icon"></i>
+                            تسجيل الخروج
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- User Profile Section -->
+        <div class="user-profile-section">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fa-duotone fa-light fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">أحمد محمد</div>
+                    <div class="user-role">طالب</div>
+                </div>
+                <div class="user-dropdown-toggle">
+                    <i class="fa-duotone fa-light fa-chevron-up"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Help Area -->
+    <div class="main-help">
+        <!-- Help Header -->
+        <div class="help-header">
+            <div class="help-header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h4 class="help-title" id="helpTitle">البدء السريع</h4>
+            </div>
+            <div class="help-actions">
+                <button class="btn btn-outline-primary me-2" onclick="searchHelp()">
+                    <i class="fas fa-search me-2"></i>
+                    البحث في المساعدة
+                </button>
+                <button class="btn btn-primary" onclick="window.location.href='feedback.html'">
+                    <i class="fas fa-headset me-2"></i>
+                    الدعم الفني
+                </button>
+            </div>
+        </div>
+
+        <!-- Help Content -->
+        <div class="help-content">
+            <!-- Getting Started Section -->
+            <div class="help-section active" id="getting-started-section">
+                <div class="help-card">
+                    <div class="help-card-header">
+                        <h5><i class="fas fa-rocket me-2"></i>البدء السريع مع مساعد كفو</h5>
+                        <p class="text-muted">دليل سريع لبدء استخدام التطبيق</p>
+                    </div>
+                    <div class="help-card-body">
+                        <div class="welcome-banner">
+                            <div class="welcome-icon">
+                                <i class="kfu-icon kfu-icon-primary"></i>
+                            </div>
+                            <h3>مرحباً بك في مساعد كفو!</h3>
+                            <p>مساعد ذكي مصمم خصيصاً لطلبة جامعة الملك فيصل لمساعدتك في الشؤون الأكاديمية والدراسية.</p>
+                        </div>
+
+                        <div class="quick-steps">
+                            <h6 class="steps-title">خطوات البدء السريع:</h6>
+
+                            <div class="step-item">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h6>ابدأ محادثة جديدة</h6>
+                                    <p>انقر على زر "محادثة جديدة" في الشريط الجانبي لبدء محادثة مع المساعد الذكي.</p>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h6>اطرح سؤالك</h6>
+                                    <p>اكتب سؤالك في حقل الإدخال واضغط Enter أو انقر على زر الإرسال.</p>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h6>احصل على الإجابة</h6>
+                                    <p>سيقوم المساعد الذكي بالرد عليك فوراً مع معلومات مفصلة ومفيدة.</p>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h6>نظم محادثاتك</h6>
+                                    <p>أنشئ مجلدات لتنظيم محادثاتك حسب الموضوع أو المقرر الدراسي.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="quick-actions">
+                            <a href="chat.html" class="btn btn-primary">
+                                <i class="fas fa-comments me-2"></i>
+                                ابدأ محادثة جديدة
+                            </a>
+                            <a href="#features" class="btn btn-outline-secondary" onclick="showHelpSection('features')">
+                                <i class="fas fa-star me-2"></i>
+                                تعرف على الميزات
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="help-section" id="features-section">
+                <div class="help-card">
+                    <div class="help-card-header">
+                        <h5><i class="fas fa-star me-2"></i>الميزات الرئيسية</h5>
+                        <p class="text-muted">اكتشف جميع الميزات المتاحة في التطبيق</p>
+                    </div>
+                    <div class="help-card-body">
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <h6>ذكاء اصطناعي متقدم</h6>
+                                <p>مساعد ذكي يستخدم أحدث تقنيات الذكاء الاصطناعي لتقديم إجابات دقيقة ومفيدة.</p>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-folder-tree"></i>
+                                </div>
+                                <h6>إدارة المجلدات</h6>
+                                <p>نظم محادثاتك في مجلدات حسب الموضوع أو المقرر الدراسي للوصول السريع.</p>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <h6>البحث المتقدم</h6>
+                                <p>ابحث في محادثاتك السابقة بسرعة وسهولة للعثور على المعلومات المطلوبة.</p>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-download"></i>
+                                </div>
+                                <h6>تصدير المحادثات</h6>
+                                <p>صدّر محادثاتك كملفات PDF أو نصية للمشاركة أو الحفظ.</p>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <h6>تصميم متجاوب</h6>
+                                <p>استخدم التطبيق على أي جهاز - هاتف، تابلت، أو حاسوب.</p>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <h6>خصوصية وأمان</h6>
+                                <p>بياناتك محفوظة محلياً على جهازك مع إعدادات خصوصية متقدمة.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Guide Section -->
+            <div class="help-section" id="chat-guide-section">
+                <div class="help-card">
+                    <div class="help-card-header">
+                        <h5><i class="fas fa-comments me-2"></i>دليل المحادثة</h5>
+                        <p class="text-muted">تعلم كيفية استخدام المحادثة بشكل فعال</p>
+                    </div>
+                    <div class="help-card-body">
+                        <div class="chat-guide-content">
+                            <div class="guide-section">
+                                <h6>كيفية بدء محادثة:</h6>
+                                <ol>
+                                    <li>انقر على زر "محادثة جديدة" في الشريط الجانبي</li>
+                                    <li>اكتب سؤالك في حقل الإدخال</li>
+                                    <li>اضغط Enter أو انقر على زر الإرسال</li>
+                                    <li>انتظر رد المساعد الذكي</li>
+                                </ol>
+                            </div>
+
+                            <div class="guide-section">
+                                <h6>نصائح للحصول على إجابات أفضل:</h6>
+                                <ul>
+                                    <li><strong>كن محدداً:</strong> اطرح أسئلة واضحة ومحددة</li>
+                                    <li><strong>قدم سياقاً:</strong> اذكر المقرر الدراسي أو الموضوع</li>
+                                    <li><strong>استخدم أمثلة:</strong> قدم أمثلة لتوضيح سؤالك</li>
+                                    <li><strong>اطرح أسئلة متابعة:</strong> اطلب توضيحاً إذا لم تفهم الإجابة</li>
+                                </ul>
+                            </div>
+
+                            <div class="guide-section">
+                                <h6>أمثلة على الأسئلة المفيدة:</h6>
+                                <div class="examples-grid">
+                                    <div class="example-item">
+                                        <div class="example-icon">📚</div>
+                                        <div class="example-text">
+                                            <strong>مثال:</strong> "اشرح لي مفهوم الأشجار الثنائية في مقرر هياكل
+                                            البيانات"
+                                        </div>
+                                    </div>
+                                    <div class="example-item">
+                                        <div class="example-icon">📅</div>
+                                        <div class="example-text">
+                                            <strong>مثال:</strong> "متى موعد التسجيل للفصل القادم؟"
+                                        </div>
+                                    </div>
+                                    <div class="example-item">
+                                        <div class="example-icon">📊</div>
+                                        <div class="example-text">
+                                            <strong>مثال:</strong> "كيف أستعلم عن درجاتي في مقرر البرمجة؟"
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Folders Section -->
+            <div class="help-section" id="folders-section">
+                <div class="help-card">
+                    <div class="help-card-header">
+                        <h5><i class="fas fa-folder me-2"></i>إدارة المجلدات</h5>
+                        <p class="text-muted">تعلم كيفية تنظيم محادثاتك باستخدام المجلدات</p>
+                    </div>
+                    <div class="help-card-body">
+                        <div class="folders-guide">
+                            <div class="guide-section">
+                                <h6>إنشاء مجلد جديد:</h6>
+                                <ol>
+                                    <li>انقر على زر "+" بجانب "المجلدات" في الشريط الجانبي</li>
+                                    <li>أدخل اسم المجلد (مثل: "البرمجة"، "هياكل البيانات")</li>
+                                    <li>اختر أيقونة مناسبة للمجلد</li>
+                                    <li>انقر على "إنشاء المجلد"</li>
+                                </ol>
+                            </div>
+
+                            <div class="guide-section">
+                                <h6>إضافة محادثة إلى مجلد:</h6>
+                                <ol>
+                                    <li>انقر على زر "..." بجانب المحادثة</li>
+                                    <li>اختر "إضافة إلى مجلد"</li>
+                                    <li>اختر المجلد المناسب أو أنشئ مجلداً جديداً</li>
+                                </ol>
+                            </div>
+
+                            <div class="guide-section">
+                                <h6>إدارة المجلدات:</h6>
+                                <ul>
+                                    <li><strong>إعادة تسمية:</strong> انقر على "..." بجانب المجلد واختر "إعادة تسمية"
+                                    </li>
+                                    <li><strong>تغيير الأيقونة:</strong> انقر على "..." واختر "تغيير الأيقونة"</li>
+                                    <li><strong>حذف المجلد:</strong> انقر على "..." واختر "حذف المجلد" (سيتم حذف جميع
+                                        المحادثات داخل المجلد)</li>
+                                </ul>
+                            </div>
+
+                            <div class="folders-tips">
+                                <h6>نصائح لتنظيم المجلدات:</h6>
+                                <div class="tips-grid">
+                                    <div class="tip-item">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <p>أنشئ مجلدات لكل مقرر دراسي</p>
+                                    </div>
+                                    <div class="tip-item">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <p>استخدم أسماء واضحة ووصفية</p>
+                                    </div>
+                                    <div class="tip-item">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <p>اختر أيقونات مميزة لكل مجلد</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="help-section" id="settings-section">
+                <div class="help-card">
+                    <div class="help-card-header">
+                        <h5><i class="fas fa-cog me-2"></i>الإعدادات</h5>
+                        <p class="text-muted">تعرف على جميع إعدادات التطبيق وكيفية تخصيصها</p>
+                    </div>
+                    <div class="help-card-body">
+                        <div class="settings-guide">
+                            <div class="guide-section">
+                                <h6>الإعدادات العامة:</h6>
+                                <ul>
+                                    <li><strong>اللغة:</strong> اختر بين العربية والإنجليزية</li>
+                                    <li><strong>المنطقة الزمنية:</strong> حدد المنطقة الزمنية المناسبة</li>
+                                    <li><strong>الوضع التجريبي:</strong> فعّل للوصول إلى الميزات الجديدة</li>
+                                    <li><strong>التحديثات التلقائية:</strong> فعّل لتحديث التطبيق تلقائياً</li>
+                                </ul>
+                            </div>
+
+                            <div class="guide-section">
+                                <h6>إعدادات المظهر:</h6>
+                                <ul>
+                                    <li><strong>المظهر:</strong> اختر بين الفاتح والداكن والتلقائي</li>
+                                    <li><strong>حجم الخط:</strong> عدّل حجم النص حسب تفضيلاتك</li>
+                                    <li><strong>الشريط الجانبي:</strong> اختر متى تريد إظهاره</li>
+                                    <li><strong>الرسوم المتحركة:</strong> فعّل أو ألغِ الانتقالات</li>
+                                </ul>
+                            </div>
+
+                            <div class="guide-section">
+                                <h6>إعدادات المحادثة:</h6>
+                                <ul>
+                                    <li><strong>نمط الرد:</strong> اختر بين مفصل ومختصر ومتوازن</li>
+                                    <li><strong>الحد الأقصى للرسائل:</strong> حدد عدد الرسائل المحفوظة</li>
+                                    <li><strong>الرد التلقائي:</strong> فعّل للردود التلقائية</li>
+                                    <li><strong>اقتراحات المحادثة:</strong> فعّل لإظهار الاقتراحات</li>
+                                </ul>
+                            </div>
+
+                            <div class="guide-section">
+                                <h6>إعدادات الخصوصية:</h6>
+                                <ul>
+                                    <li><strong>البيانات التحليلية:</strong> فعّل لتحسين التطبيق</li>
+                                    <li><strong>حفظ سجل المحادثات:</strong> فعّل لحفظ المحادثات محلياً</li>
+                                    <li><strong>مشاركة المحادثات:</strong> فعّل للمشاركة مع الآخرين</li>
+                                    <li><strong>حذف البيانات:</strong> احذف جميع البيانات المحفوظة</li>
+                                </ul>
+                            </div>
+
+                            <div class="settings-note">
+                                <div class="note-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="note-content">
+                                    <h6>ملاحظة مهمة:</h6>
+                                    <p>جميع الإعدادات محفوظة محلياً على جهازك. تأكد من حفظ الإعدادات بعد تغييرها.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="help-section" id="faq-section">
+                <div class="help-card">
+                    <div class="help-card-header">
+                        <h5><i class="fas fa-question me-2"></i>الأسئلة الشائعة</h5>
+                        <p class="text-muted">إجابات على أكثر الأسئلة شيوعاً</p>
+                    </div>
+                    <div class="help-card-body">
+                        <div class="faq-list">
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <h6>كيف يمكنني بدء محادثة جديدة؟</h6>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>انقر على زر "محادثة جديدة" في الشريط الجانبي، أو استخدم الاختصار Ctrl+N (Cmd+N
+                                        على Mac).</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <h6>كيف يمكنني حفظ محادثة؟</h6>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>المحادثات تُحفظ تلقائياً. يمكنك أيضاً تصديرها كملف PDF أو نصي من خلال زر "تصدير
+                                        المحادثة".</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <h6>كيف يمكنني البحث في المحادثات السابقة؟</h6>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>استخدم حقل البحث في أعلى الشريط الجانبي، أو ابحث في مجلد محدد بالنقر على المجلد
+                                        أولاً.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <h6>كيف يمكنني تغيير مظهر التطبيق؟</h6>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>اذهب إلى الإعدادات > المظهر، واختر بين المظهر الفاتح والداكن والتلقائي.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <h6>كيف يمكنني حذف محادثة؟</h6>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>انقر على زر "..." بجانب المحادثة واختر "حذف". تأكد من أنك تريد حذف المحادثة
+                                        نهائياً.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <h6>كيف يمكنني مشاركة محادثة مع شخص آخر؟</h6>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>انقر على زر "..." بجانب المحادثة واختر "مشاركة"، ثم اختر طريقة المشاركة المفضلة
+                                        لديك.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <h6>هل يمكنني استخدام التطبيق بدون إنترنت؟</h6>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>يمكنك عرض المحادثات المحفوظة بدون إنترنت، لكن للتفاعل مع المساعد الذكي تحتاج إلى
+                                        اتصال بالإنترنت.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <h6>كيف يمكنني تغيير إعدادات الذكاء الاصطناعي؟</h6>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>اذهب إلى الإعدادات > إعدادات الذكاء الاصطناعي، وعدّل النموذج المستخدم ودرجة
+                                        الإبداع والسياق المحفوظ.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/icons.js"></script>
+    <script src="assets/js/kfu-icon.js"></script>
+    <script src="assets/js/theme-switcher.js"></script>
+    <script src="assets/js/settings-manager.js"></script>
+    <script src="assets/js/font-manager.js"></script>
+    <script src="assets/js/notification-manager.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/user-profile.js"></script>
+    <script src="assets/js/folders.js"></script>
+    <script src="assets/js/help.js"></script>
+    <!-- User Profile functionality is now handled by user-profile.js -->
+</body>
+
+</html>
