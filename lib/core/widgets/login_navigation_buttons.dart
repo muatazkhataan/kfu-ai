@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 /// Navigation buttons for login screen
 class LoginNavigationButtons extends StatelessWidget {
@@ -36,7 +37,7 @@ class LoginNavigationButtons extends StatelessWidget {
                     vertical: 16,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(25),
                   ),
                 ),
                 child: Row(
@@ -44,9 +45,9 @@ class LoginNavigationButtons extends StatelessWidget {
                   children: [
                     const Icon(Icons.arrow_back, size: 18),
                     const SizedBox(width: 8),
-                    const Text(
-                      'السابق',
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.authPrevious,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -70,7 +71,7 @@ class LoginNavigationButtons extends StatelessWidget {
                   vertical: 16,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(25),
                 ),
               ),
               child: Row(
@@ -78,7 +79,7 @@ class LoginNavigationButtons extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      'تسجيل الدخول',
+                      AppLocalizations.of(context)!.authLogin,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,

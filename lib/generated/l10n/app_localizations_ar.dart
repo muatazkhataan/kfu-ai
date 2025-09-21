@@ -12,7 +12,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appName => 'مساعد كفو';
 
   @override
-  String get appDescription => 'مساعد ذكي للطلبة - جامعة الملك فيصل';
+  String get appDescription =>
+      'أنا مساعدك الذكي. يمكنني مساعدتك في المذاكرة، الشؤون الأكاديمية، وحل المشاكل الدراسية.';
+
+  @override
+  String get appWelcomeMessage => 'مرحباً بك في مساعد كفو!';
+
+  @override
+  String get appNameShort => 'مساعد كفو';
 
   @override
   String get authLogin => 'تسجيل الدخول';
@@ -33,7 +40,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authEnter => 'دخول';
 
   @override
-  String get authRememberMe => 'تذكر رمز المرور';
+  String get authRememberMe => 'تذكرني';
 
   @override
   String get chatNew => 'محادثة جديدة';
@@ -306,4 +313,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get commonNoResults => 'لا توجد نتائج';
+
+  @override
+  String get authAcademicId => 'الرقم الأكاديمي';
+
+  @override
+  String get authAcademicIdHint => 'أدخل رقمك الأكاديمي';
+
+  @override
+  String get authPasswordHint => 'أدخل رمز المرور';
+
+  @override
+  String get authLoginTitle => 'تسجيل الدخول';
 }

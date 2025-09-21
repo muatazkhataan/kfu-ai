@@ -107,8 +107,20 @@ abstract class AppLocalizations {
   /// وصف التطبيق
   ///
   /// In ar, this message translates to:
-  /// **'مساعد ذكي للطلبة - جامعة الملك فيصل'**
+  /// **'أنا مساعدك الذكي. يمكنني مساعدتك في المذاكرة، الشؤون الأكاديمية، وحل المشاكل الدراسية.'**
   String get appDescription;
+
+  /// رسالة الترحيب في التطبيق
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحباً بك في مساعد كفو!'**
+  String get appWelcomeMessage;
+
+  /// اسم التطبيق المختصر
+  ///
+  /// In ar, this message translates to:
+  /// **'مساعد كفو'**
+  String get appNameShort;
 
   /// عنوان شاشة تسجيل الدخول
   ///
@@ -146,10 +158,10 @@ abstract class AppLocalizations {
   /// **'دخول'**
   String get authEnter;
 
-  /// خيار تذكر كلمة المرور
+  /// خيار تذكر المستخدم
   ///
   /// In ar, this message translates to:
-  /// **'تذكر رمز المرور'**
+  /// **'تذكرني'**
   String get authRememberMe;
 
   /// إنشاء محادثة جديدة
@@ -667,6 +679,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد نتائج'**
   String get commonNoResults;
+
+  /// حقل الرقم الأكاديمي
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم الأكاديمي'**
+  String get authAcademicId;
+
+  /// نص توضيحي لحقل الرقم الأكاديمي
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رقمك الأكاديمي'**
+  String get authAcademicIdHint;
+
+  /// نص توضيحي لحقل رمز المرور
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رمز المرور'**
+  String get authPasswordHint;
+
+  /// عنوان شاشة تسجيل الدخول
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الدخول'**
+  String get authLoginTitle;
 }
 
 class _AppLocalizationsDelegate

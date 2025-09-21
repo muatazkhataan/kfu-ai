@@ -7,9 +7,19 @@
     "description": "Application name"
   },
   
-  "appDescription": "Smart Assistant for Students - King Faisal University",
+  "appDescription": "I am your smart assistant. I can help you with studying, academic matters, and solving academic problems.",
   "@appDescription": {
     "description": "Application description"
+  },
+  
+  "appWelcomeMessage": "Welcome to KFU AI Assistant!",
+  "@appWelcomeMessage": {
+    "description": "Application welcome message"
+  },
+  
+  "appNameShort": "KFU AI Assistant",
+  "@appNameShort": {
+    "description": "Short application name"
   },
   
   "authLogin": "Login",
@@ -42,8 +52,8 @@
     "description": "Login button"
   },
   
-  "authRememberMe": "Remember Password",
-  "@authRememberMe": {
+  "authRememberPassword": "Remember Password",
+  "@authRememberPassword": {
     "description": "Remember password option"
   },
   
@@ -487,5 +497,30 @@
   "commonNoResults": "No results found",
   "@commonNoResults": {
     "description": "No results message"
+  },
+
+  "authAcademicId": "Academic ID",
+  "@authAcademicId": {
+    "description": "Academic ID field"
+  },
+
+  "authAcademicIdHint": "Enter your academic ID",
+  "@authAcademicIdHint": {
+    "description": "Academic ID field hint"
+  },
+
+  "authPasswordHint": "Enter your password",
+  "@authPasswordHint": {
+    "description": "Password field hint"
+  },
+
+  "authLoginTitle": "Login",
+  "@authLoginTitle": {
+    "description": "Login screen title"
+  },
+
+  "authRememberMe": "Remember me",
+  "@authRememberMe": {
+    "description": "Remember me option"
   }
 }

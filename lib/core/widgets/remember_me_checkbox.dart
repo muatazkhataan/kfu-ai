@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 /// Remember me checkbox widget
 class RememberMeCheckbox extends StatefulWidget {
@@ -40,7 +41,7 @@ class _RememberMeCheckboxState extends State<RememberMeCheckbox> {
           activeColor: Theme.of(context).colorScheme.primary,
         ),
         Text(
-          'تذكرني',
+          AppLocalizations.of(context)!.authRememberMe,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 /// Floating input field with rounded corners and icon
 class FloatingInputField extends StatefulWidget {
@@ -22,7 +23,7 @@ class FloatingInputField extends StatefulWidget {
     this.isPassword = false,
     required this.icon,
     this.onNext,
-    this.nextButtonText = 'التالي',
+    this.nextButtonText,
     this.showNextButton = true,
   });
 
@@ -176,12 +177,12 @@ class _FloatingInputFieldState extends State<FloatingInputField>
                 const SizedBox(height: 24),
                 // Next button with arrow
                 if (widget.showNextButton && widget.onNext != null)
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.85,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton.icon(
+                        ElevatedButton(
                           onPressed: widget.onNext,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(
@@ -198,13 +199,20 @@ class _FloatingInputFieldState extends State<FloatingInputField>
                               borderRadius: BorderRadius.circular(25),
                             ),
                           ),
-                          icon: const Icon(Icons.arrow_forward, size: 20),
-                          label: Text(
-                            widget.nextButtonText!,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                widget.nextButtonText ??
+                                    AppLocalizations.of(context)!.authNext,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.arrow_forward, size: 20),
+                            ],
                           ),
                         ),
                       ],

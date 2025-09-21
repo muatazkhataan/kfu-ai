@@ -17,9 +17,11 @@ class NeuralNetworkEffect extends StatelessWidget {
     return AnimatedBuilder(
       animation: animation,
       builder: (context, child) {
-        return CustomPaint(
-          painter: NeuralNetworkPainter(animation.value, primaryColor),
-          size: Size.infinite,
+        return Positioned.fill(
+          child: CustomPaint(
+            painter: NeuralNetworkPainter(animation.value, primaryColor),
+            size: Size.infinite,
+          ),
         );
       },
     );

@@ -13,7 +13,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'Smart Assistant for Students - King Faisal University';
+      'I am your smart assistant. I can help you with studying, academic matters, and solving academic problems.';
+
+  @override
+  String get appWelcomeMessage => 'Welcome to KFU AI Assistant!';
+
+  @override
+  String get appNameShort => 'KFU AI Assistant';
 
   @override
   String get authLogin => 'Login';
@@ -34,7 +40,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authEnter => 'Enter';
 
   @override
-  String get authRememberMe => 'Remember Password';
+  String get authRememberMe => 'Remember me';
 
   @override
   String get chatNew => 'New Chat';
@@ -308,4 +314,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonNoResults => 'No results found';
+
+  @override
+  String get authAcademicId => 'Academic ID';
+
+  @override
+  String get authAcademicIdHint => 'Enter your academic ID';
+
+  @override
+  String get authPasswordHint => 'Enter your password';
+
+  @override
+  String get authLoginTitle => 'Login';
 }

@@ -7,9 +7,19 @@
     "description": "اسم التطبيق"
   },
   
-  "appDescription": "مساعد ذكي للطلبة - جامعة الملك فيصل",
+  "appDescription": "أنا مساعدك الذكي. يمكنني مساعدتك في المذاكرة، الشؤون الأكاديمية، وحل المشاكل الدراسية.",
   "@appDescription": {
     "description": "وصف التطبيق"
+  },
+  
+  "appWelcomeMessage": "مرحباً بك في مساعد كفو!",
+  "@appWelcomeMessage": {
+    "description": "رسالة الترحيب في التطبيق"
+  },
+  
+  "appNameShort": "مساعد كفو",
+  "@appNameShort": {
+    "description": "اسم التطبيق المختصر"
   },
   
   "authLogin": "تسجيل الدخول",
@@ -42,8 +52,8 @@
     "description": "زر تسجيل الدخول"
   },
   
-  "authRememberMe": "تذكر رمز المرور",
-  "@authRememberMe": {
+  "authRememberPassword": "تذكر رمز المرور",
+  "@authRememberPassword": {
     "description": "خيار تذكر كلمة المرور"
   },
   
@@ -487,5 +497,30 @@
   "commonNoResults": "لا توجد نتائج",
   "@commonNoResults": {
     "description": "رسالة عدم وجود نتائج"
+  },
+
+  "authAcademicId": "الرقم الأكاديمي",
+  "@authAcademicId": {
+    "description": "حقل الرقم الأكاديمي"
+  },
+
+  "authAcademicIdHint": "أدخل رقمك الأكاديمي",
+  "@authAcademicIdHint": {
+    "description": "نص توضيحي لحقل الرقم الأكاديمي"
+  },
+
+  "authPasswordHint": "أدخل رمز المرور",
+  "@authPasswordHint": {
+    "description": "نص توضيحي لحقل رمز المرور"
+  },
+
+  "authLoginTitle": "تسجيل الدخول",
+  "@authLoginTitle": {
+    "description": "عنوان شاشة تسجيل الدخول"
+  },
+
+  "authRememberMe": "تذكرني",
+  "@authRememberMe": {
+    "description": "خيار تذكر المستخدم"
   }
 }

@@ -62,6 +62,8 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _particleAnimation;
   late Animation<double> _kfuLogoAnimation;
   late Animation<double> _delitLogoAnimation;
+  late AnimationController _countdownController;
+  int _countdown = 30;
 
   @override
   void initState() {
@@ -88,6 +90,11 @@ class _SplashScreenState extends State<SplashScreen>
 
     _delitLogoController = AnimationController(
       duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    _countdownController = AnimationController(
+      duration: const Duration(seconds: 30),
       vsync: this,
     );
 
@@ -119,6 +126,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _animationController.forward();
     _particleController.repeat();
+    _startCountdown();
 
     // Start logo animations with delay
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -144,12 +152,33 @@ class _SplashScreenState extends State<SplashScreen>
     // });
   }
 
+  void _startCountdown() {
+    _countdownController.forward();
+    _countdownController.addListener(() {
+      if (mounted) {
+        setState(() {
+          _countdown = 16 - (_countdownController.value * 30).round();
+        });
+      }
+    });
+
+    // Auto navigate when countdown reaches 0
+    Future.delayed(const Duration(seconds: 16), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      }
+    });
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
     _particleController.dispose();
     _kfuLogoController.dispose();
     _delitLogoController.dispose();
+    _countdownController.dispose();
     super.dispose();
   }
 
@@ -206,21 +235,20 @@ class _SplashScreenState extends State<SplashScreen>
                                 ).colorScheme.primary,
                               ),
 
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 100),
 
-                              // App Name
+                              // Welcome message
                               Text(
-                                context.l10n.appName,
-                                style: Theme.of(context).textTheme.displayMedium
+                                context.l10n.appWelcomeMessage,
+                                style: Theme.of(context).textTheme.titleLarge
                                     ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
+                                textAlign: TextAlign.center,
                               ),
 
-                              const SizedBox(height: 8),
+                              const SizedBox(height: 16),
 
                               // App Description
                               Text(
@@ -236,30 +264,71 @@ class _SplashScreenState extends State<SplashScreen>
 
                               const SizedBox(height: 48),
 
-                              // Loading indicator
+                              // Loading indicator with countdown
                               SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Theme.of(context).colorScheme.primary,
-                                  ),
+                                width: 60,
+                                height: 60,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      strokeWidth: 1,
+                                      value: _countdown / 16,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Theme.of(context).colorScheme.primary,
+                                      ),
+                                    ),
+                                    Text(
+                                      '$_countdown',
+                                      style: TextStyle(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
 
                               const SizedBox(height: 24),
 
-                              // Tap instruction
-                              Text(
-                                'اضغط للمتابعة',
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                      fontStyle: FontStyle.italic,
+                              // Login button
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginScreen(),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                    foregroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 32,
+                                      vertical: 16,
                                     ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    context.l10n.authLogin,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -299,9 +368,11 @@ class _LoginScreenState extends State<LoginScreen>
   late AnimationController _particleController;
   late AnimationController _academicIdController;
   late AnimationController _passwordController;
+  late AnimationController _logoController;
   late Animation<double> _particleAnimation;
   late Animation<double> _academicIdAnimation;
   late Animation<double> _passwordAnimation;
+  late Animation<double> _logoAnimation;
 
   final TextEditingController _academicIdTextController =
       TextEditingController();
@@ -331,6 +402,11 @@ class _LoginScreenState extends State<LoginScreen>
       vsync: this,
     );
 
+    _logoController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
     _particleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _particleController, curve: Curves.linear),
     );
@@ -343,8 +419,13 @@ class _LoginScreenState extends State<LoginScreen>
       CurvedAnimation(parent: _passwordController, curve: Curves.easeInOut),
     );
 
+    _logoAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _logoController, curve: Curves.easeInOut),
+    );
+
     _particleController.repeat();
     _academicIdController.forward();
+    _logoController.forward();
   }
 
   void _onNextPressed() {
@@ -374,10 +455,13 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   void _onLoginPressed() {
-    // TODO: Implement login logic
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const ChatScreen()),
-    );
+    // Hide logos when logging in
+    _logoController.reverse().then((_) {
+      // TODO: Implement login logic
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const ChatScreen()),
+      );
+    });
   }
 
   @override
@@ -385,6 +469,7 @@ class _LoginScreenState extends State<LoginScreen>
     _particleController.dispose();
     _academicIdController.dispose();
     _passwordController.dispose();
+    _logoController.dispose();
     _academicIdTextController.dispose();
     _passwordTextController.dispose();
     super.dispose();
@@ -404,7 +489,7 @@ class _LoginScreenState extends State<LoginScreen>
             ),
             // Animated KFU Logo at top left
             AnimatedKfuLogo(
-              animation: _academicIdAnimation,
+              animation: _logoAnimation,
               logoPath: 'assets/images/kfu_logo.png',
               logoHeight: 75,
               top: 50,
@@ -424,29 +509,10 @@ class _LoginScreenState extends State<LoginScreen>
                       logoSize: 75,
                       logoColor: Theme.of(context).colorScheme.primary,
                     ),
-                    const SizedBox(height: 16),
-                    // App Name
-                    Text(
-                      context.l10n.appName,
-                      style: Theme.of(context).textTheme.displayMedium
-                          ?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    // App Description
-                    Text(
-                      context.l10n.appDescription,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
                     const SizedBox(height: 24),
                     // Login Title
                     Text(
-                      'تسجيل الدخول',
+                      context.l10n.authLoginTitle,
                       style: Theme.of(context).textTheme.headlineMedium
                           ?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
@@ -458,19 +524,19 @@ class _LoginScreenState extends State<LoginScreen>
                     if (!_isPasswordStep)
                       FloatingInputField(
                         animation: _academicIdAnimation,
-                        label: 'الرقم الأكاديمي',
-                        hint: 'أدخل رقمك الأكاديمي',
+                        label: context.l10n.authAcademicId,
+                        hint: context.l10n.authAcademicIdHint,
                         controller: _academicIdTextController,
                         icon: FontAwesomeIcons.user,
                         onNext: _onNextPressed,
-                        nextButtonText: 'التالي',
+                        nextButtonText: context.l10n.authNext,
                       ),
                     // Password input (second step)
                     if (_isPasswordStep)
                       FloatingInputField(
                         animation: _passwordAnimation,
-                        label: 'رمز المرور',
-                        hint: 'أدخل رمز المرور',
+                        label: context.l10n.authPassword,
+                        hint: context.l10n.authPasswordHint,
                         controller: _passwordTextController,
                         icon: FontAwesomeIcons.lock,
                         isPassword: true,
@@ -504,7 +570,7 @@ class _LoginScreenState extends State<LoginScreen>
             ),
             // Animated DELIT Logo and text at bottom
             AnimatedDelitLogo(
-              animation: _academicIdAnimation,
+              animation: _logoAnimation,
               logoPath: 'assets/images/delit_logo.png',
               logoHeight: 36,
               developmentText:
@@ -536,23 +602,33 @@ class ChatScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              context.l10n.chatTitleDefault,
-              style: Theme.of(context).textTheme.headlineMedium,
+      body: Stack(
+        children: [
+          // Neural network effect background
+          NeuralNetworkEffect(
+            animation: AlwaysStoppedAnimation(1.0),
+            primaryColor: Theme.of(context).colorScheme.primary,
+          ),
+          // Main content
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  context.l10n.chatTitleDefault,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  context.l10n.chatTyping,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 24),
-            Text(
-              context.l10n.chatTyping,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
