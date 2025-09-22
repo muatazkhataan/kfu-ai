@@ -12,6 +12,7 @@ import '../core/widgets/animated_delit_logo.dart';
 import '../core/widgets/floating_input_field.dart';
 import '../core/widgets/password_related_elements.dart';
 import '../state/app_state.dart';
+import '../features/chat/presentation/screens/chat_screen.dart';
 
 /// Main application widget
 class KfuAiApp extends ConsumerWidget {
@@ -156,13 +157,13 @@ class _SplashScreenState extends State<SplashScreen>
     _countdownController.addListener(() {
       if (mounted) {
         setState(() {
-          _countdown = 16 - (_countdownController.value * 30).round();
+          _countdown = 15 - (_countdownController.value * 30).round();
         });
       }
     });
 
     // Auto navigate when countdown reaches 0
-    Future.delayed(const Duration(seconds: 16), () {
+    Future.delayed(const Duration(seconds: 15), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -294,38 +295,34 @@ class _SplashScreenState extends State<SplashScreen>
                               const SizedBox(height: 16),
 
                               // Login button
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginScreen(),
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                    foregroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.onPrimary,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 32,
-                                      vertical: 16,
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginScreen(),
                                     ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primary,
+                                  foregroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 32,
+                                    vertical: 16,
                                   ),
-                                  child: Text(
-                                    context.l10n.authLogin,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                                child: Text(
+                                  context.l10n.authLogin,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
@@ -523,72 +520,81 @@ class _LoginScreenState extends State<LoginScreen>
                   left: 20,
                   right: 20,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // Main logo with light rays
-                    SplashImageLogo(
-                      animationController: _academicIdAnimation,
-                      imagePath: 'assets/images/mosa3ed_kfu_icon_app.jpg',
-                      logoSize: 75,
-                      logoColor: Theme.of(context).colorScheme.primary,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width > 400
+                          ? 400
+                          : double.infinity,
                     ),
-                    const SizedBox(height: 16),
-                    // Login Title
-                    Text(
-                      context.l10n.authLoginTitle,
-                      style: Theme.of(context).textTheme.headlineMedium
-                          ?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        // Main logo with light rays
+                        SplashImageLogo(
+                          animationController: _academicIdAnimation,
+                          imagePath: 'assets/images/mosa3ed_kfu_icon_app.jpg',
+                          logoSize: 75,
+                          logoColor: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(height: 16),
+                        // Login Title
+                        Text(
+                          context.l10n.authLoginTitle,
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        const SizedBox(height: 20),
+                        // Academic ID input (first step)
+                        if (!_isPasswordStep)
+                          FloatingInputField(
+                            animation: _academicIdAnimation,
+                            label: context.l10n.authAcademicId,
+                            hint: context.l10n.authAcademicIdHint,
+                            controller: _academicIdTextController,
+                            icon: FontAwesomeIcons.user,
+                            onNext: _onNextPressed,
+                            nextButtonText: context.l10n.authNext,
+                            isRTL:
+                                Localizations.localeOf(context).languageCode ==
+                                'ar',
                           ),
+                        // Password input (second step)
+                        if (_isPasswordStep)
+                          FloatingInputField(
+                            animation: _passwordAnimation,
+                            label: context.l10n.authPassword,
+                            hint: context.l10n.authPasswordHint,
+                            controller: _passwordTextController,
+                            icon: FontAwesomeIcons.lock,
+                            isPassword: true,
+                            showNextButton: false,
+                            isRTL:
+                                Localizations.localeOf(context).languageCode ==
+                                'ar',
+                          ),
+                        // Password related elements (only in password step)
+                        if (_isPasswordStep)
+                          PasswordRelatedElements(
+                            animation: _passwordElementsAnimation,
+                            rememberMe: _rememberMe,
+                            onRememberMeChanged: (value) {
+                              setState(() {
+                                _rememberMe = value;
+                              });
+                            },
+                            onPrevious: _onPreviousPressed,
+                            onLogin: _onLoginPressed,
+                            isRTL:
+                                Localizations.localeOf(context).languageCode ==
+                                'ar',
+                          ),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    // Academic ID input (first step)
-                    if (!_isPasswordStep)
-                      FloatingInputField(
-                        animation: _academicIdAnimation,
-                        label: context.l10n.authAcademicId,
-                        hint: context.l10n.authAcademicIdHint,
-                        controller: _academicIdTextController,
-                        icon: FontAwesomeIcons.user,
-                        onNext: _onNextPressed,
-                        nextButtonText: context.l10n.authNext,
-                        isRTL:
-                            Localizations.localeOf(context).languageCode ==
-                            'ar',
-                      ),
-                    // Password input (second step)
-                    if (_isPasswordStep)
-                      FloatingInputField(
-                        animation: _passwordAnimation,
-                        label: context.l10n.authPassword,
-                        hint: context.l10n.authPasswordHint,
-                        controller: _passwordTextController,
-                        icon: FontAwesomeIcons.lock,
-                        isPassword: true,
-                        showNextButton: false,
-                        isRTL:
-                            Localizations.localeOf(context).languageCode ==
-                            'ar',
-                      ),
-                    // Password related elements (only in password step)
-                    if (_isPasswordStep)
-                      PasswordRelatedElements(
-                        animation: _passwordElementsAnimation,
-                        rememberMe: _rememberMe,
-                        onRememberMeChanged: (value) {
-                          setState(() {
-                            _rememberMe = value;
-                          });
-                        },
-                        onPrevious: _onPreviousPressed,
-                        onLogin: _onLoginPressed,
-                        isRTL:
-                            Localizations.localeOf(context).languageCode ==
-                            'ar',
-                      ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -603,56 +609,6 @@ class _LoginScreenState extends State<LoginScreen>
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Chat screen widget (placeholder)
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.chatNew),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              // TODO: Navigate to settings
-            },
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          // Neural network effect background
-          NeuralNetworkEffect(
-            animation: AlwaysStoppedAnimation(1.0),
-            primaryColor: Theme.of(context).colorScheme.primary,
-          ),
-          // Main content
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  context.l10n.chatTitleDefault,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  context.l10n.chatTyping,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -58,7 +58,7 @@ dependencies:
   image_picker: ^1.0.4
   
   # Sharing
-  share_plus: ^7.2.1
+  share_plus: ^10.0.0
   
   # Notifications
   flutter_local_notifications: ^17.2.3

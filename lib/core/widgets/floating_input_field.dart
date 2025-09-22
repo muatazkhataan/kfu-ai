@@ -94,7 +94,7 @@ class _FloatingInputFieldState extends State<FloatingInputField>
               children: [
                 // Input field with floating label
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.85,
+                  width: double.infinity,
                   padding: const EdgeInsets.only(
                     top: 12,
                   ), // Add top padding to prevent clipping
@@ -185,41 +185,51 @@ class _FloatingInputFieldState extends State<FloatingInputField>
                 // Next button with arrow
                 if (widget.showNextButton && widget.onNext != null)
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.85,
+                    width: double.infinity,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton(
-                          onPressed: widget.onNext,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.primary,
-                            foregroundColor: Theme.of(
-                              context,
-                            ).colorScheme.onPrimary,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 16,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width > 600
+                                ? 200
+                                : double.infinity,
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                widget.nextButtonText ??
-                                    AppLocalizations.of(context)!.authNext,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          child: ElevatedButton(
+                            onPressed: widget.onNext,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
+                              foregroundColor: Theme.of(
+                                context,
+                              ).colorScheme.onPrimary,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 16,
                               ),
-                              const SizedBox(width: 8),
-                              const Icon(Icons.arrow_forward, size: 20),
-                            ],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    widget.nextButtonText ??
+                                        AppLocalizations.of(context)!.authNext,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                const Icon(Icons.arrow_forward, size: 20),
+                              ],
+                            ),
                           ),
                         ),
                       ],

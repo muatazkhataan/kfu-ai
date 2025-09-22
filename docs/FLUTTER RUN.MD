@@ -3,7 +3,7 @@ flutter build apk --debug
 flutter build apk --release
 تشغيل ويندوز
 flutter build windows --debug
-أو 
+أو
 flutter clean
 flutter build windows
 بناء الأيقونات
@@ -31,6 +31,7 @@ cd ..
 flutter pub get
 flutter run --debug
 
+
 **FLUTTER RELEASE RUN**
 
 flutter clean
@@ -51,9 +52,7 @@ flutter build apk --release --no-tree-shake-icons
 
 flutter build apk --debug --target-platform android-arm64
 
-
 flutter build apk --debug
-
 
 flutter logs --clear
 
@@ -71,15 +70,12 @@ cd android
 cd .. && flutter pub get
 flutter run
 
-
-
 **CREAT ARB FILES**
 flutter gen-l10n
 
 flutter pub run flutter_gen:flutter_gen_command
 
 flutter clean && flutter pub get && flutter build apk --release
-
 
 **Cash Clean**
 flutter pub cache clean
@@ -91,4 +87,3 @@ flutter pub cache repair
 flutter pub cache clean --force
 
 flutter analyze --no-fatal-infos | grep -E "(error|Error)" | head -20
-
