@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../generated/l10n/app_localizations.dart';
 
 /// Floating input field with rounded corners and icon
@@ -13,6 +12,7 @@ class FloatingInputField extends StatefulWidget {
   final VoidCallback? onNext;
   final String? nextButtonText;
   final bool showNextButton;
+  final bool isRTL;
 
   const FloatingInputField({
     super.key,
@@ -25,6 +25,7 @@ class FloatingInputField extends StatefulWidget {
     this.onNext,
     this.nextButtonText,
     this.showNextButton = true,
+    this.isRTL = true,
   });
 
   @override
@@ -77,7 +78,13 @@ class _FloatingInputFieldState extends State<FloatingInputField>
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(
-            (1 - widget.animation.value) * MediaQuery.of(context).size.width,
+            widget.isRTL
+                ? -(1 - widget.animation.value) *
+                      MediaQuery.of(context).size.width *
+                      1.2
+                : (1 - widget.animation.value) *
+                      MediaQuery.of(context).size.width *
+                      1.2,
             0,
           ),
           child: Opacity(
@@ -111,19 +118,19 @@ class _FloatingInputFieldState extends State<FloatingInputField>
                                   ).colorScheme.onSurfaceVariant,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(
                               color: Theme.of(context).colorScheme.outline,
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(
                               color: Theme.of(context).colorScheme.outline,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(
                               color: Theme.of(context).colorScheme.primary,
                               width: 2,
@@ -196,7 +203,7 @@ class _FloatingInputFieldState extends State<FloatingInputField>
                               vertical: 16,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                           ),
                           child: Row(

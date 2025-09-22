@@ -40,7 +40,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authEnter => 'Enter';
 
   @override
-  String get authRememberMe => 'Remember me';
+  String get authRememberPassword => 'Remember Password';
 
   @override
   String get chatNew => 'New Chat';
@@ -326,4 +326,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authLoginTitle => 'Login';
+
+  @override
+  String get authRememberMe => 'Remember me';
 }

@@ -23,7 +23,7 @@ class AnimatedDelitLogo extends StatelessWidget {
       animation: animation,
       builder: (context, child) {
         return Positioned(
-          bottom: 20 + (animation.value * 50), // Slide up from bottom
+          bottom: (animation.value * 50), // Slide up from bottom
           left: 0,
           right: 0,
           child: Opacity(

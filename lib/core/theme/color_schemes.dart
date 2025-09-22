@@ -6,12 +6,12 @@ class AppColorSchemes {
   AppColorSchemes._();
 
   // KFU Institutional Colors
-  static const Color kfuPrimary = Color(0xFF25935f); // Saudi green (primary)
+  static const Color kfuPrimary = Color(0xFF1B8354); // Saudi green (primary)
   static const Color kfuPrimaryDark = Color(
-    0xFF2fa572,
+    0xFF104631,
   ); // Lighter green for dark theme
   static const Color kfuSecondary = Color(
-    0xFF6c757d,
+    0xFFF3F4F6,
   ); // Bootstrap secondary gray
 
   // Light Theme Colors

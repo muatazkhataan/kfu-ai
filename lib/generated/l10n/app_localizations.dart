@@ -158,11 +158,11 @@ abstract class AppLocalizations {
   /// **'دخول'**
   String get authEnter;
 
-  /// خيار تذكر المستخدم
+  /// خيار تذكر كلمة المرور
   ///
   /// In ar, this message translates to:
-  /// **'تذكرني'**
-  String get authRememberMe;
+  /// **'تذكر رمز المرور'**
+  String get authRememberPassword;
 
   /// إنشاء محادثة جديدة
   ///
@@ -703,6 +703,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تسجيل الدخول'**
   String get authLoginTitle;
+
+  /// خيار تذكر المستخدم
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكرني'**
+  String get authRememberMe;
 }
 
 class _AppLocalizationsDelegate

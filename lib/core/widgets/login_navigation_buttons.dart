@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../generated/l10n/app_localizations.dart';
+import '../theme/color_schemes.dart';
 
 /// Navigation buttons for login screen
 class LoginNavigationButtons extends StatelessWidget {
@@ -24,32 +25,34 @@ class LoginNavigationButtons extends StatelessWidget {
         if (showPrevious)
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: OutlinedButton(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ElevatedButton(
                 onPressed: onPrevious,
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Theme.of(context).colorScheme.primary,
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColorSchemes.kfuSecondary,
+                  foregroundColor: Theme.of(context).colorScheme.onSurface,
+                  elevation: 0,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
+                    horizontal: 12,
                     vertical: 16,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.arrow_back, size: 18),
-                    const SizedBox(width: 8),
-                    Text(
-                      AppLocalizations.of(context)!.authPrevious,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    const Icon(Icons.arrow_back, size: 16),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        AppLocalizations.of(context)!.authPrevious,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -60,18 +63,18 @@ class LoginNavigationButtons extends StatelessWidget {
         // Login button
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: ElevatedButton(
               onPressed: onLogin,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
+                  horizontal: 12,
                   vertical: 16,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(5),
                 ),
               ),
               child: Row(
@@ -79,15 +82,15 @@ class LoginNavigationButtons extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      AppLocalizations.of(context)!.authLogin,
+                      'دخول',
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: 2),
                   Transform(
                     alignment: Alignment.center,
                     transform: Matrix4.identity()..scale(-1.0, 1.0),

@@ -10,8 +10,7 @@ import '../core/widgets/neural_network_effect.dart';
 import '../core/widgets/animated_kfu_logo.dart';
 import '../core/widgets/animated_delit_logo.dart';
 import '../core/widgets/floating_input_field.dart';
-import '../core/widgets/remember_me_checkbox.dart';
-import '../core/widgets/login_navigation_buttons.dart';
+import '../core/widgets/password_related_elements.dart';
 import '../state/app_state.dart';
 
 /// Main application widget
@@ -205,7 +204,7 @@ class _SplashScreenState extends State<SplashScreen>
                 animation: _kfuLogoAnimation,
                 logoPath: 'assets/images/kfu_logo.png',
                 logoHeight: 75,
-                top: 50,
+                top: 0,
                 left: 20,
               ),
               // Main content
@@ -235,7 +234,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 ).colorScheme.primary,
                               ),
 
-                              const SizedBox(height: 100),
+                              const SizedBox(height: 40),
 
                               // Welcome message
                               Text(
@@ -248,7 +247,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 textAlign: TextAlign.center,
                               ),
 
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 8),
 
                               // App Description
                               Text(
@@ -262,7 +261,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 textAlign: TextAlign.center,
                               ),
 
-                              const SizedBox(height: 48),
+                              const SizedBox(height: 24),
 
                               // Loading indicator with countdown
                               SizedBox(
@@ -292,7 +291,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 ),
                               ),
 
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 16),
 
                               // Login button
                               SizedBox(
@@ -318,7 +317,7 @@ class _SplashScreenState extends State<SplashScreen>
                                       vertical: 16,
                                     ),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(5),
                                     ),
                                   ),
                                   child: Text(
@@ -368,10 +367,12 @@ class _LoginScreenState extends State<LoginScreen>
   late AnimationController _particleController;
   late AnimationController _academicIdController;
   late AnimationController _passwordController;
+  late AnimationController _passwordElementsController;
   late AnimationController _logoController;
   late Animation<double> _particleAnimation;
   late Animation<double> _academicIdAnimation;
   late Animation<double> _passwordAnimation;
+  late Animation<double> _passwordElementsAnimation;
   late Animation<double> _logoAnimation;
 
   final TextEditingController _academicIdTextController =
@@ -402,6 +403,11 @@ class _LoginScreenState extends State<LoginScreen>
       vsync: this,
     );
 
+    _passwordElementsController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
     _logoController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -419,6 +425,13 @@ class _LoginScreenState extends State<LoginScreen>
       CurvedAnimation(parent: _passwordController, curve: Curves.easeInOut),
     );
 
+    _passwordElementsAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _passwordElementsController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
     _logoAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _logoController, curve: Curves.easeInOut),
     );
@@ -430,26 +443,30 @@ class _LoginScreenState extends State<LoginScreen>
 
   void _onNextPressed() {
     if (!_isPasswordStep) {
-      // Move to password step
-      setState(() {
-        _isPasswordStep = true;
-      });
-
+      // Start exit animation for academic ID
       _academicIdController.reverse().then((_) {
+        // Start enter animations for password elements
         _passwordController.forward();
+        _passwordElementsController.forward();
+        // Change state after animations are set up
+        setState(() {
+          _isPasswordStep = true;
+        });
       });
     }
   }
 
   void _onPreviousPressed() {
     if (_isPasswordStep) {
-      // Move back to academic ID step
-      setState(() {
-        _isPasswordStep = false;
-      });
-
-      _passwordController.reverse().then((_) {
+      // Start exit animations for password elements
+      _passwordController.reverse();
+      _passwordElementsController.reverse().then((_) {
+        // Start enter animation for academic ID
         _academicIdController.forward();
+        // Change state after animations are set up
+        setState(() {
+          _isPasswordStep = false;
+        });
       });
     }
   }
@@ -469,6 +486,7 @@ class _LoginScreenState extends State<LoginScreen>
     _particleController.dispose();
     _academicIdController.dispose();
     _passwordController.dispose();
+    _passwordElementsController.dispose();
     _logoController.dispose();
     _academicIdTextController.dispose();
     _passwordTextController.dispose();
@@ -478,6 +496,7 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SplashBackground(
         particleAnimation: _particleAnimation,
         child: Stack(
@@ -492,15 +511,20 @@ class _LoginScreenState extends State<LoginScreen>
               animation: _logoAnimation,
               logoPath: 'assets/images/kfu_logo.png',
               logoHeight: 75,
-              top: 50,
+              top: 0,
               left: 20,
             ),
             // Main content
-            Center(
+            Positioned.fill(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: 20),
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.15 + 50,
+                  bottom: 20,
+                  left: 20,
+                  right: 20,
+                ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     // Main logo with light rays
                     SplashImageLogo(
@@ -509,7 +533,7 @@ class _LoginScreenState extends State<LoginScreen>
                       logoSize: 75,
                       logoColor: Theme.of(context).colorScheme.primary,
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
                     // Login Title
                     Text(
                       context.l10n.authLoginTitle,
@@ -519,7 +543,7 @@ class _LoginScreenState extends State<LoginScreen>
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 20),
                     // Academic ID input (first step)
                     if (!_isPasswordStep)
                       FloatingInputField(
@@ -530,6 +554,9 @@ class _LoginScreenState extends State<LoginScreen>
                         icon: FontAwesomeIcons.user,
                         onNext: _onNextPressed,
                         nextButtonText: context.l10n.authNext,
+                        isRTL:
+                            Localizations.localeOf(context).languageCode ==
+                            'ar',
                       ),
                     // Password input (second step)
                     if (_isPasswordStep)
@@ -541,28 +568,25 @@ class _LoginScreenState extends State<LoginScreen>
                         icon: FontAwesomeIcons.lock,
                         isPassword: true,
                         showNextButton: false,
+                        isRTL:
+                            Localizations.localeOf(context).languageCode ==
+                            'ar',
                       ),
-                    const SizedBox(height: 24),
-                    // Remember me checkbox (only in password step)
+                    // Password related elements (only in password step)
                     if (_isPasswordStep)
-                      RememberMeCheckbox(
-                        initialValue: _rememberMe,
-                        onChanged: (value) {
+                      PasswordRelatedElements(
+                        animation: _passwordElementsAnimation,
+                        rememberMe: _rememberMe,
+                        onRememberMeChanged: (value) {
                           setState(() {
                             _rememberMe = value;
                           });
                         },
-                      ),
-                    const SizedBox(height: 24),
-                    // Navigation buttons (only in password step)
-                    if (_isPasswordStep)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: LoginNavigationButtons(
-                          showPrevious: true,
-                          onPrevious: _onPreviousPressed,
-                          onLogin: _onLoginPressed,
-                        ),
+                        onPrevious: _onPreviousPressed,
+                        onLogin: _onLoginPressed,
+                        isRTL:
+                            Localizations.localeOf(context).languageCode ==
+                            'ar',
                       ),
                   ],
                 ),

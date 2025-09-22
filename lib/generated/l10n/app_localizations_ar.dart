@@ -40,7 +40,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authEnter => 'دخول';
 
   @override
-  String get authRememberMe => 'تذكرني';
+  String get authRememberPassword => 'تذكر رمز المرور';
 
   @override
   String get chatNew => 'محادثة جديدة';
@@ -325,4 +325,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authLoginTitle => 'تسجيل الدخول';
+
+  @override
+  String get authRememberMe => 'تذكرني';
 }
