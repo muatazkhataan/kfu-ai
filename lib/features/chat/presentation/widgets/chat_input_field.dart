@@ -236,7 +236,7 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceVariant,
+          color: theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Icon(
@@ -253,7 +253,7 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
     return Container(
       constraints: const BoxConstraints(minHeight: 40, maxHeight: 120),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant,
+        color: theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: _focusNode.hasFocus
@@ -266,7 +266,7 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
         controller: _controller,
         focusNode: _focusNode,
         enabled: widget.enabled,
-        maxLines: widget.maxLines ?? null,
+        maxLines: widget.maxLines,
         minLines: widget.minLines ?? 1,
         textAlignVertical: TextAlignVertical.center,
         onChanged: widget.onTextChanged,
@@ -312,7 +312,7 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
       decoration: BoxDecoration(
         color: hasText
             ? theme.colorScheme.primary
-            : theme.colorScheme.surfaceVariant,
+            : theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(20),
       ),
       child: IconButton(
@@ -436,7 +436,7 @@ class _SimpleChatInputFieldState extends State<SimpleChatInputField> {
                     color: theme.colorScheme.onSurfaceVariant..withAlpha(153),
                   ),
                   filled: true,
-                  fillColor: theme.colorScheme.surfaceVariant,
+                  fillColor: theme.colorScheme.surfaceContainerHighest,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: BorderSide.none,
@@ -458,7 +458,7 @@ class _SimpleChatInputFieldState extends State<SimpleChatInputField> {
               decoration: BoxDecoration(
                 color: _controller.text.trim().isNotEmpty
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.surfaceVariant,
+                    : theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(24),
               ),
               child: IconButton(
@@ -605,7 +605,7 @@ class _AdvancedChatInputFieldState extends State<AdvancedChatInputField> {
                         ),
                       ),
                       filled: true,
-                      fillColor: theme.colorScheme.surfaceVariant,
+                      fillColor: theme.colorScheme.surfaceContainerHighest,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide.none,
@@ -627,7 +627,7 @@ class _AdvancedChatInputFieldState extends State<AdvancedChatInputField> {
                   decoration: BoxDecoration(
                     color: _controller.text.trim().isNotEmpty
                         ? theme.colorScheme.primary
-                        : theme.colorScheme.surfaceVariant,
+                        : theme.colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: IconButton(

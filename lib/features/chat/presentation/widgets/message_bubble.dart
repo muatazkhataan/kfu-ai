@@ -104,7 +104,7 @@ class MessageBubble extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant..withAlpha(128),
+        color: theme.colorScheme.surfaceContainerHighest..withAlpha(128),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: theme.colorScheme.outline..withAlpha(75),
@@ -291,7 +291,7 @@ class MessageBubble extends ConsumerWidget {
                     decoration: BoxDecoration(
                       color: isUser
                           ? theme.colorScheme.primary
-                          : theme.colorScheme.surfaceVariant,
+                          : theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(18),
                         topRight: const Radius.circular(18),
@@ -431,7 +431,7 @@ class MessageBubble extends ConsumerWidget {
                 onPressed: () {
                   // TODO: فتح المرفق
                 },
-                icon: Icon(AppIcons.getIcon(AppIcon.external), size: 16),
+                icon: Icon(AppIcons.getIcon(AppIcon.link), size: 16),
                 constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                 padding: EdgeInsets.zero,
               ),

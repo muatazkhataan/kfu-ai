@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/folder.dart';
-import '../../domain/models/folder_icon.dart';
 import '../providers/folder_provider.dart';
 import '../../../../state/folder_state.dart';
 import '../../../../core/theme/icons.dart';
@@ -78,7 +77,7 @@ class FolderSidebar extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant..withAlpha(128),
+        color: theme.colorScheme.surfaceContainerHighest..withAlpha(128),
         border: Border(
           bottom: BorderSide(
             color: theme.colorScheme.outline..withAlpha(50),
@@ -232,7 +231,7 @@ class FolderSidebar extends ConsumerWidget {
                     decoration: BoxDecoration(
                       color: isSelected
                           ? theme.colorScheme.primary
-                          : theme.colorScheme.surfaceVariant,
+                          : theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
@@ -352,7 +351,7 @@ class FolderSidebar extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant..withAlpha(128),
+        color: theme.colorScheme.surfaceContainerHighest..withAlpha(128),
         border: Border(
           top: BorderSide(
             color: theme.colorScheme.outline..withAlpha(50),

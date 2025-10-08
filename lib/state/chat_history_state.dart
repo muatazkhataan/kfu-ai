@@ -279,11 +279,11 @@ class ChatHistoryState {
   /// الحصول على معاينة الحالة
   String get preview {
     if (hasActiveSearch) {
-      return 'البحث: "$searchQuery" - ${filteredChatCount} نتيجة';
+      return 'البحث: "$searchQuery" - $filteredChatCount نتيجة';
     } else if (filter != ChatHistoryFilter.all) {
-      return '${filter.displayName}: ${filteredChatCount} محادثة';
+      return '${filter.displayName}: $filteredChatCount محادثة';
     } else if (hasChats) {
-      return '${chatCount} محادثة';
+      return '$chatCount محادثة';
     } else if (isLoadingChats) {
       return 'جاري تحميل المحادثات...';
     } else if (hasError) {

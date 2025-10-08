@@ -6,13 +6,13 @@ import '../widgets/chat_input_field.dart';
 // import '../../../../features/folders/presentation/widgets/folder_sidebar.dart';
 // import '../../../../features/chat_history/presentation/widgets/chat_list_sidebar.dart';
 import '../providers/chat_provider.dart';
-import '../../../../features/folders/presentation/providers/folder_provider.dart';
 import '../../../../features/chat_history/presentation/providers/chat_history_provider.dart';
 import '../../../../core/widgets/neural_network_effect.dart';
 import '../../../../core/theme/icons.dart';
 // import '../../domain/models/chat.dart';
 // import '../../domain/models/message.dart';
 import '../../../../features/folders/domain/models/folder.dart';
+import '../../../../features/help/presentation/screens/help_screen.dart';
 
 /// الشاشة الرئيسية للمحادثة
 ///
@@ -32,7 +32,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   final ScrollController _messageScrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
 
-  String? _selectedChatId = null; // بدء بشاشة فارغة
+  String? _selectedChatId; // بدء بشاشة فارغة
   // String? _selectedFolderId;
   // bool _showSidebar = true;
   bool _isSearching = false;
@@ -86,7 +86,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
-          automaticallyImplyLeading: false, // إخفاء زر الرجوع التلقائي
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: _buildChatHeader(theme, chatState),
@@ -132,7 +131,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withAlpha(128),
+        color: theme.colorScheme.surfaceContainerHighest.withAlpha(128),
         border: Border(
           bottom: BorderSide(
             color: theme.colorScheme.outline.withAlpha(50),
@@ -166,6 +165,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               ],
             ),
           ),
+
+          // أزرار الإجراءات - محذوفة لتجنب التكرار
         ],
       ),
     );
@@ -766,7 +767,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+              color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
               borderRadius: BorderRadius.circular(8),
               border: Border(
                 bottom: BorderSide(
@@ -826,7 +827,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+              color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
               borderRadius: BorderRadius.circular(8),
               border: Border(
                 bottom: BorderSide(
@@ -880,7 +881,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
         border: Border(
           top: BorderSide(
             color: theme.colorScheme.outline.withOpacity(0.1),
@@ -907,7 +908,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             title: 'المساعدة',
             onTap: () {
               Navigator.pop(context);
-              // TODO: فتح المساعدة
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const HelpScreen()),
+              );
             },
           ),
           const SizedBox(height: 8),
@@ -1273,7 +1276,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           trailing: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant,
+              color: theme.colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -1369,7 +1372,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant.withAlpha(51),
+              color: theme.colorScheme.surfaceContainerHighest.withAlpha(51),
               border: Border(
                 bottom: BorderSide(
                   color: theme.colorScheme.outline.withAlpha(51),

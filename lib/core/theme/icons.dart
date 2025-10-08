@@ -3,82 +3,207 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'tokens.dart';
 
 /// Icon mapping for FontAwesome icons used in the app
-/// Based on the inventory from web_design files and folder.js
+/// Organized by categories matching web_design/assets/js/icons.js
 enum AppIcon {
-  // Navigation & Actions
+  // البرمجة والتقنية - Programming & Technology (24 icons)
+  code,
+  laptopCode,
+  terminal,
+  bug,
+  cogs,
+  microchip,
+  server,
+  networkWired,
+  shieldAlt,
+  key,
+  database,
+  table,
+  chartBar,
+  mobileAlt,
+  globe,
+  cloud,
+  robot,
+  brain,
+  sitemap,
+  projectDiagram,
+  fileCode,
+  codeBranch,
+  codeMerge,
+  codeCompare,
+
+  // الرياضيات والإحصائيات - Mathematics & Statistics (23 icons)
+  calculator,
+  squareRootAlt,
+  infinity,
+  percentage,
+  chartLine,
+  chartPie,
+  chartArea,
+  sortNumericUp,
+  sortNumericDown,
+  equals,
+  plus,
+  minus,
+  times,
+  divide,
+  superscript,
+  subscript,
+  sigma,
+  pi,
+  function,
+  integral,
+  triangle,
+  omega,
+  theta,
+
+  // العلوم والكيمياء - Science & Chemistry (23 icons)
+  atom,
+  flask,
+  microscope,
+  dna,
+  leaf,
+  seedling,
+  droplet,
+  fire,
+  bolt,
+  magnet,
+  satellite,
+  rocket,
+  sun,
+  moon,
+  star,
+  telescope,
+  vial,
+  pills,
+  stethoscope,
+  heartbeat,
+  eye,
+  ear,
+  nose,
+  tooth,
+  bone,
+  lungs,
+  liver,
+  kidney,
+  stomach,
+  intestines,
+
+  // الدراسة والأكاديمية - Study & Academic (27 icons)
+  graduationCap,
+  book,
+  bookOpen,
+  pen,
+  pencilAlt,
+  highlighter,
+  stickyNote,
+  clipboard,
+  fileAlt,
+  folder,
+  archive,
+  calendarAlt,
+  clock,
+  stopwatch,
+  hourglassHalf,
+  bell,
+  flag,
+  trophy,
+  medal,
+  certificate,
+  award,
+  userGraduate,
+  chalkboardTeacher,
+  chalkboard,
+  search,
+  questionCircle,
+  lightbulb,
+
+  // الإبداع والتصميم - Creativity & Design (25 icons)
+  palette,
+  paintBrush,
+  magic,
+  sparkles,
+  eyeDropper,
+  camera,
+  video,
+  music,
+  headphones,
+  gamepad,
+  dice,
+  puzzlePiece,
+  cube,
+  gem,
+  crown,
+  ribbon,
+
+  // العمل الجماعي والتواصل - Collaboration & Communication (24 icons)
+  users,
+  userFriends,
+  handshake,
+  comments,
+  commentDots,
+  envelope,
+  phone,
+  videoCamera,
+  shareAlt,
+  link,
+  sync,
+  download,
+  upload,
+  print,
+  copy,
+  paperPlane,
+  inbox,
+  send,
+  bellSlash,
+
+  // Navigation & Common Actions
   home,
   back,
   next,
   previous,
   close,
   menu,
-  search,
   filter,
   sort,
   refresh,
-  sync,
 
   // Chat & Communication
   chat,
-  comments,
-  commentDots,
-  send,
   attach,
-  microphone,
   image,
   file,
   message,
   reply,
-  copy,
   share,
-  link,
   paperclip,
-  paperPlane,
-  envelope,
-  inbox,
 
   // User & Auth
   user,
   lock,
   signIn,
   signOut,
-  robot,
 
   // Content Management
   edit,
   delete,
   trash,
-  archive,
-  download,
-  upload,
   save,
-  clipboard,
 
   // Organization
-  folder,
   folderPlus,
-  plus,
-  minus,
-  star,
+  folderOpen,
   heart,
-  fire,
-  rocket,
   thumbtack,
 
   // Settings & Configuration
   settings,
   cog,
-  palette,
-  bell,
   shield,
-  database,
   info,
 
   // Help & Support
   help,
   question,
-  book,
-  lightbulb,
 
   // Status & Feedback
   check,
@@ -104,22 +229,11 @@ enum AppIcon {
   anglesDown,
 
   // Specific Features
-  graduationCap,
-  code,
-  sitemap,
-  brain,
   history,
   lockKeyhole,
-  terminal,
-  bug,
-  cogs,
-  microchip,
-  laptopCode,
-  fileCodeIcon,
-  server,
-  networkWired,
-  key,
   unlock,
+  microphone,
+  fileCodeIcon,
 
   // Display & Layout
   list,
@@ -131,96 +245,11 @@ enum AppIcon {
   play,
   pause,
   stop,
-  music,
-  video,
-  fileText,
-  camera,
   film,
-
-  // Mathematics & Science
-  calculator,
-  mathPlus,
-  mathMinus,
-  times,
-  divide,
-  equals,
-  percentage,
-  infinity,
-  pi,
-  sigma,
-  function,
-  chartLine,
-  chartBar,
-  chartPie,
-  chartArea,
-  sortNumericUp,
-  sortNumericDown,
-  sortAmountUp,
-  sortAmountDown,
-  squareRootAlt,
-  flask,
-  atom,
-  dna,
-  microscope,
-  telescope,
-  vial,
-  pills,
-  stethoscope,
-  heartbeat,
-  eye,
-  ear,
-  nose,
-  tooth,
-  bone,
-  lungs,
-  liver,
-  kidney,
-  stomach,
-  intestines,
-
-  // Study & Education
-  chalkboardTeacher,
-  chalkboard,
-  pencilAlt,
-  pen,
-  highlighter,
-  stickyNote,
-  folderOpen,
-
-  // Creativity & Arts
-  paintBrush,
-  guitar,
-  piano,
-  theaterMasks,
-  magic,
-  gem,
-  crown,
-  trophy,
-  medal,
-  award,
-  certificate,
-  ribbon,
-  flag,
-
-  // Collaboration & Social
-  users,
-  userFriends,
-  handshake,
-  commentAlt,
-  bellSlash,
-  calendarAlt,
-  clock,
-  stopwatch,
-  hourglassHalf,
-
-  // External & Links
-  external,
-  externalLink,
+  fileText,
 
   // File Types
   fileLines,
-  fileAlt,
-  fileCode,
 
   // Arrows & Direction
   arrowLeft,
@@ -238,7 +267,6 @@ enum AppIcon {
   timesCircle,
   infoCircleIcon,
   exclamationCircle,
-  questionCircle,
 }
 
 /// Icon mapping class to get FontAwesome icons
@@ -248,7 +276,297 @@ class AppIcons {
   /// Get FontAwesome icon data for the given app icon
   static IconData getIcon(AppIcon icon) {
     switch (icon) {
-      // Navigation & Actions
+      // البرمجة والتقنية - Programming & Technology
+      case AppIcon.code:
+        return FontAwesomeIcons.code;
+      case AppIcon.laptopCode:
+        return FontAwesomeIcons.laptopCode;
+      case AppIcon.terminal:
+        return FontAwesomeIcons.terminal;
+      case AppIcon.bug:
+        return FontAwesomeIcons.bug;
+      case AppIcon.cogs:
+        return FontAwesomeIcons.gears;
+      case AppIcon.microchip:
+        return FontAwesomeIcons.microchip;
+      case AppIcon.server:
+        return FontAwesomeIcons.server;
+      case AppIcon.networkWired:
+        return FontAwesomeIcons.networkWired;
+      case AppIcon.shieldAlt:
+        return FontAwesomeIcons.shieldHalved;
+      case AppIcon.key:
+        return FontAwesomeIcons.key;
+      case AppIcon.database:
+        return FontAwesomeIcons.database;
+      case AppIcon.table:
+        return FontAwesomeIcons.table;
+      case AppIcon.chartBar:
+        return FontAwesomeIcons.chartBar;
+      case AppIcon.mobileAlt:
+        return FontAwesomeIcons.mobileScreen;
+      case AppIcon.globe:
+        return FontAwesomeIcons.globe;
+      case AppIcon.cloud:
+        return FontAwesomeIcons.cloud;
+      case AppIcon.robot:
+        return FontAwesomeIcons.robot;
+      case AppIcon.brain:
+        return FontAwesomeIcons.brain;
+      case AppIcon.sitemap:
+        return FontAwesomeIcons.sitemap;
+      case AppIcon.projectDiagram:
+        return FontAwesomeIcons.diagramProject;
+      case AppIcon.fileCode:
+        return FontAwesomeIcons.fileCode;
+      case AppIcon.codeBranch:
+        return FontAwesomeIcons.codeBranch;
+      case AppIcon.codeMerge:
+        return FontAwesomeIcons.codeMerge;
+      case AppIcon.codeCompare:
+        return FontAwesomeIcons.codeCompare;
+
+      // الرياضيات والإحصائيات - Mathematics & Statistics
+      case AppIcon.calculator:
+        return FontAwesomeIcons.calculator;
+      case AppIcon.squareRootAlt:
+        return FontAwesomeIcons.squareRootVariable;
+      case AppIcon.infinity:
+        return FontAwesomeIcons.infinity;
+      case AppIcon.percentage:
+        return FontAwesomeIcons.percent;
+      case AppIcon.chartLine:
+        return FontAwesomeIcons.chartLine;
+      case AppIcon.chartPie:
+        return FontAwesomeIcons.chartPie;
+      case AppIcon.chartArea:
+        return FontAwesomeIcons.chartArea;
+      case AppIcon.sortNumericUp:
+        return FontAwesomeIcons.arrowDownWideShort;
+      case AppIcon.sortNumericDown:
+        return FontAwesomeIcons.arrowUpShortWide;
+      case AppIcon.equals:
+        return FontAwesomeIcons.equals;
+      case AppIcon.plus:
+        return FontAwesomeIcons.plus;
+      case AppIcon.minus:
+        return FontAwesomeIcons.minus;
+      case AppIcon.times:
+        return FontAwesomeIcons.xmark;
+      case AppIcon.divide:
+        return FontAwesomeIcons.divide;
+      case AppIcon.superscript:
+        return FontAwesomeIcons.superscript;
+      case AppIcon.subscript:
+        return FontAwesomeIcons.subscript;
+      case AppIcon.sigma:
+        return FontAwesomeIcons.s; // fallback
+      case AppIcon.pi:
+        return FontAwesomeIcons.p; // fallback
+      case AppIcon.function:
+        return FontAwesomeIcons.f; // fallback
+      case AppIcon.integral:
+        return FontAwesomeIcons.i; // fallback
+      case AppIcon.triangle:
+        return FontAwesomeIcons.triangleExclamation; // fallback
+      case AppIcon.omega:
+        return FontAwesomeIcons.o; // fallback
+      case AppIcon.theta:
+        return FontAwesomeIcons.circle; // fallback
+
+      // العلوم والكيمياء - Science & Chemistry
+      case AppIcon.atom:
+        return FontAwesomeIcons.atom;
+      case AppIcon.flask:
+        return FontAwesomeIcons.flask;
+      case AppIcon.microscope:
+        return FontAwesomeIcons.microscope;
+      case AppIcon.dna:
+        return FontAwesomeIcons.dna;
+      case AppIcon.leaf:
+        return FontAwesomeIcons.leaf;
+      case AppIcon.seedling:
+        return FontAwesomeIcons.seedling;
+      case AppIcon.droplet:
+        return FontAwesomeIcons.droplet;
+      case AppIcon.fire:
+        return FontAwesomeIcons.fire;
+      case AppIcon.bolt:
+        return FontAwesomeIcons.bolt;
+      case AppIcon.magnet:
+        return FontAwesomeIcons.magnet;
+      case AppIcon.satellite:
+        return FontAwesomeIcons.satellite;
+      case AppIcon.rocket:
+        return FontAwesomeIcons.rocket;
+      case AppIcon.sun:
+        return FontAwesomeIcons.sun;
+      case AppIcon.moon:
+        return FontAwesomeIcons.moon;
+      case AppIcon.star:
+        return FontAwesomeIcons.star;
+      case AppIcon.telescope:
+        return FontAwesomeIcons.binoculars; // fallback
+      case AppIcon.vial:
+        return FontAwesomeIcons.vial;
+      case AppIcon.pills:
+        return FontAwesomeIcons.pills;
+      case AppIcon.stethoscope:
+        return FontAwesomeIcons.stethoscope;
+      case AppIcon.heartbeat:
+        return FontAwesomeIcons.heartPulse;
+      case AppIcon.eye:
+        return FontAwesomeIcons.eye;
+      case AppIcon.ear:
+        return FontAwesomeIcons.earListen;
+      case AppIcon.nose:
+        return FontAwesomeIcons.question; // fallback
+      case AppIcon.tooth:
+        return FontAwesomeIcons.tooth;
+      case AppIcon.bone:
+        return FontAwesomeIcons.bone;
+      case AppIcon.lungs:
+        return FontAwesomeIcons.lungs;
+      case AppIcon.liver:
+        return FontAwesomeIcons.question; // fallback
+      case AppIcon.kidney:
+        return FontAwesomeIcons.question; // fallback
+      case AppIcon.stomach:
+        return FontAwesomeIcons.question; // fallback
+      case AppIcon.intestines:
+        return FontAwesomeIcons.question; // fallback
+
+      // الدراسة والأكاديمية - Study & Academic
+      case AppIcon.graduationCap:
+        return FontAwesomeIcons.graduationCap;
+      case AppIcon.book:
+        return FontAwesomeIcons.book;
+      case AppIcon.bookOpen:
+        return FontAwesomeIcons.bookOpen;
+      case AppIcon.pen:
+        return FontAwesomeIcons.pen;
+      case AppIcon.pencilAlt:
+        return FontAwesomeIcons.pencil;
+      case AppIcon.highlighter:
+        return FontAwesomeIcons.highlighter;
+      case AppIcon.stickyNote:
+        return FontAwesomeIcons.noteSticky;
+      case AppIcon.clipboard:
+        return FontAwesomeIcons.clipboard;
+      case AppIcon.fileAlt:
+        return FontAwesomeIcons.fileLines;
+      case AppIcon.folder:
+        return FontAwesomeIcons.folder;
+      case AppIcon.archive:
+        return FontAwesomeIcons.boxArchive;
+      case AppIcon.calendarAlt:
+        return FontAwesomeIcons.calendar;
+      case AppIcon.clock:
+        return FontAwesomeIcons.clock;
+      case AppIcon.stopwatch:
+        return FontAwesomeIcons.stopwatch;
+      case AppIcon.hourglassHalf:
+        return FontAwesomeIcons.hourglassHalf;
+      case AppIcon.bell:
+        return FontAwesomeIcons.bell;
+      case AppIcon.flag:
+        return FontAwesomeIcons.flag;
+      case AppIcon.trophy:
+        return FontAwesomeIcons.trophy;
+      case AppIcon.medal:
+        return FontAwesomeIcons.medal;
+      case AppIcon.certificate:
+        return FontAwesomeIcons.certificate;
+      case AppIcon.award:
+        return FontAwesomeIcons.award;
+      case AppIcon.userGraduate:
+        return FontAwesomeIcons.userGraduate;
+      case AppIcon.chalkboardTeacher:
+        return FontAwesomeIcons.chalkboardUser;
+      case AppIcon.chalkboard:
+        return FontAwesomeIcons.chalkboard;
+      case AppIcon.search:
+        return FontAwesomeIcons.magnifyingGlass;
+      case AppIcon.questionCircle:
+        return FontAwesomeIcons.circleQuestion;
+      case AppIcon.lightbulb:
+        return FontAwesomeIcons.lightbulb;
+
+      // الإبداع والتصميم - Creativity & Design
+      case AppIcon.palette:
+        return FontAwesomeIcons.palette;
+      case AppIcon.paintBrush:
+        return FontAwesomeIcons.paintbrush;
+      case AppIcon.magic:
+        return FontAwesomeIcons.wandMagic;
+      case AppIcon.sparkles:
+        return FontAwesomeIcons.wandMagicSparkles;
+      case AppIcon.eyeDropper:
+        return FontAwesomeIcons.eyeDropper;
+      case AppIcon.camera:
+        return FontAwesomeIcons.camera;
+      case AppIcon.video:
+        return FontAwesomeIcons.video;
+      case AppIcon.music:
+        return FontAwesomeIcons.music;
+      case AppIcon.headphones:
+        return FontAwesomeIcons.headphones;
+      case AppIcon.gamepad:
+        return FontAwesomeIcons.gamepad;
+      case AppIcon.dice:
+        return FontAwesomeIcons.dice;
+      case AppIcon.puzzlePiece:
+        return FontAwesomeIcons.puzzlePiece;
+      case AppIcon.cube:
+        return FontAwesomeIcons.cube;
+      case AppIcon.gem:
+        return FontAwesomeIcons.gem;
+      case AppIcon.crown:
+        return FontAwesomeIcons.crown;
+      case AppIcon.ribbon:
+        return FontAwesomeIcons.ribbon;
+
+      // العمل الجماعي والتواصل - Collaboration & Communication
+      case AppIcon.users:
+        return FontAwesomeIcons.users;
+      case AppIcon.userFriends:
+        return FontAwesomeIcons.userGroup;
+      case AppIcon.handshake:
+        return FontAwesomeIcons.handshake;
+      case AppIcon.comments:
+        return FontAwesomeIcons.comments;
+      case AppIcon.commentDots:
+        return FontAwesomeIcons.commentDots;
+      case AppIcon.envelope:
+        return FontAwesomeIcons.envelope;
+      case AppIcon.phone:
+        return FontAwesomeIcons.phone;
+      case AppIcon.videoCamera:
+        return FontAwesomeIcons.videoCamera;
+      case AppIcon.shareAlt:
+        return FontAwesomeIcons.shareNodes;
+      case AppIcon.link:
+        return FontAwesomeIcons.link;
+      case AppIcon.sync:
+        return FontAwesomeIcons.arrowsRotate;
+      case AppIcon.download:
+        return FontAwesomeIcons.download;
+      case AppIcon.upload:
+        return FontAwesomeIcons.upload;
+      case AppIcon.print:
+        return FontAwesomeIcons.print;
+      case AppIcon.copy:
+        return FontAwesomeIcons.copy;
+      case AppIcon.paperPlane:
+        return FontAwesomeIcons.paperPlane;
+      case AppIcon.inbox:
+        return FontAwesomeIcons.inbox;
+      case AppIcon.send:
+        return FontAwesomeIcons.paperPlane;
+      case AppIcon.bellSlash:
+        return FontAwesomeIcons.bellSlash;
+
+      // Navigation & Common Actions
       case AppIcon.home:
         return FontAwesomeIcons.house;
       case AppIcon.back:
@@ -261,30 +579,18 @@ class AppIcons {
         return FontAwesomeIcons.xmark;
       case AppIcon.menu:
         return FontAwesomeIcons.bars;
-      case AppIcon.search:
-        return FontAwesomeIcons.magnifyingGlass;
       case AppIcon.filter:
         return FontAwesomeIcons.filter;
       case AppIcon.sort:
         return FontAwesomeIcons.arrowsUpDown;
       case AppIcon.refresh:
         return FontAwesomeIcons.arrowsRotate;
-      case AppIcon.sync:
-        return FontAwesomeIcons.arrowsRotate;
 
       // Chat & Communication
       case AppIcon.chat:
         return FontAwesomeIcons.comment;
-      case AppIcon.comments:
-        return FontAwesomeIcons.comments;
-      case AppIcon.commentDots:
-        return FontAwesomeIcons.commentDots;
-      case AppIcon.send:
-        return FontAwesomeIcons.paperPlane;
       case AppIcon.attach:
         return FontAwesomeIcons.paperclip;
-      case AppIcon.microphone:
-        return FontAwesomeIcons.microphone;
       case AppIcon.image:
         return FontAwesomeIcons.image;
       case AppIcon.file:
@@ -293,20 +599,10 @@ class AppIcons {
         return FontAwesomeIcons.message;
       case AppIcon.reply:
         return FontAwesomeIcons.reply;
-      case AppIcon.copy:
-        return FontAwesomeIcons.copy;
       case AppIcon.share:
         return FontAwesomeIcons.share;
-      case AppIcon.link:
-        return FontAwesomeIcons.link;
       case AppIcon.paperclip:
         return FontAwesomeIcons.paperclip;
-      case AppIcon.paperPlane:
-        return FontAwesomeIcons.paperPlane;
-      case AppIcon.envelope:
-        return FontAwesomeIcons.envelope;
-      case AppIcon.inbox:
-        return FontAwesomeIcons.inbox;
 
       // User & Auth
       case AppIcon.user:
@@ -317,8 +613,6 @@ class AppIcons {
         return FontAwesomeIcons.rightToBracket;
       case AppIcon.signOut:
         return FontAwesomeIcons.rightFromBracket;
-      case AppIcon.robot:
-        return FontAwesomeIcons.robot;
 
       // Content Management
       case AppIcon.edit:
@@ -327,34 +621,16 @@ class AppIcons {
         return FontAwesomeIcons.trash;
       case AppIcon.trash:
         return FontAwesomeIcons.trash;
-      case AppIcon.archive:
-        return FontAwesomeIcons.boxArchive;
-      case AppIcon.download:
-        return FontAwesomeIcons.download;
-      case AppIcon.upload:
-        return FontAwesomeIcons.upload;
       case AppIcon.save:
         return FontAwesomeIcons.floppyDisk;
-      case AppIcon.clipboard:
-        return FontAwesomeIcons.clipboard;
 
       // Organization
-      case AppIcon.folder:
-        return FontAwesomeIcons.folder;
       case AppIcon.folderPlus:
         return FontAwesomeIcons.folderPlus;
-      case AppIcon.plus:
-        return FontAwesomeIcons.plus;
-      case AppIcon.minus:
-        return FontAwesomeIcons.minus;
-      case AppIcon.star:
-        return FontAwesomeIcons.star;
+      case AppIcon.folderOpen:
+        return FontAwesomeIcons.folderOpen;
       case AppIcon.heart:
         return FontAwesomeIcons.heart;
-      case AppIcon.fire:
-        return FontAwesomeIcons.fire;
-      case AppIcon.rocket:
-        return FontAwesomeIcons.rocket;
       case AppIcon.thumbtack:
         return FontAwesomeIcons.thumbtack;
 
@@ -363,14 +639,8 @@ class AppIcons {
         return FontAwesomeIcons.gear;
       case AppIcon.cog:
         return FontAwesomeIcons.gear;
-      case AppIcon.palette:
-        return FontAwesomeIcons.palette;
-      case AppIcon.bell:
-        return FontAwesomeIcons.bell;
       case AppIcon.shield:
         return FontAwesomeIcons.shield;
-      case AppIcon.database:
-        return FontAwesomeIcons.database;
       case AppIcon.info:
         return FontAwesomeIcons.info;
 
@@ -379,10 +649,6 @@ class AppIcons {
         return FontAwesomeIcons.circleQuestion;
       case AppIcon.question:
         return FontAwesomeIcons.question;
-      case AppIcon.book:
-        return FontAwesomeIcons.book;
-      case AppIcon.lightbulb:
-        return FontAwesomeIcons.lightbulb;
 
       // Status & Feedback
       case AppIcon.check:
@@ -427,38 +693,16 @@ class AppIcons {
         return FontAwesomeIcons.anglesDown;
 
       // Specific Features
-      case AppIcon.graduationCap:
-        return FontAwesomeIcons.graduationCap;
-      case AppIcon.code:
-        return FontAwesomeIcons.code;
-      case AppIcon.sitemap:
-        return FontAwesomeIcons.sitemap;
-      case AppIcon.brain:
-        return FontAwesomeIcons.brain;
       case AppIcon.history:
         return FontAwesomeIcons.clockRotateLeft;
       case AppIcon.lockKeyhole:
         return FontAwesomeIcons.lock;
-      case AppIcon.terminal:
-        return FontAwesomeIcons.terminal;
-      case AppIcon.bug:
-        return FontAwesomeIcons.bug;
-      case AppIcon.cogs:
-        return FontAwesomeIcons.gears;
-      case AppIcon.microchip:
-        return FontAwesomeIcons.microchip;
-      case AppIcon.laptopCode:
-        return FontAwesomeIcons.laptopCode;
-      case AppIcon.fileCodeIcon:
-        return FontAwesomeIcons.fileCode;
-      case AppIcon.server:
-        return FontAwesomeIcons.server;
-      case AppIcon.networkWired:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.key:
-        return FontAwesomeIcons.key;
       case AppIcon.unlock:
         return FontAwesomeIcons.unlock;
+      case AppIcon.microphone:
+        return FontAwesomeIcons.microphone;
+      case AppIcon.fileCodeIcon:
+        return FontAwesomeIcons.fileCode;
 
       // Display & Layout
       case AppIcon.list:
@@ -477,174 +721,14 @@ class AppIcons {
         return FontAwesomeIcons.pause;
       case AppIcon.stop:
         return FontAwesomeIcons.stop;
-      case AppIcon.music:
-        return FontAwesomeIcons.music;
-      case AppIcon.video:
-        return FontAwesomeIcons.video;
-      case AppIcon.fileText:
-        return FontAwesomeIcons.fileLines;
-      case AppIcon.camera:
-        return FontAwesomeIcons.camera;
       case AppIcon.film:
         return FontAwesomeIcons.film;
-
-      // Mathematics & Science
-      case AppIcon.calculator:
-        return FontAwesomeIcons.calculator;
-      case AppIcon.mathPlus:
-        return FontAwesomeIcons.plus;
-      case AppIcon.mathMinus:
-        return FontAwesomeIcons.minus;
-      case AppIcon.times:
-        return FontAwesomeIcons.xmark;
-      case AppIcon.divide:
-        return FontAwesomeIcons.divide;
-      case AppIcon.equals:
-        return FontAwesomeIcons.equals;
-      case AppIcon.percentage:
-        return FontAwesomeIcons.percent;
-      case AppIcon.infinity:
-        return FontAwesomeIcons.infinity;
-      case AppIcon.pi:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.sigma:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.function:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.chartLine:
-        return FontAwesomeIcons.chartLine;
-      case AppIcon.chartBar:
-        return FontAwesomeIcons.chartBar;
-      case AppIcon.chartPie:
-        return FontAwesomeIcons.chartPie;
-      case AppIcon.chartArea:
-        return FontAwesomeIcons.chartArea;
-      case AppIcon.sortNumericUp:
-        return FontAwesomeIcons.sortNumericUp;
-      case AppIcon.sortNumericDown:
-        return FontAwesomeIcons.sortNumericDown;
-      case AppIcon.sortAmountUp:
-        return FontAwesomeIcons.sortAmountUp;
-      case AppIcon.sortAmountDown:
-        return FontAwesomeIcons.sortAmountDown;
-      case AppIcon.squareRootAlt:
-        return FontAwesomeIcons.squareRootVariable;
-      case AppIcon.flask:
-        return FontAwesomeIcons.flask;
-      case AppIcon.atom:
-        return FontAwesomeIcons.atom;
-      case AppIcon.dna:
-        return FontAwesomeIcons.dna;
-      case AppIcon.microscope:
-        return FontAwesomeIcons.microscope;
-      case AppIcon.telescope:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.vial:
-        return FontAwesomeIcons.vial;
-      case AppIcon.pills:
-        return FontAwesomeIcons.pills;
-      case AppIcon.stethoscope:
-        return FontAwesomeIcons.stethoscope;
-      case AppIcon.heartbeat:
-        return FontAwesomeIcons.heartPulse;
-      case AppIcon.eye:
-        return FontAwesomeIcons.eye;
-      case AppIcon.ear:
-        return FontAwesomeIcons.earListen;
-      case AppIcon.nose:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.tooth:
-        return FontAwesomeIcons.tooth;
-      case AppIcon.bone:
-        return FontAwesomeIcons.bone;
-      case AppIcon.lungs:
-        return FontAwesomeIcons.lungs;
-      case AppIcon.liver:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.kidney:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.stomach:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.intestines:
-        return FontAwesomeIcons.question; // fallback
-
-      // Study & Education
-      case AppIcon.chalkboardTeacher:
-        return FontAwesomeIcons.chalkboardUser;
-      case AppIcon.chalkboard:
-        return FontAwesomeIcons.chalkboard;
-      case AppIcon.pencilAlt:
-        return FontAwesomeIcons.pencil;
-      case AppIcon.pen:
-        return FontAwesomeIcons.pen;
-      case AppIcon.highlighter:
-        return FontAwesomeIcons.highlighter;
-      case AppIcon.stickyNote:
-        return FontAwesomeIcons.noteSticky;
-      case AppIcon.folderOpen:
-        return FontAwesomeIcons.folderOpen;
-
-      // Creativity & Arts
-      case AppIcon.paintBrush:
-        return FontAwesomeIcons.paintbrush;
-      case AppIcon.guitar:
-        return FontAwesomeIcons.guitar;
-      case AppIcon.piano:
-        return FontAwesomeIcons.question; // fallback
-      case AppIcon.theaterMasks:
-        return FontAwesomeIcons.masksTheater;
-      case AppIcon.magic:
-        return FontAwesomeIcons.wandMagic;
-      case AppIcon.gem:
-        return FontAwesomeIcons.gem;
-      case AppIcon.crown:
-        return FontAwesomeIcons.crown;
-      case AppIcon.trophy:
-        return FontAwesomeIcons.trophy;
-      case AppIcon.medal:
-        return FontAwesomeIcons.medal;
-      case AppIcon.award:
-        return FontAwesomeIcons.award;
-      case AppIcon.certificate:
-        return FontAwesomeIcons.certificate;
-      case AppIcon.ribbon:
-        return FontAwesomeIcons.ribbon;
-      case AppIcon.flag:
-        return FontAwesomeIcons.flag;
-
-      // Collaboration & Social
-      case AppIcon.users:
-        return FontAwesomeIcons.users;
-      case AppIcon.userFriends:
-        return FontAwesomeIcons.userFriends;
-      case AppIcon.handshake:
-        return FontAwesomeIcons.handshake;
-      case AppIcon.commentAlt:
-        return FontAwesomeIcons.comment;
-      case AppIcon.bellSlash:
-        return FontAwesomeIcons.bellSlash;
-      case AppIcon.calendarAlt:
-        return FontAwesomeIcons.calendar;
-      case AppIcon.clock:
-        return FontAwesomeIcons.clock;
-      case AppIcon.stopwatch:
-        return FontAwesomeIcons.stopwatch;
-      case AppIcon.hourglassHalf:
-        return FontAwesomeIcons.hourglassHalf;
-
-      // External & Links
-      case AppIcon.external:
-        return FontAwesomeIcons.arrowUpRightFromSquare;
-      case AppIcon.externalLink:
-        return FontAwesomeIcons.arrowUpRightFromSquare;
+      case AppIcon.fileText:
+        return FontAwesomeIcons.fileLines;
 
       // File Types
       case AppIcon.fileLines:
         return FontAwesomeIcons.fileLines;
-      case AppIcon.fileAlt:
-        return FontAwesomeIcons.fileLines;
-      case AppIcon.fileCode:
-        return FontAwesomeIcons.fileCode;
 
       // Arrows & Direction
       case AppIcon.arrowLeft:
@@ -656,13 +740,13 @@ class AppIcons {
       case AppIcon.arrowDown:
         return FontAwesomeIcons.arrowDown;
       case AppIcon.arrowTurnUpLeft:
-        return FontAwesomeIcons.question; // fallback
+        return FontAwesomeIcons.arrowTurnUp;
       case AppIcon.arrowTurnUpRight:
-        return FontAwesomeIcons.question; // fallback
+        return FontAwesomeIcons.arrowTurnUp;
       case AppIcon.arrowTurnDownLeft:
-        return FontAwesomeIcons.question; // fallback
+        return FontAwesomeIcons.arrowTurnDown;
       case AppIcon.arrowTurnDownRight:
-        return FontAwesomeIcons.question; // fallback
+        return FontAwesomeIcons.arrowTurnDown;
 
       // Common UI
       case AppIcon.xmark:
@@ -675,8 +759,6 @@ class AppIcons {
         return FontAwesomeIcons.circleInfo;
       case AppIcon.exclamationCircle:
         return FontAwesomeIcons.circleExclamation;
-      case AppIcon.questionCircle:
-        return FontAwesomeIcons.circleQuestion;
     }
   }
 
@@ -738,66 +820,241 @@ class AppIcons {
 
 /// Mapping from FontAwesome class names to AppIcon enums
 const Map<String, AppIcon> _fontAwesomeToAppIconMap = {
-  'house': AppIcon.home,
-  'arrow-left': AppIcon.back,
-  'arrow-right': AppIcon.next,
-  'xmark': AppIcon.close,
-  'bars': AppIcon.menu,
+  // Programming & Technology
+  'code': AppIcon.code,
+  'laptop-code': AppIcon.laptopCode,
+  'terminal': AppIcon.terminal,
+  'bug': AppIcon.bug,
+  'cogs': AppIcon.cogs,
+  'gears': AppIcon.cogs,
+  'microchip': AppIcon.microchip,
+  'server': AppIcon.server,
+  'network-wired': AppIcon.networkWired,
+  'shield-alt': AppIcon.shieldAlt,
+  'shield-halved': AppIcon.shieldAlt,
+  'key': AppIcon.key,
+  'database': AppIcon.database,
+  'table': AppIcon.table,
+  'chart-bar': AppIcon.chartBar,
+  'mobile-alt': AppIcon.mobileAlt,
+  'mobile-screen': AppIcon.mobileAlt,
+  'globe': AppIcon.globe,
+  'cloud': AppIcon.cloud,
+  'robot': AppIcon.robot,
+  'brain': AppIcon.brain,
+  'sitemap': AppIcon.sitemap,
+  'project-diagram': AppIcon.projectDiagram,
+  'diagram-project': AppIcon.projectDiagram,
+  'file-code': AppIcon.fileCode,
+  'code-branch': AppIcon.codeBranch,
+  'code-merge': AppIcon.codeMerge,
+  'code-compare': AppIcon.codeCompare,
+
+  // Mathematics & Statistics
+  'calculator': AppIcon.calculator,
+  'square-root-alt': AppIcon.squareRootAlt,
+  'square-root-variable': AppIcon.squareRootAlt,
+  'infinity': AppIcon.infinity,
+  'percentage': AppIcon.percentage,
+  'percent': AppIcon.percentage,
+  'chart-line': AppIcon.chartLine,
+  'chart-pie': AppIcon.chartPie,
+  'chart-area': AppIcon.chartArea,
+  'sort-numeric-up': AppIcon.sortNumericUp,
+  'sort-numeric-down': AppIcon.sortNumericDown,
+  'equals': AppIcon.equals,
+  'plus': AppIcon.plus,
+  'minus': AppIcon.minus,
+  'times': AppIcon.times,
+  'xmark': AppIcon.times,
+  'divide': AppIcon.divide,
+  'superscript': AppIcon.superscript,
+  'subscript': AppIcon.subscript,
+  'sigma': AppIcon.sigma,
+  'pi': AppIcon.pi,
+  'function': AppIcon.function,
+  'integral': AppIcon.integral,
+  'triangle': AppIcon.triangle,
+  'omega': AppIcon.omega,
+  'theta': AppIcon.theta,
+
+  // Science & Chemistry
+  'atom': AppIcon.atom,
+  'flask': AppIcon.flask,
+  'microscope': AppIcon.microscope,
+  'dna': AppIcon.dna,
+  'leaf': AppIcon.leaf,
+  'seedling': AppIcon.seedling,
+  'droplet': AppIcon.droplet,
+  'fire': AppIcon.fire,
+  'bolt': AppIcon.bolt,
+  'magnet': AppIcon.magnet,
+  'satellite': AppIcon.satellite,
+  'rocket': AppIcon.rocket,
+  'sun': AppIcon.sun,
+  'moon': AppIcon.moon,
+  'star': AppIcon.star,
+  'telescope': AppIcon.telescope,
+  'vial': AppIcon.vial,
+  'pills': AppIcon.pills,
+  'stethoscope': AppIcon.stethoscope,
+  'heartbeat': AppIcon.heartbeat,
+  'heart-pulse': AppIcon.heartbeat,
+  'eye': AppIcon.eye,
+  'ear': AppIcon.ear,
+  'ear-listen': AppIcon.ear,
+  'nose': AppIcon.nose,
+  'tooth': AppIcon.tooth,
+  'bone': AppIcon.bone,
+  'lungs': AppIcon.lungs,
+  'liver': AppIcon.liver,
+  'kidneys': AppIcon.kidney,
+  'stomach': AppIcon.stomach,
+  'intestines': AppIcon.intestines,
+
+  // Study & Academic
+  'graduation-cap': AppIcon.graduationCap,
+  'book': AppIcon.book,
+  'book-open': AppIcon.bookOpen,
+  'pen': AppIcon.pen,
+  'pencil-alt': AppIcon.pencilAlt,
+  'pencil': AppIcon.pencilAlt,
+  'highlighter': AppIcon.highlighter,
+  'sticky-note': AppIcon.stickyNote,
+  'note-sticky': AppIcon.stickyNote,
+  'clipboard': AppIcon.clipboard,
+  'file-alt': AppIcon.fileAlt,
+  'file-lines': AppIcon.fileAlt,
+  'folder': AppIcon.folder,
+  'archive': AppIcon.archive,
+  'box-archive': AppIcon.archive,
+  'calendar-alt': AppIcon.calendarAlt,
+  'calendar': AppIcon.calendarAlt,
+  'clock': AppIcon.clock,
+  'stopwatch': AppIcon.stopwatch,
+  'hourglass-half': AppIcon.hourglassHalf,
+  'bell': AppIcon.bell,
+  'flag': AppIcon.flag,
+  'trophy': AppIcon.trophy,
+  'medal': AppIcon.medal,
+  'certificate': AppIcon.certificate,
+  'award': AppIcon.award,
+  'user-graduate': AppIcon.userGraduate,
+  'chalkboard-teacher': AppIcon.chalkboardTeacher,
+  'chalkboard-user': AppIcon.chalkboardTeacher,
+  'chalkboard': AppIcon.chalkboard,
   'magnifying-glass': AppIcon.search,
-  'filter': AppIcon.filter,
-  'arrows-up-down': AppIcon.sort,
-  'arrows-rotate': AppIcon.refresh,
-  'comment': AppIcon.chat,
+  'search': AppIcon.search,
+  'question-circle': AppIcon.questionCircle,
+  'circle-question': AppIcon.questionCircle,
+  'lightbulb': AppIcon.lightbulb,
+
+  // Creativity & Design
+  'palette': AppIcon.palette,
+  'paint-brush': AppIcon.paintBrush,
+  'paintbrush': AppIcon.paintBrush,
+  'magic': AppIcon.magic,
+  'wand-magic': AppIcon.magic,
+  'sparkles': AppIcon.sparkles,
+  'wand-magic-sparkles': AppIcon.sparkles,
+  'eye-dropper': AppIcon.eyeDropper,
+  'camera': AppIcon.camera,
+  'video': AppIcon.video,
+  'music': AppIcon.music,
+  'headphones': AppIcon.headphones,
+  'gamepad': AppIcon.gamepad,
+  'dice': AppIcon.dice,
+  'puzzle-piece': AppIcon.puzzlePiece,
+  'cube': AppIcon.cube,
+  'gem': AppIcon.gem,
+  'crown': AppIcon.crown,
+  'ribbon': AppIcon.ribbon,
+
+  // Collaboration & Communication
+  'users': AppIcon.users,
+  'user-friends': AppIcon.userFriends,
+  'user-group': AppIcon.userFriends,
+  'handshake': AppIcon.handshake,
   'comments': AppIcon.comments,
   'comment-dots': AppIcon.commentDots,
-  'paper-plane': AppIcon.send,
+  'envelope': AppIcon.envelope,
+  'phone': AppIcon.phone,
+  'video-camera': AppIcon.videoCamera,
+  'share-alt': AppIcon.shareAlt,
+  'share-nodes': AppIcon.shareAlt,
+  'link': AppIcon.link,
+  'sync': AppIcon.sync,
+  'arrows-rotate': AppIcon.sync,
+  'download': AppIcon.download,
+  'upload': AppIcon.upload,
+  'print': AppIcon.print,
+  'copy': AppIcon.copy,
+  'paper-plane': AppIcon.paperPlane,
+  'inbox': AppIcon.inbox,
+  'send': AppIcon.send,
+  'bell-slash': AppIcon.bellSlash,
+
+  // Navigation & Common Actions
+  'house': AppIcon.home,
+  'home': AppIcon.home,
+  'arrow-left': AppIcon.back,
+  'arrow-right': AppIcon.next,
+  'bars': AppIcon.menu,
+  'filter': AppIcon.filter,
+  'arrows-up-down': AppIcon.sort,
+  'refresh': AppIcon.refresh,
+
+  // Chat & Communication
+  'comment': AppIcon.chat,
   'paperclip': AppIcon.attach,
-  'microphone': AppIcon.microphone,
   'image': AppIcon.image,
   'file': AppIcon.file,
   'message': AppIcon.message,
   'reply': AppIcon.reply,
-  'copy': AppIcon.copy,
   'share': AppIcon.share,
-  'link': AppIcon.link,
-  'envelope': AppIcon.envelope,
-  'inbox': AppIcon.inbox,
+
+  // User & Auth
   'user': AppIcon.user,
   'lock': AppIcon.lock,
   'right-to-bracket': AppIcon.signIn,
+  'sign-in': AppIcon.signIn,
   'right-from-bracket': AppIcon.signOut,
-  'robot': AppIcon.robot,
-  'pen': AppIcon.edit,
+  'sign-out': AppIcon.signOut,
+
+  // Content Management
+  'edit': AppIcon.edit,
   'trash': AppIcon.delete,
-  'box-archive': AppIcon.archive,
-  'download': AppIcon.download,
-  'upload': AppIcon.upload,
   'floppy-disk': AppIcon.save,
-  'clipboard': AppIcon.clipboard,
-  'folder': AppIcon.folder,
+  'save': AppIcon.save,
+
+  // Organization
   'folder-plus': AppIcon.folderPlus,
-  'plus': AppIcon.plus,
-  'minus': AppIcon.minus,
-  'star': AppIcon.star,
+  'folder-open': AppIcon.folderOpen,
   'heart': AppIcon.heart,
-  'fire': AppIcon.fire,
-  'rocket': AppIcon.rocket,
   'thumbtack': AppIcon.thumbtack,
+
+  // Settings & Configuration
   'gear': AppIcon.settings,
-  'palette': AppIcon.palette,
-  'bell': AppIcon.bell,
+  'settings': AppIcon.settings,
+  'cog': AppIcon.cog,
   'shield': AppIcon.shield,
-  'database': AppIcon.database,
   'info': AppIcon.info,
-  'circle-question': AppIcon.help,
+
+  // Help & Support
+  'help': AppIcon.help,
   'question': AppIcon.question,
-  'book': AppIcon.book,
-  'lightbulb': AppIcon.lightbulb,
+
+  // Status & Feedback
   'check': AppIcon.check,
   'triangle-exclamation': AppIcon.warning,
+  'warning': AppIcon.warning,
   'circle-exclamation': AppIcon.error,
-  'circle-info': AppIcon.infoCircleIcon,
+  'error': AppIcon.error,
+  'circle-info': AppIcon.infoCircle,
+  'info-circle': AppIcon.infoCircle,
   'exclamation': AppIcon.exclamation,
+
+  // UI Elements
   'ellipsis': AppIcon.ellipsis,
   'ellipsis-vertical': AppIcon.ellipsisV,
   'chevron-up': AppIcon.chevronUp,
@@ -810,226 +1067,99 @@ const Map<String, AppIcon> _fontAwesomeToAppIconMap = {
   'angle-right': AppIcon.angleRight,
   'angles-up': AppIcon.anglesUp,
   'angles-down': AppIcon.anglesDown,
-  'graduation-cap': AppIcon.graduationCap,
-  'code': AppIcon.code,
-  'sitemap': AppIcon.sitemap,
-  'brain': AppIcon.brain,
+
+  // Specific Features
   'clock-rotate-left': AppIcon.history,
-  'terminal': AppIcon.terminal,
-  'bug': AppIcon.bug,
-  'gears': AppIcon.cogs,
-  'microchip': AppIcon.microchip,
-  'laptop-code': AppIcon.laptopCode,
-  'file-code': AppIcon.fileCodeIcon,
-  'server': AppIcon.server,
-  'net-wired': AppIcon.networkWired,
-  'key': AppIcon.key,
+  'history': AppIcon.history,
   'unlock': AppIcon.unlock,
+  'microphone': AppIcon.microphone,
+
+  // Display & Layout
   'list': AppIcon.list,
   'table-cells': AppIcon.grid,
+  'grid': AppIcon.grid,
   'table-cells-large': AppIcon.thLarge,
+
+  // Media
   'play': AppIcon.play,
   'pause': AppIcon.pause,
   'stop': AppIcon.stop,
-  'music': AppIcon.music,
-  'video': AppIcon.video,
-  'file-lines': AppIcon.fileText,
-  'camera': AppIcon.camera,
   'film': AppIcon.film,
-  'calculator': AppIcon.calculator,
-  'divide': AppIcon.divide,
-  'equals': AppIcon.equals,
-  'percent': AppIcon.percentage,
-  'infinity': AppIcon.infinity,
-  'pi': AppIcon.pi,
-  'sigma': AppIcon.sigma,
-  'function': AppIcon.function,
-  'chart-line': AppIcon.chartLine,
-  'chart-bar': AppIcon.chartBar,
-  'chart-pie': AppIcon.chartPie,
-  'chart-area': AppIcon.chartArea,
-  'sort-numeric-up': AppIcon.sortNumericUp,
-  'sort-numeric-down': AppIcon.sortNumericDown,
-  'sort-amount-up': AppIcon.sortAmountUp,
-  'sort-amount-down': AppIcon.sortAmountDown,
-  'square-root-variable': AppIcon.squareRootAlt,
-  'flask': AppIcon.flask,
-  'atom': AppIcon.atom,
-  'dna': AppIcon.dna,
-  'microscope': AppIcon.microscope,
-  'telescope': AppIcon.telescope,
-  'vial': AppIcon.vial,
-  'pills': AppIcon.pills,
-  'stethoscope': AppIcon.stethoscope,
-  'heart-pulse': AppIcon.heartbeat,
-  'eye': AppIcon.eye,
-  'ear-listen': AppIcon.ear,
-  'nose': AppIcon.nose,
-  'tooth': AppIcon.tooth,
-  'bone': AppIcon.bone,
-  'lungs': AppIcon.lungs,
-  'liver': AppIcon.liver,
-  'kidneys': AppIcon.kidney,
-  'stomach': AppIcon.stomach,
-  'intestines': AppIcon.intestines,
-  'chalkboard-user': AppIcon.chalkboardTeacher,
-  'chalkboard': AppIcon.chalkboard,
-  'pencil': AppIcon.pencilAlt,
-  'highlighter': AppIcon.highlighter,
-  'note-sticky': AppIcon.stickyNote,
-  'folder-open': AppIcon.folderOpen,
-  'paintbrush': AppIcon.paintBrush,
-  'guitar': AppIcon.guitar,
-  'piano-keyboard': AppIcon.piano,
-  'masks-theater': AppIcon.theaterMasks,
-  'wand-magic': AppIcon.magic,
-  'gem': AppIcon.gem,
-  'crown': AppIcon.crown,
-  'trophy': AppIcon.trophy,
-  'medal': AppIcon.medal,
-  'award': AppIcon.award,
-  'certificate': AppIcon.certificate,
-  'ribbon': AppIcon.ribbon,
-  'flag': AppIcon.flag,
-  'user-friends': AppIcon.userFriends,
-  'handshake': AppIcon.handshake,
-  'bell-slash': AppIcon.bellSlash,
-  'calendar': AppIcon.calendarAlt,
-  'stopwatch': AppIcon.stopwatch,
-  'hourglass-half': AppIcon.hourglassHalf,
-  'arrow-up-right-from-square': AppIcon.external,
-  'circle-check': AppIcon.checkCircle,
-  'circle-xmark': AppIcon.timesCircle,
-  'exclamation-circle': AppIcon.exclamationCircle,
+
+  // Arrows & Direction
+  'arrow-up': AppIcon.arrowUp,
+  'arrow-down': AppIcon.arrowDown,
 };
 
 /// Mapping from AppIcon enums to FontAwesome class names
 const Map<AppIcon, String> _appIconToFontAwesomeMap = {
-  AppIcon.home: 'house',
-  AppIcon.back: 'arrow-left',
-  AppIcon.next: 'arrow-right',
-  AppIcon.close: 'xmark',
-  AppIcon.menu: 'bars',
-  AppIcon.search: 'magnifying-glass',
-  AppIcon.filter: 'filter',
-  AppIcon.sort: 'arrows-up-down',
-  AppIcon.refresh: 'arrows-rotate',
-  AppIcon.chat: 'comment',
-  AppIcon.comments: 'comments',
-  AppIcon.commentDots: 'comment-dots',
-  AppIcon.send: 'paper-plane',
-  AppIcon.attach: 'paperclip',
-  AppIcon.microphone: 'microphone',
-  AppIcon.image: 'image',
-  AppIcon.file: 'file',
-  AppIcon.message: 'message',
-  AppIcon.reply: 'reply',
-  AppIcon.copy: 'copy',
-  AppIcon.share: 'share',
-  AppIcon.link: 'link',
-  AppIcon.envelope: 'envelope',
-  AppIcon.inbox: 'inbox',
-  AppIcon.user: 'user',
-  AppIcon.lock: 'lock',
-  AppIcon.signIn: 'right-to-bracket',
-  AppIcon.signOut: 'right-from-bracket',
-  AppIcon.robot: 'robot',
-  AppIcon.edit: 'pen',
-  AppIcon.delete: 'trash',
-  AppIcon.trash: 'trash',
-  AppIcon.archive: 'box-archive',
-  AppIcon.download: 'download',
-  AppIcon.upload: 'upload',
-  AppIcon.save: 'floppy-disk',
-  AppIcon.clipboard: 'clipboard',
-  AppIcon.folder: 'folder',
-  AppIcon.folderPlus: 'folder-plus',
-  AppIcon.plus: 'plus',
-  AppIcon.minus: 'minus',
-  AppIcon.star: 'star',
-  AppIcon.heart: 'heart',
-  AppIcon.fire: 'fire',
-  AppIcon.rocket: 'rocket',
-  AppIcon.thumbtack: 'thumbtack',
-  AppIcon.settings: 'gear',
-  AppIcon.cog: 'gear',
-  AppIcon.palette: 'palette',
-  AppIcon.bell: 'bell',
-  AppIcon.shield: 'shield',
-  AppIcon.database: 'database',
-  AppIcon.info: 'info',
-  AppIcon.help: 'circle-question',
-  AppIcon.question: 'question',
-  AppIcon.book: 'book',
-  AppIcon.lightbulb: 'lightbulb',
-  AppIcon.check: 'check',
-  AppIcon.warning: 'triangle-exclamation',
-  AppIcon.error: 'circle-exclamation',
-  AppIcon.exclamation: 'exclamation',
-  AppIcon.exclamationTriangle: 'triangle-exclamation',
-  AppIcon.ellipsis: 'ellipsis',
-  AppIcon.ellipsisH: 'ellipsis',
-  AppIcon.ellipsisV: 'ellipsis-vertical',
-  AppIcon.chevronUp: 'chevron-up',
-  AppIcon.chevronDown: 'chevron-down',
-  AppIcon.chevronLeft: 'chevron-left',
-  AppIcon.chevronRight: 'chevron-right',
-  AppIcon.angleUp: 'angle-up',
-  AppIcon.angleDown: 'angle-down',
-  AppIcon.angleLeft: 'angle-left',
-  AppIcon.angleRight: 'angle-right',
-  AppIcon.anglesUp: 'angles-up',
-  AppIcon.anglesDown: 'angles-down',
-  AppIcon.graduationCap: 'graduation-cap',
+  // Programming & Technology
   AppIcon.code: 'code',
-  AppIcon.sitemap: 'sitemap',
-  AppIcon.brain: 'brain',
-  AppIcon.history: 'clock-rotate-left',
-  AppIcon.lockKeyhole: 'lock',
+  AppIcon.laptopCode: 'laptop-code',
   AppIcon.terminal: 'terminal',
   AppIcon.bug: 'bug',
   AppIcon.cogs: 'gears',
   AppIcon.microchip: 'microchip',
-  AppIcon.laptopCode: 'laptop-code',
-  AppIcon.fileCodeIcon: 'file-code',
   AppIcon.server: 'server',
-  AppIcon.networkWired: 'net-wired',
+  AppIcon.networkWired: 'network-wired',
+  AppIcon.shieldAlt: 'shield-halved',
   AppIcon.key: 'key',
-  AppIcon.unlock: 'unlock',
-  AppIcon.list: 'list',
-  AppIcon.grid: 'table-cells',
-  AppIcon.thLarge: 'table-cells-large',
-  AppIcon.bars: 'bars',
-  AppIcon.play: 'play',
-  AppIcon.pause: 'pause',
-  AppIcon.stop: 'stop',
-  AppIcon.music: 'music',
-  AppIcon.video: 'video',
-  AppIcon.fileText: 'file-lines',
-  AppIcon.camera: 'camera',
-  AppIcon.film: 'film',
-  AppIcon.calculator: 'calculator',
-  AppIcon.times: 'xmark',
-  AppIcon.divide: 'divide',
-  AppIcon.equals: 'equals',
-  AppIcon.percentage: 'percent',
-  AppIcon.infinity: 'infinity',
-  AppIcon.pi: 'pi',
-  AppIcon.sigma: 'sigma',
-  AppIcon.function: 'function',
-  AppIcon.chartLine: 'chart-line',
+  AppIcon.database: 'database',
+  AppIcon.table: 'table',
   AppIcon.chartBar: 'chart-bar',
+  AppIcon.mobileAlt: 'mobile-screen',
+  AppIcon.globe: 'globe',
+  AppIcon.cloud: 'cloud',
+  AppIcon.robot: 'robot',
+  AppIcon.brain: 'brain',
+  AppIcon.sitemap: 'sitemap',
+  AppIcon.projectDiagram: 'diagram-project',
+  AppIcon.fileCode: 'file-code',
+  AppIcon.codeBranch: 'code-branch',
+  AppIcon.codeMerge: 'code-merge',
+  AppIcon.codeCompare: 'code-compare',
+
+  // Mathematics & Statistics
+  AppIcon.calculator: 'calculator',
+  AppIcon.squareRootAlt: 'square-root-variable',
+  AppIcon.infinity: 'infinity',
+  AppIcon.percentage: 'percent',
+  AppIcon.chartLine: 'chart-line',
   AppIcon.chartPie: 'chart-pie',
   AppIcon.chartArea: 'chart-area',
   AppIcon.sortNumericUp: 'sort-numeric-up',
   AppIcon.sortNumericDown: 'sort-numeric-down',
-  AppIcon.sortAmountUp: 'sort-amount-up',
-  AppIcon.sortAmountDown: 'sort-amount-down',
-  AppIcon.squareRootAlt: 'square-root-variable',
-  AppIcon.flask: 'flask',
+  AppIcon.equals: 'equals',
+  AppIcon.plus: 'plus',
+  AppIcon.minus: 'minus',
+  AppIcon.times: 'xmark',
+  AppIcon.divide: 'divide',
+  AppIcon.superscript: 'superscript',
+  AppIcon.subscript: 'subscript',
+  AppIcon.sigma: 'sigma',
+  AppIcon.pi: 'pi',
+  AppIcon.function: 'function',
+  AppIcon.integral: 'integral',
+  AppIcon.triangle: 'triangle',
+  AppIcon.omega: 'omega',
+  AppIcon.theta: 'theta',
+
+  // Science & Chemistry
   AppIcon.atom: 'atom',
-  AppIcon.dna: 'dna',
+  AppIcon.flask: 'flask',
   AppIcon.microscope: 'microscope',
+  AppIcon.dna: 'dna',
+  AppIcon.leaf: 'leaf',
+  AppIcon.seedling: 'seedling',
+  AppIcon.droplet: 'droplet',
+  AppIcon.fire: 'fire',
+  AppIcon.bolt: 'bolt',
+  AppIcon.magnet: 'magnet',
+  AppIcon.satellite: 'satellite',
+  AppIcon.rocket: 'rocket',
+  AppIcon.sun: 'sun',
+  AppIcon.moon: 'moon',
+  AppIcon.star: 'star',
   AppIcon.telescope: 'telescope',
   AppIcon.vial: 'vial',
   AppIcon.pills: 'pills',
@@ -1045,52 +1175,184 @@ const Map<AppIcon, String> _appIconToFontAwesomeMap = {
   AppIcon.kidney: 'kidneys',
   AppIcon.stomach: 'stomach',
   AppIcon.intestines: 'intestines',
-  AppIcon.chalkboardTeacher: 'chalkboard-user',
-  AppIcon.chalkboard: 'chalkboard',
-  AppIcon.pencilAlt: 'pencil',
+
+  // Study & Academic
+  AppIcon.graduationCap: 'graduation-cap',
+  AppIcon.book: 'book',
+  AppIcon.bookOpen: 'book-open',
   AppIcon.pen: 'pen',
+  AppIcon.pencilAlt: 'pencil',
   AppIcon.highlighter: 'highlighter',
   AppIcon.stickyNote: 'note-sticky',
-  AppIcon.folderOpen: 'folder-open',
-  AppIcon.paintBrush: 'paintbrush',
-  AppIcon.guitar: 'guitar',
-  AppIcon.piano: 'piano-keyboard',
-  AppIcon.theaterMasks: 'masks-theater',
-  AppIcon.magic: 'wand-magic',
-  AppIcon.gem: 'gem',
-  AppIcon.crown: 'crown',
-  AppIcon.trophy: 'trophy',
-  AppIcon.medal: 'medal',
-  AppIcon.award: 'award',
-  AppIcon.certificate: 'certificate',
-  AppIcon.ribbon: 'ribbon',
-  AppIcon.flag: 'flag',
-  AppIcon.users: 'users',
-  AppIcon.userFriends: 'user-friends',
-  AppIcon.handshake: 'handshake',
-  AppIcon.commentAlt: 'comment',
-  AppIcon.bellSlash: 'bell-slash',
+  AppIcon.clipboard: 'clipboard',
+  AppIcon.fileAlt: 'file-lines',
+  AppIcon.folder: 'folder',
+  AppIcon.archive: 'box-archive',
   AppIcon.calendarAlt: 'calendar',
   AppIcon.clock: 'clock',
   AppIcon.stopwatch: 'stopwatch',
   AppIcon.hourglassHalf: 'hourglass-half',
-  AppIcon.external: 'arrow-up-right-from-square',
+  AppIcon.bell: 'bell',
+  AppIcon.flag: 'flag',
+  AppIcon.trophy: 'trophy',
+  AppIcon.medal: 'medal',
+  AppIcon.certificate: 'certificate',
+  AppIcon.award: 'award',
+  AppIcon.userGraduate: 'user-graduate',
+  AppIcon.chalkboardTeacher: 'chalkboard-user',
+  AppIcon.chalkboard: 'chalkboard',
+  AppIcon.search: 'magnifying-glass',
+  AppIcon.questionCircle: 'circle-question',
+  AppIcon.lightbulb: 'lightbulb',
+
+  // Creativity & Design
+  AppIcon.palette: 'palette',
+  AppIcon.paintBrush: 'paintbrush',
+  AppIcon.magic: 'wand-magic',
+  AppIcon.sparkles: 'wand-magic-sparkles',
+  AppIcon.eyeDropper: 'eye-dropper',
+  AppIcon.camera: 'camera',
+  AppIcon.video: 'video',
+  AppIcon.music: 'music',
+  AppIcon.headphones: 'headphones',
+  AppIcon.gamepad: 'gamepad',
+  AppIcon.dice: 'dice',
+  AppIcon.puzzlePiece: 'puzzle-piece',
+  AppIcon.cube: 'cube',
+  AppIcon.gem: 'gem',
+  AppIcon.crown: 'crown',
+  AppIcon.ribbon: 'ribbon',
+
+  // Collaboration & Communication
+  AppIcon.users: 'users',
+  AppIcon.userFriends: 'user-group',
+  AppIcon.handshake: 'handshake',
+  AppIcon.comments: 'comments',
+  AppIcon.commentDots: 'comment-dots',
+  AppIcon.envelope: 'envelope',
+  AppIcon.phone: 'phone',
+  AppIcon.videoCamera: 'video-camera',
+  AppIcon.shareAlt: 'share-nodes',
+  AppIcon.link: 'link',
+  AppIcon.sync: 'arrows-rotate',
+  AppIcon.download: 'download',
+  AppIcon.upload: 'upload',
+  AppIcon.print: 'print',
+  AppIcon.copy: 'copy',
+  AppIcon.paperPlane: 'paper-plane',
+  AppIcon.inbox: 'inbox',
+  AppIcon.send: 'paper-plane',
+  AppIcon.bellSlash: 'bell-slash',
+
+  // Navigation & Common Actions
+  AppIcon.home: 'house',
+  AppIcon.back: 'arrow-left',
+  AppIcon.next: 'arrow-right',
+  AppIcon.previous: 'arrow-left',
+  AppIcon.close: 'xmark',
+  AppIcon.menu: 'bars',
+  AppIcon.filter: 'filter',
+  AppIcon.sort: 'arrows-up-down',
+  AppIcon.refresh: 'arrows-rotate',
+
+  // Chat & Communication
+  AppIcon.chat: 'comment',
+  AppIcon.attach: 'paperclip',
+  AppIcon.image: 'image',
+  AppIcon.file: 'file',
+  AppIcon.message: 'message',
+  AppIcon.reply: 'reply',
+  AppIcon.share: 'share',
+  AppIcon.paperclip: 'paperclip',
+
+  // User & Auth
+  AppIcon.user: 'user',
+  AppIcon.lock: 'lock',
+  AppIcon.signIn: 'right-to-bracket',
+  AppIcon.signOut: 'right-from-bracket',
+
+  // Content Management
+  AppIcon.edit: 'pen',
+  AppIcon.delete: 'trash',
+  AppIcon.trash: 'trash',
+  AppIcon.save: 'floppy-disk',
+
+  // Organization
+  AppIcon.folderPlus: 'folder-plus',
+  AppIcon.folderOpen: 'folder-open',
+  AppIcon.heart: 'heart',
+  AppIcon.thumbtack: 'thumbtack',
+
+  // Settings & Configuration
+  AppIcon.settings: 'gear',
+  AppIcon.cog: 'gear',
+  AppIcon.shield: 'shield',
+  AppIcon.info: 'info',
+
+  // Help & Support
+  AppIcon.help: 'circle-question',
+  AppIcon.question: 'question',
+
+  // Status & Feedback
+  AppIcon.check: 'check',
+  AppIcon.warning: 'triangle-exclamation',
+  AppIcon.error: 'circle-exclamation',
+  AppIcon.infoCircle: 'circle-info',
+  AppIcon.exclamation: 'exclamation',
+  AppIcon.exclamationTriangle: 'triangle-exclamation',
+
+  // UI Elements
+  AppIcon.ellipsis: 'ellipsis',
+  AppIcon.ellipsisH: 'ellipsis',
+  AppIcon.ellipsisV: 'ellipsis-vertical',
+  AppIcon.chevronUp: 'chevron-up',
+  AppIcon.chevronDown: 'chevron-down',
+  AppIcon.chevronLeft: 'chevron-left',
+  AppIcon.chevronRight: 'chevron-right',
+  AppIcon.angleUp: 'angle-up',
+  AppIcon.angleDown: 'angle-down',
+  AppIcon.angleLeft: 'angle-left',
+  AppIcon.angleRight: 'angle-right',
+  AppIcon.anglesUp: 'angles-up',
+  AppIcon.anglesDown: 'angles-down',
+
+  // Specific Features
+  AppIcon.history: 'clock-rotate-left',
+  AppIcon.lockKeyhole: 'lock',
+  AppIcon.unlock: 'unlock',
+  AppIcon.microphone: 'microphone',
+  AppIcon.fileCodeIcon: 'file-code',
+
+  // Display & Layout
+  AppIcon.list: 'list',
+  AppIcon.grid: 'table-cells',
+  AppIcon.thLarge: 'table-cells-large',
+  AppIcon.bars: 'bars',
+
+  // Media
+  AppIcon.play: 'play',
+  AppIcon.pause: 'pause',
+  AppIcon.stop: 'stop',
+  AppIcon.film: 'film',
+  AppIcon.fileText: 'file-lines',
+
+  // File Types
   AppIcon.fileLines: 'file-lines',
-  AppIcon.fileAlt: 'file-lines',
+
+  // Arrows & Direction
   AppIcon.arrowLeft: 'arrow-left',
   AppIcon.arrowRight: 'arrow-right',
   AppIcon.arrowUp: 'arrow-up',
   AppIcon.arrowDown: 'arrow-down',
-  AppIcon.arrowTurnUpLeft: 'arrow-turn-up-left',
-  AppIcon.arrowTurnUpRight: 'arrow-turn-up-right',
-  AppIcon.arrowTurnDownLeft: 'arrow-turn-down-left',
-  AppIcon.arrowTurnDownRight: 'arrow-turn-down-right',
+  AppIcon.arrowTurnUpLeft: 'arrow-turn-up',
+  AppIcon.arrowTurnUpRight: 'arrow-turn-up',
+  AppIcon.arrowTurnDownLeft: 'arrow-turn-down',
+  AppIcon.arrowTurnDownRight: 'arrow-turn-down',
+
+  // Common UI
   AppIcon.xmark: 'xmark',
   AppIcon.checkCircle: 'circle-check',
   AppIcon.timesCircle: 'circle-xmark',
   AppIcon.infoCircleIcon: 'circle-info',
   AppIcon.exclamationCircle: 'circle-exclamation',
-  AppIcon.questionCircle: 'circle-question',
-  AppIcon.paperclip: 'paperclip',
-  AppIcon.paperPlane: 'paper-plane',
 };

@@ -110,7 +110,7 @@ class _ChatListSidebarState extends ConsumerState<ChatListSidebar> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant..withAlpha(128),
+        color: theme.colorScheme.surfaceContainerHighest..withAlpha(128),
         border: Border(
           bottom: BorderSide(
             color: theme.colorScheme.outline..withAlpha(50),
@@ -211,7 +211,7 @@ class _ChatListSidebarState extends ConsumerState<ChatListSidebar> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant..withAlpha(75),
+        color: theme.colorScheme.surfaceContainerHighest..withAlpha(75),
         border: Border(
           bottom: BorderSide(
             color: theme.colorScheme.outline..withAlpha(50),
@@ -384,7 +384,7 @@ class _ChatListSidebarState extends ConsumerState<ChatListSidebar> {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? theme.colorScheme.primary
-                              : theme.colorScheme.surfaceVariant,
+                              : theme.colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -438,7 +438,7 @@ class _ChatListSidebarState extends ConsumerState<ChatListSidebar> {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? theme.colorScheme.primary
-                              : theme.colorScheme.surfaceVariant,
+                              : theme.colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(

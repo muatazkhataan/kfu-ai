@@ -216,7 +216,7 @@ class FolderState {
   /// الحصول على معاينة الحالة
   String get preview {
     if (hasFolders) {
-      return '${folderCount} مجلد، ${totalChatCount} محادثة';
+      return '$folderCount مجلد، $totalChatCount محادثة';
     } else if (isLoadingFolders) {
       return 'جاري تحميل المجلدات...';
     } else if (hasError) {
