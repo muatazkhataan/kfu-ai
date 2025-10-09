@@ -11,7 +11,7 @@ class AppColorSchemes {
     0xFF104631,
   ); // Lighter green for dark theme
   static const Color kfuSecondary = Color(
-    0xFFF3F4F6,
+    0xFFF9FAFB,
   ); // Bootstrap secondary gray
 
   // Light Theme Colors

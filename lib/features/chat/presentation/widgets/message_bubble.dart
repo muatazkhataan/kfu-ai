@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../domain/models/message.dart';
 import '../../domain/models/message_attachment.dart';
 import '../../../../core/theme/icons.dart';
+import '../../../../core/utils/html_utils.dart';
 
 /// مكون فقاعة الرسالة
 ///
@@ -308,14 +311,12 @@ class MessageBubble extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        // عرض المحتوى (HTML أو نص عادي)
+                        _buildMessageText(
+                          theme,
+                          isUser,
+                          isAssistant,
                           message.content,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: isUser
-                                ? theme.colorScheme.onPrimary
-                                : theme.colorScheme.onSurfaceVariant,
-                            height: 1.4,
-                          ),
                         ),
                         if (message.hasAttachments) ...[
                           const SizedBox(height: 8),
@@ -360,6 +361,169 @@ class MessageBubble extends ConsumerWidget {
         ),
         if (isUser) ...[const SizedBox(width: 8), _buildAvatar(theme, isUser)],
       ],
+    );
+  }
+
+  /// بناء محتوى الرسالة (HTML أو نص عادي)
+  Widget _buildMessageText(
+    ThemeData theme,
+    bool isUser,
+    bool isAssistant,
+    String content,
+  ) {
+    // التحقق من وجود HTML في المحتوى
+    final hasHtml = HtmlUtils.containsHtml(content);
+
+    // إذا كانت رسالة المساعد تحتوي على HTML، استخدم Html widget
+    if (isAssistant && hasHtml) {
+      // استخراج المصادر قبل التنظيف
+      final sources = HtmlUtils.extractSources(content);
+
+      // تنظيف HTML من div المصادر
+      final cleanedHtml = HtmlUtils.cleanHtml(content);
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Html(
+            data: cleanedHtml,
+            style: {
+              'body': Style(
+                margin: Margins.zero,
+                padding: HtmlPaddings.zero,
+                fontSize: FontSize(14),
+                color: theme.colorScheme.onSurfaceVariant,
+                lineHeight: const LineHeight(1.4),
+              ),
+              'p': Style(
+                margin: Margins.only(bottom: 8),
+                padding: HtmlPaddings.zero,
+              ),
+              'strong': Style(fontWeight: FontWeight.bold),
+            },
+          ),
+          // عرض المصادر إن وجدت
+          if (sources.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            _buildSources(theme, sources),
+          ],
+        ],
+      );
+    }
+
+    // إذا كان نص عادي أو رسالة من المستخدم، استخدم Text widget
+    final displayText = hasHtml
+        ? HtmlUtils.htmlToFormattedText(content)
+        : content;
+
+    return Text(
+      displayText,
+      style: theme.textTheme.bodyMedium?.copyWith(
+        color: isUser
+            ? theme.colorScheme.onPrimary
+            : theme.colorScheme.onSurfaceVariant,
+        height: 1.4,
+      ),
+    );
+  }
+
+  /// بناء قسم المصادر
+  Widget _buildSources(ThemeData theme, List<SourceInfo> sources) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withAlpha(128),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: theme.colorScheme.outline.withAlpha(75),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                FontAwesomeIcons.bookOpen,
+                size: 14,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'المصادر',
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: sources
+                .map((source) => _buildSourceChip(theme, source))
+                .toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// بناء chip للمصدر
+  Widget _buildSourceChip(ThemeData theme, SourceInfo source) {
+    // تحديد الأيقونة واللون حسب نوع الملف
+    IconData icon;
+    Color iconColor;
+
+    switch (source.fileType) {
+      case 'ppt':
+        icon = FontAwesomeIcons.filePowerpoint;
+        iconColor = Colors.deepOrange;
+        break;
+      case 'pdf':
+        icon = FontAwesomeIcons.filePdf;
+        iconColor = Colors.red;
+        break;
+      case 'word':
+        icon = FontAwesomeIcons.fileWord;
+        iconColor = Colors.blue;
+        break;
+      case 'excel':
+        icon = FontAwesomeIcons.fileExcel;
+        iconColor = Colors.green;
+        break;
+      default:
+        icon = FontAwesomeIcons.file;
+        iconColor = theme.colorScheme.primary;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: iconColor.withAlpha(100), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FaIcon(icon, size: 12, color: iconColor),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              source.title,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

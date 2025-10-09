@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/typing_indicator.dart';
 import '../widgets/chat_input_field.dart';
+import '../widgets/recent_chats_widget.dart';
 // import '../../../../features/folders/presentation/widgets/folder_sidebar.dart';
 // import '../../../../features/chat_history/presentation/widgets/chat_list_sidebar.dart';
 import '../providers/chat_provider.dart';
+import '../providers/chat_sessions_provider.dart';
 import '../../../../features/chat_history/presentation/providers/chat_history_provider.dart';
 import '../../../../core/widgets/neural_network_effect.dart';
 import '../../../../core/theme/icons.dart';
@@ -13,6 +15,8 @@ import '../../../../core/theme/icons.dart';
 // import '../../domain/models/message.dart';
 import '../../../../features/folders/domain/models/folder.dart';
 import '../../../../features/help/presentation/screens/help_screen.dart';
+import '../../../../features/auth/presentation/providers/auth_provider.dart';
+import '../../../../core/extensions/context_extensions.dart';
 
 /// الشاشة الرئيسية للمحادثة
 ///
@@ -77,20 +81,32 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = context.theme;
     final chatState = ref.watch(chatProvider);
+    final isRTL = context.isRTL;
+
+    // ignore: avoid_print
+    print('[ChatScreen] 🌍 isRTL: $isRTL');
+    // ignore: avoid_print
+    print('[ChatScreen] 📍 TextDirection: ${context.textDirection}');
+    // ignore: avoid_print
+    print(
+      '[ChatScreen] 🗂️ drawer: ${isRTL ? 'set (يفتح من اليمين)' : 'null'}',
+    );
+    // ignore: avoid_print
+    print(
+      '[ChatScreen] 🗂️ endDrawer: ${isRTL ? 'null' : 'set (يفتح من اليمين)'}',
+    );
 
     return Scaffold(
-      // قائمة جانبية من اليمين (للغة العربية)
-      endDrawer: _buildNavigationDrawer(theme),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          flexibleSpace: _buildChatHeader(theme, chatState),
-        ),
-      ),
+      // قائمة جانبية - Flutter يعكس في RTL تلقائياً، لذلك نعكس المنطق
+      drawer: isRTL
+          ? _buildNavigationDrawer(theme)
+          : null, // في RTL: drawer يفتح من اليمين!
+      endDrawer: isRTL
+          ? null
+          : _buildNavigationDrawer(theme), // في LTR: endDrawer يفتح من اليمين
+      appBar: _buildAppBar(theme, chatState, isRTL),
       body: Stack(
         children: [
           // خلفية التأثير البصري
@@ -101,6 +117,108 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           // المحادثة الرئيسية (تأخذ الشاشة كاملة)
           _buildMainChatArea(theme, chatState),
         ],
+      ),
+    );
+  }
+
+  /// بناء AppBar مخصص بالكامل
+  PreferredSizeWidget _buildAppBar(
+    ThemeData theme,
+    dynamic chatState,
+    bool isRTL,
+  ) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(kToolbarHeight),
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerHighest.withAlpha(128),
+          border: Border(
+            bottom: BorderSide(
+              color: theme.colorScheme.outline.withAlpha(50),
+              width: 1,
+            ),
+          ),
+        ),
+        child: SafeArea(
+          child: Builder(
+            builder: (builderContext) {
+              return Row(
+                children: [
+                  // أيقونة القائمة - من اليمين في RTL
+                  IconButton(
+                    icon: Icon(
+                      AppIcons.getIcon(AppIcon.menu),
+                      color: theme.colorScheme.primary,
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      // ignore: avoid_print
+                      print('[Menu Button] 🔘 تم الضغط على زر القائمة');
+                      // ignore: avoid_print
+                      print('[Menu Button] 🌍 isRTL: $isRTL');
+                      // ignore: avoid_print
+                      print(
+                        '[Menu Button] 🗂️ سيتم فتح: drawer (من اليمين في RTL)',
+                      );
+
+                      builderContext.openAdaptiveDrawer();
+                    },
+                    tooltip: 'القائمة',
+                  ),
+
+                  // المسافة
+                  const SizedBox(width: 8),
+
+                  // العنوان في المنتصف
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _getChatTitle(chatState),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (_getChatSubtitle(chatState).isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            _getChatSubtitle(chatState),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+
+                  // المسافة
+                  const SizedBox(width: 8),
+
+                  // أيقونة الإعدادات - من اليسار في RTL
+                  IconButton(
+                    icon: Icon(
+                      AppIcons.getIcon(AppIcon.settings),
+                      color: theme.colorScheme.primary,
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      // TODO: فتح شاشة الإعدادات
+                    },
+                    tooltip: 'الإعدادات',
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
@@ -121,52 +239,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         children: [
           _buildMessagesArea(theme, chatState),
           _buildChatInput(theme),
-        ],
-      ),
-    );
-  }
-
-  /// بناء رأس المحادثة
-  Widget _buildChatHeader(ThemeData theme, dynamic chatState) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withAlpha(128),
-        border: Border(
-          bottom: BorderSide(
-            color: theme.colorScheme.outline.withAlpha(50),
-            width: 1,
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          // معلومات المحادثة
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _getChatTitle(chatState),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-                if (_getChatSubtitle(chatState).isNotEmpty) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    _getChatSubtitle(chatState),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-
-          // أزرار الإجراءات - محذوفة لتجنب التكرار
         ],
       ),
     );
@@ -638,149 +710,217 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   /// بناء القائمة الجانبية الرئيسية (المجلدات والمحادثات)
   Widget _buildNavigationDrawer(ThemeData theme) {
+    final authState = ref.watch(authProvider);
+    final userName = authState.loginResponse?.profile?['fullName'] ?? 'مستخدم';
+    final userId = authState.userId ?? '';
+
     return Drawer(
       backgroundColor: theme.colorScheme.surface,
-      width: 320, // عرض ثابت مثل الويب
-      child: Column(
-        children: [
-          // رأس القائمة الجانبية (مثل الويب)
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              border: Border(
-                bottom: BorderSide(
-                  color: theme.colorScheme.outline.withOpacity(0.1),
-                  width: 1,
+      width: 320,
+      child: SafeArea(
+        child: Column(
+          children: [
+            // رأس القائمة مع الشعار
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surface,
+                border: Border(
+                  bottom: BorderSide(
+                    color: theme.colorScheme.outline.withAlpha(25),
+                    width: 1,
+                  ),
                 ),
               ),
-            ),
-            child: Row(
-              children: [
-                // أيقونة التطبيق
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    'assets/images/mosa3ed_kfu_icon_app.jpg',
-                    width: 32,
-                    height: 32,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'مساعد كفو',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // أزرار ثابتة في الأعلى (مثل الويب)
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                // زر محادثة جديدة
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      ref.read(chatProvider.notifier).createNewChat();
-                    },
-                    icon: Icon(AppIcons.getIcon(AppIcon.plus), size: 16),
-                    label: const Text('محادثة جديدة'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 16,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                // زر البحث
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      // TODO: فتح البحث
-                    },
-                    icon: Icon(AppIcons.getIcon(AppIcon.search), size: 16),
-                    label: const Text('بحث'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 16,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // المحتوى القابل للتمرير (مثل الويب)
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  // قسم المجلدات (مثل الويب)
-                  _buildFoldersSection(theme),
-
-                  // قسم المحادثات الأخيرة (مثل الويب)
-                  _buildRecentChatsSection(theme),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(28),
+                    child: Image.asset(
+                      'assets/images/mosa3ed_kfu_icon_app.jpg',
+                      width: 32,
+                      height: 32,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'مساعد كفو',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
 
-          // تذييل القائمة الجانبية (مثل الويب)
-          _buildSidebarFooter(theme),
-        ],
+            // معلومات المستخدم وزر الخروج
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(color: theme.colorScheme.secondary),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: theme.colorScheme.primary,
+                    child: Icon(
+                      AppIcons.getIcon(AppIcon.user),
+                      size: 20,
+                      color: theme.colorScheme.onPrimary,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          userName,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        // ID المستخدم
+                        const SizedBox(height: 2),
+                        Text(
+                          userId.isNotEmpty
+                              ? 'ID: ${userId.substring(0, 8)}...'
+                              : '',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      await ref.read(authProvider.notifier).logout();
+                      if (context.mounted) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const Scaffold(
+                              body: Center(child: Text('تم تسجيل الخروج')),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    icon: Icon(
+                      AppIcons.getIcon(AppIcon.signOut),
+                      size: 18,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    tooltip: 'تسجيل الخروج',
+                  ),
+                ],
+              ),
+            ),
+
+            // أزرار محادثة جديدة والبحث
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+              child: Column(
+                children: [
+                  // زر محادثة جديدة
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        ref.read(chatProvider.notifier).createNewChat();
+                      },
+                      icon: Icon(AppIcons.getIcon(AppIcon.plus), size: 16),
+                      label: const Text('محادثة جديدة'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // زر البحث
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        // TODO: فتح البحث في سجل المحادثات
+                      },
+                      icon: Icon(AppIcons.getIcon(AppIcon.search), size: 16),
+                      label: const Text('بحث في المحادثات'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // المحتوى القابل للتمرير (مثل الويب)
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // قسم المجلدات (مثل الويب)
+                    _buildFoldersSection(theme),
+
+                    // قسم المحادثات الأخيرة (مثل الويب)
+                    _buildRecentChatsSection(theme),
+                  ],
+                ),
+              ),
+            ),
+
+            // تذييل القائمة الجانبية
+            _buildSidebarFooter(theme),
+          ],
+        ),
       ),
     );
   }
 
-  /// بناء قسم المجلدات (مثل الويب)
+  /// بناء قسم المجلدات
   Widget _buildFoldersSection(ThemeData theme) {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // عنوان قسم المجلدات
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+              color: theme.colorScheme.surfaceContainerHighest.withAlpha(75),
               borderRadius: BorderRadius.circular(8),
-              border: Border(
-                bottom: BorderSide(
-                  color: theme.colorScheme.outline.withOpacity(0.1),
-                  width: 1,
-                ),
-              ),
             ),
             child: Row(
               children: [
                 Icon(
                   AppIcons.getIcon(AppIcon.folder),
-                  size: 16,
+                  size: 14,
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
@@ -798,7 +938,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   },
                   icon: Icon(
                     AppIcons.getIcon(AppIcon.plus),
-                    size: 16,
+                    size: 14,
                     color: theme.colorScheme.primary,
                   ),
                   constraints: const BoxConstraints(),
@@ -807,7 +947,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
 
           // قائمة المجلدات
           _buildFolderList(theme),
@@ -816,22 +956,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     );
   }
 
-  /// بناء قسم المحادثات الأخيرة (مثل الويب)
+  /// بناء قسم المحادثات الأخيرة
   Widget _buildRecentChatsSection(ThemeData theme) {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // عنوان قسم المحادثات
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+              color: theme.colorScheme.surfaceContainerHighest.withAlpha(75),
               borderRadius: BorderRadius.circular(8),
               border: Border(
                 bottom: BorderSide(
-                  color: theme.colorScheme.outline.withOpacity(0.1),
+                  color: theme.colorScheme.outline.withAlpha(25),
                   width: 1,
                 ),
               ),
@@ -840,7 +980,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               children: [
                 Icon(
                   AppIcons.getIcon(AppIcon.chat),
-                  size: 16,
+                  size: 14,
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
@@ -854,20 +994,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 const Spacer(),
                 IconButton(
                   onPressed: () {
-                    // TODO: محادثة جديدة
+                    ref.read(chatSessionsProvider.notifier).loadRecentChats();
                   },
                   icon: Icon(
-                    AppIcons.getIcon(AppIcon.plus),
-                    size: 16,
+                    AppIcons.getIcon(AppIcon.refresh),
+                    size: 14,
                     color: theme.colorScheme.primary,
                   ),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
+                  tooltip: 'تحديث',
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
 
           // قائمة المحادثات
           _buildChatList(theme),
@@ -876,22 +1017,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     );
   }
 
-  /// بناء تذييل القائمة الجانبية (مثل الويب)
+  /// بناء تذييل القائمة الجانبية
   Widget _buildSidebarFooter(ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+        color: theme.colorScheme.surfaceContainerHighest.withAlpha(75),
         border: Border(
           top: BorderSide(
-            color: theme.colorScheme.outline.withOpacity(0.1),
+            color: theme.colorScheme.outline.withAlpha(25),
             width: 1,
           ),
         ),
       ),
       child: Column(
         children: [
-          // قائمة الإعدادات
           _buildFooterMenuItem(
             theme,
             icon: AppIcons.getIcon(AppIcon.settings),
@@ -901,7 +1041,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               // TODO: فتح الإعدادات
             },
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           _buildFooterMenuItem(
             theme,
             icon: AppIcons.getIcon(AppIcon.help),
@@ -912,76 +1052,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 MaterialPageRoute(builder: (context) => const HelpScreen()),
               );
             },
-          ),
-          const SizedBox(height: 8),
-          _buildFooterMenuItem(
-            theme,
-            icon: AppIcons.getIcon(AppIcon.chat),
-            title: 'إرسال ملاحظات',
-            onTap: () {
-              Navigator.pop(context);
-              // TODO: فتح إرسال ملاحظات
-            },
-          ),
-          const SizedBox(height: 16),
-          // معلومات المستخدم
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: theme.colorScheme.outline.withOpacity(0.1),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 16,
-                  backgroundColor: theme.colorScheme.primary,
-                  child: Icon(
-                    AppIcons.getIcon(AppIcon.user),
-                    size: 16,
-                    color: theme.colorScheme.onPrimary,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'أحمد محمد',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                      Text(
-                        'طالب',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    // TODO: تسجيل الخروج
-                  },
-                  icon: Icon(
-                    AppIcons.getIcon(AppIcon.signOut),
-                    size: 16,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  constraints: const BoxConstraints(),
-                  padding: EdgeInsets.zero,
-                ),
-              ],
-            ),
           ),
         ],
       ),
@@ -999,14 +1069,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
         child: Row(
           children: [
-            Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
-            const SizedBox(width: 12),
+            Icon(icon, size: 14, color: theme.colorScheme.onSurfaceVariant),
+            const SizedBox(width: 8),
             Text(
               title,
-              style: theme.textTheme.bodyMedium?.copyWith(
+              style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
@@ -1053,14 +1123,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   }
 
   void _onChatSelected(String? chatId) {
+    // ignore: avoid_print
+    print('\n╔═══════════════════════════════════════════════');
+    // ignore: avoid_print
+    print('║ 💬 ChatScreen: اختيار محادثة');
+    // ignore: avoid_print
+    print('╠═══════════════════════════════════════════════');
+    // ignore: avoid_print
+    print('║ 🆔 Chat ID: $chatId');
+    // ignore: avoid_print
+    print('╚═══════════════════════════════════════════════\n');
+
     setState(() {
       _selectedChatId = chatId;
     });
 
     if (chatId != null) {
+      // ignore: avoid_print
+      print('📥 تحميل المحادثة...\n');
+
       // تحميل المحادثة المحددة
       ref.read(chatProvider.notifier).loadChat(chatId);
     } else {
+      // ignore: avoid_print
+      print('➕ إنشاء محادثة جديدة...\n');
+
       // إنشاء محادثة جديدة
       ref.read(chatProvider.notifier).createNewChat();
     }
@@ -1254,36 +1341,42 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     return Column(
       children: folders.map((folder) {
         return ListTile(
+          dense: true,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 2,
+          ),
           leading: Container(
-            width: 40,
-            height: 40,
+            width: 28,
+            height: 28,
             decoration: BoxDecoration(
               color: theme.colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(
               AppIcons.getIcon(folder['icon'] as AppIcon),
-              size: 20,
+              size: 14,
               color: theme.colorScheme.onPrimaryContainer,
             ),
           ),
           title: Text(
             folder['name'] as String,
-            style: theme.textTheme.bodyMedium?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface,
             ),
           ),
           trailing: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               folder['count'] as String,
               style: theme.textTheme.labelSmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.bold,
+                fontSize: 11,
               ),
             ),
           ),
@@ -1298,68 +1391,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   /// بناء قائمة المحادثات المبسطة
   Widget _buildChatList(ThemeData theme) {
-    final chats = [
-      {
-        'title': 'مساعدة في البرمجة',
-        'preview': 'أحتاج مساعدة في حل مشكلة...',
-        'time': 'منذ 5 دقائق',
-      },
-      {
-        'title': 'مراجعة هياكل البيانات',
-        'preview': 'شرح الأشجار الثنائية...',
-        'time': 'منذ ساعة',
-      },
-      {
-        'title': 'المواعيد الأكاديمية',
-        'preview': 'متى موعد التسجيل؟',
-        'time': 'منذ يوم',
-      },
-    ];
-
-    return Column(
-      children: chats.map((chat) {
-        return ListTile(
-          leading: CircleAvatar(
-            backgroundColor: theme.colorScheme.primaryContainer,
-            child: Icon(
-              AppIcons.getIcon(AppIcon.chat),
-              size: 20,
-              color: theme.colorScheme.onPrimaryContainer,
-            ),
-          ),
-          title: Text(
-            chat['title'] as String,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-              color: theme.colorScheme.onSurface,
-            ),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                chat['preview'] as String,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                chat['time'] as String,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withAlpha(153),
-                ),
-              ),
-            ],
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            _onChatSelected('chat_${chat['title']}');
-          },
-        );
-      }).toList(),
+    return SizedBox(
+      height: 300, // ارتفاع محدد للقائمة
+      child: RecentChatsWidget(
+        selectedSessionId: _selectedChatId,
+        onSessionSelected: (sessionId) {
+          Navigator.pop(context);
+          _onChatSelected(sessionId);
+        },
+        showRefreshButton: false, // لأن هناك زر تحديث في القسم
+      ),
     );
   }
 

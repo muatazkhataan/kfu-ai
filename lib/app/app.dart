@@ -13,6 +13,8 @@ import '../core/widgets/floating_input_field.dart';
 import '../core/widgets/password_related_elements.dart';
 import '../state/app_state.dart';
 import '../features/chat/presentation/screens/chat_screen.dart';
+import '../features/auth/presentation/providers/auth_provider.dart';
+import '../features/chat/presentation/providers/chat_sessions_provider.dart';
 
 /// Main application widget
 class KfuAiApp extends ConsumerWidget {
@@ -44,14 +46,14 @@ class KfuAiApp extends ConsumerWidget {
 }
 
 /// Splash screen widget
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late AnimationController _particleController;
@@ -143,13 +145,65 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _navigateToNextScreen() {
-    // Future.delayed(const Duration(seconds: 3), () {
-    //   if (mounted) {
-    //     Navigator.of(context).pushReplacement(
-    //       MaterialPageRoute(builder: (context) => const LoginScreen()),
-    //     );
-    //   }
-    // });
+    Future.delayed(const Duration(seconds: 2), () async {
+      if (!mounted) return;
+
+      // ignore: avoid_print
+      print('\n╔═══════════════════════════════════════════════');
+      // ignore: avoid_print
+      print('║ 🚀 SplashScreen: التحقق من تسجيل الدخول');
+      // ignore: avoid_print
+      print('╚═══════════════════════════════════════════════\n');
+
+      try {
+        // التحقق من وجود جلسة محفوظة
+        final authState = ref.read(authProvider);
+
+        // ignore: avoid_print
+        print('📊 Is Authenticated: ${authState.isAuthenticated}');
+
+        // محاولة تحميل الجلسة من TokenManager
+        // ignore: avoid_print
+        print('🔍 البحث عن جلسة محفوظة...');
+
+        final sessionValid = await ref
+            .read(authProvider.notifier)
+            .checkSavedSession();
+
+        if (sessionValid && mounted) {
+          // ignore: avoid_print
+          print('✅ تم العثور على جلسة صالحة - الانتقال إلى ChatScreen\n');
+
+          // تحميل المحادثات الأخيرة
+          await ref.read(chatSessionsProvider.notifier).loadRecentChats();
+
+          if (mounted) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const ChatScreen()),
+            );
+          }
+        } else {
+          // ignore: avoid_print
+          print('❌ لا توجد جلسة محفوظة - الانتقال إلى LoginScreen\n');
+
+          if (mounted) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
+          }
+        }
+      } catch (e) {
+        // ignore: avoid_print
+        print('❌ خطأ في التحقق من الجلسة: $e\n');
+
+        // في حالة الخطأ، الانتقال إلى LoginScreen
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        }
+      }
+    });
   }
 
   void _startCountdown() {
@@ -352,14 +406,14 @@ class _SplashScreenState extends State<SplashScreen>
 }
 
 /// Login screen widget with animations
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
+class _LoginScreenState extends ConsumerState<LoginScreen>
     with TickerProviderStateMixin {
   late AnimationController _particleController;
   late AnimationController _academicIdController;
@@ -377,6 +431,7 @@ class _LoginScreenState extends State<LoginScreen>
   final TextEditingController _passwordTextController = TextEditingController();
   bool _isPasswordStep = false;
   bool _rememberMe = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -468,14 +523,116 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
-  void _onLoginPressed() {
-    // Hide logos when logging in
-    _logoController.reverse().then((_) {
-      // TODO: Implement login logic
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const ChatScreen()),
-      );
+  void _onLoginPressed() async {
+    // ignore: avoid_print
+    print('\n╔═══════════════════════════════════════════════');
+    // ignore: avoid_print
+    print('║ 🔐 LoginScreen: بدء عملية تسجيل الدخول');
+    // ignore: avoid_print
+    print('╠═══════════════════════════════════════════════');
+
+    // التحقق من إدخال البيانات
+    final studentNumber = _academicIdTextController.text.trim();
+    final password = _passwordTextController.text;
+
+    // ignore: avoid_print
+    print('║ 📝 الرقم الجامعي: $studentNumber');
+    // ignore: avoid_print
+    print('║ 📝 طول كلمة المرور: ${password.length} حرف');
+    // ignore: avoid_print
+    print(
+      '║ 📝 كلمة المرور: ${password.length > 3 ? password.substring(0, 3) : password}***',
+    );
+
+    if (studentNumber.isEmpty || password.isEmpty) {
+      // ignore: avoid_print
+      print('║ ❌ البيانات فارغة!');
+      // ignore: avoid_print
+      print('╚═══════════════════════════════════════════════\n');
+      _showErrorMessage('يرجى إدخال الرقم الجامعي وكلمة المرور');
+      return;
+    }
+
+    // ignore: avoid_print
+    print('║ ✅ البيانات مكتملة - بدء المصادقة...');
+    // ignore: avoid_print
+    print('╚═══════════════════════════════════════════════\n');
+
+    // عرض مؤشر التحميل
+    setState(() {
+      _isLoading = true;
     });
+
+    // محاولة تسجيل الدخول
+    // ignore: avoid_print
+    print('🔄 استدعاء AuthProvider.login()...\n');
+
+    final success = await ref
+        .read(authProvider.notifier)
+        .login(studentNumber, password);
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    // ignore: avoid_print
+    print('\n╔═══════════════════════════════════════════════');
+    // ignore: avoid_print
+    print('║ 📊 نتيجة تسجيل الدخول: ${success ? "نجاح ✅" : "فشل ❌"}');
+    // ignore: avoid_print
+    print('╠═══════════════════════════════════════════════');
+
+    if (success) {
+      final authState = ref.read(authProvider);
+      // ignore: avoid_print
+      print('║ ✅ تم تسجيل الدخول بنجاح!');
+      // ignore: avoid_print
+      print('║ 👤 User ID: ${authState.userId}');
+      // ignore: avoid_print
+      print('║ 📦 Profile: ${authState.loginResponse?.profile}');
+      // ignore: avoid_print
+      print('╚═══════════════════════════════════════════════\n');
+
+      // تحميل المحادثات الأخيرة
+      // ignore: avoid_print
+      print('📥 تحميل المحادثات الأخيرة...\n');
+      ref.read(chatSessionsProvider.notifier).refreshAll();
+
+      // إخفاء الشعارات والانتقال للمحادثة
+      _logoController.reverse().then((_) {
+        if (mounted) {
+          // ignore: avoid_print
+          print('🔄 الانتقال إلى ChatScreen...\n');
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const ChatScreen()),
+          );
+        }
+      });
+    } else {
+      // عرض رسالة الخطأ
+      final error = ref.read(authProvider).error;
+      // ignore: avoid_print
+      print('║ ❌ فشل تسجيل الدخول!');
+      // ignore: avoid_print
+      print('║ 💬 رسالة الخطأ: $error');
+      // ignore: avoid_print
+      print('╚═══════════════════════════════════════════════\n');
+
+      _showErrorMessage(error ?? 'فشل تسجيل الدخول');
+    }
+  }
+
+  void _showErrorMessage(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Theme.of(context).colorScheme.error,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -587,10 +744,11 @@ class _LoginScreenState extends State<LoginScreen>
                               });
                             },
                             onPrevious: _onPreviousPressed,
-                            onLogin: _onLoginPressed,
+                            onLogin: _isLoading ? null : _onLoginPressed,
                             isRTL:
                                 Localizations.localeOf(context).languageCode ==
                                 'ar',
+                            isLoading: _isLoading,
                           ),
                       ],
                     ),

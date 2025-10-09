@@ -79,7 +79,9 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                     )
                   : null,
               filled: true,
-              fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+              fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(
+                0.3,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
@@ -123,7 +125,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
           color: theme.colorScheme.onSurfaceVariant,
         ),
         filled: true,
-        fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
@@ -158,7 +160,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
         labelText: 'ترتيب',
         prefixIcon: Icon(Icons.sort, color: theme.colorScheme.onSurfaceVariant),
         filled: true,
-        fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
@@ -324,7 +326,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surfaceVariant,
+                        color: theme.colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(

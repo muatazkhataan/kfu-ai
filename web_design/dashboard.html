@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>لوحة التحكم - مساعد كفو</title>
+
+    <!-- Bootstrap 5.3.3 RTL -->
+    <link rel="stylesheet" type="text/css" id="themestylesheet" href="assets/css/ksa.bootstrap.rtl.css" />
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/d27eb6fc68.js" crossorigin="anonymous"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap"
+        rel="stylesheet" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/chat.css" />
+    <link rel="stylesheet" href="assets/css/dashboard.css" />
+    <link rel="stylesheet" href="assets/css/user-profile.css" />
+    <link rel="stylesheet" href="assets/css/theme-support.css" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-resizer" id="sidebarResizer"></div>
+        <div class="sidebar-header">
+            <a href="index.html" class="sidebar-brand">
+                <i class="kfu-icon kfu-icon-primary me-2"></i>
+                لوحة التحكم
+            </a>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- Fixed Top Buttons -->
+            <div class="sidebar-fixed-top">
+                <button class="new-chat-btn p-2" onclick="window.location.href='chat.html'">
+                    <i class="fa-solid fa-comment-medical float-start me-2"></i>
+                    المحادثات
+                </button>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="sidebar-scrollable">
+                <!-- Dashboard Menu -->
+                <div class="dashboard-menu">
+                    <div class="folders-header p-3 border-bottom">
+                        <h6 class="text-muted mb-0">
+                            <i class="fa-duotone fa-light fa-chart-line text-primary me-2"></i>
+                            القوائم الرئيسية
+                        </h6>
+                    </div>
+
+                    <div class="menu-list">
+                        <a href="#overview" class="menu-item active" onclick="showSection('overview', event)">
+                            <div class="menu-icon">
+                                <i class="fa-duotone fa-light fa-dashboard"></i>
+                            </div>
+                            <div class="menu-content">
+                                <div class="menu-name">نظرة عامة</div>
+                            </div>
+                        </a>
+
+                        <a href="#users" class="menu-item" onclick="showSection('users', event)">
+                            <div class="menu-icon">
+                                <i class="fa-duotone fa-light fa-users"></i>
+                            </div>
+                            <div class="menu-content">
+                                <div class="menu-name">المستخدمون</div>
+                            </div>
+                        </a>
+
+                        <a href="#satisfaction" class="menu-item" onclick="showSection('satisfaction', event)">
+                            <div class="menu-icon">
+                                <i class="fa-duotone fa-light fa-smile"></i>
+                            </div>
+                            <div class="menu-content">
+                                <div class="menu-name">رضا المستخدمين</div>
+                            </div>
+                        </a>
+
+                        <a href="#topics" class="menu-item" onclick="showSection('topics', event)">
+                            <div class="menu-icon">
+                                <i class="fa-duotone fa-light fa-book"></i>
+                            </div>
+                            <div class="menu-content">
+                                <div class="menu-name">الموضوعات الأكثر طلباً</div>
+                            </div>
+                        </a>
+
+                        <a href="#analytics" class="menu-item" onclick="showSection('analytics', event)">
+                            <div class="menu-icon">
+                                <i class="fa-duotone fa-light fa-chart-pie"></i>
+                            </div>
+                            <div class="menu-content">
+                                <div class="menu-name">التحليلات</div>
+                            </div>
+                        </a>
+
+                        <a href="#reports" class="menu-item" onclick="showSection('reports', event)">
+                            <div class="menu-icon">
+                                <i class="fa-duotone fa-light fa-file-chart-line"></i>
+                            </div>
+                            <div class="menu-content">
+                                <div class="menu-name">التقارير</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div> <!-- End sidebar-scrollable -->
+        </div> <!-- End sidebar-content -->
+
+        <!-- Footer جديد -->
+        <div class="sidebar-footer-new" id="sidebarFooterNew">
+            <div class="footer-content">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item">
+                        <a href="settings.html" class="sidebar-menu-link">
+                            <i class="fas fa-cog sidebar-menu-icon"></i>
+                            الإعدادات
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="help.html" class="sidebar-menu-link">
+                            <i class="fas fa-question-circle sidebar-menu-icon"></i>
+                            المساعدة
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="chat.html" class="sidebar-menu-link">
+                            <i class="fas fa-comments sidebar-menu-icon"></i>
+                            المحادثات
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="index.html" class="sidebar-menu-link">
+                            <i class="fas fa-home sidebar-menu-icon"></i>
+                            الصفحة الرئيسية
+                        </a>
+                    </li>
+                    <li class="sidebar-menu-item">
+                        <a href="#" class="sidebar-menu-link" onclick="logout()">
+                            <i class="fas fa-sign-out-alt sidebar-menu-icon"></i>
+                            تسجيل الخروج
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- User Profile Section -->
+        <div class="user-profile-section">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fa-duotone fa-light fa-user-shield"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">مدير النظام</div>
+                    <div class="user-role">مدير</div>
+                </div>
+                <div class="user-dropdown-toggle">
+                    <i class="fa-duotone fa-light fa-chevron-up"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Area -->
+    <div class="main-chat dashboard-main">
+        <!-- Dashboard Header -->
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fa-duotone fa-light fa-bars"></i>
+                </button>
+                <h5 class="chat-title" id="dashboardTitle">نظرة عامة</h5>
+            </div>
+            <div class="chat-actions">
+                <!-- Time Period Selector -->
+                <div class="btn-group me-3" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-primary active" onclick="changePeriod('day', this)">
+                        يوم
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="changePeriod('week', this)">
+                        أسبوع
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="changePeriod('month', this)">
+                        شهر
+                    </button>
+                </div>
+                <button class="chat-action-btn" onclick="refreshDashboard()" title="تحديث البيانات">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <button class="chat-action-btn" onclick="exportReport()" title="تصدير التقرير">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content" id="dashboardContent">
+            
+            <!-- Overview Section -->
+            <div class="dashboard-section active" id="section-overview">
+                <!-- Banner for Dashboard -->
+                <div class="d-flex align-items-center mb-4 p-4 bg-white rounded-3 border shadow-sm">
+                    <img src="assets/images/mosa3ed_kfu_icon.png" alt="شعار مساعد كفو" class="me-3" style="width: 60px; height: 60px; object-fit: contain;">
+                    <div>
+                        <h3 class="mb-0 text-muted">لوحة تحكم إدارة تطبيق</h3>
+                        <h1 class="mb-0 text-primary">مساعد كفو</h1>
+                    </div>
+                </div>
+                <!-- End Banner -->
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-primary">
+                            <i class="fa-duotone fa-light fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">إجمالي المستخدمين</div>
+                            <div class="stat-value" id="totalUsers">1,247</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12%</span>
+                                <small>عن الفترة السابقة</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-info">
+                            <i class="fa-duotone fa-light fa-comment-dots"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">إجمالي المحادثات</div>
+                            <div class="stat-value" id="totalChats">8,456</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>8%</span>
+                                <small>عن الفترة السابقة</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-success">
+                            <i class="fa-duotone fa-light fa-smile"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">معدل الرضا</div>
+                            <div class="stat-value" id="satisfactionRate">87%</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>5%</span>
+                                <small>عن الفترة السابقة</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-warning">
+                            <i class="fa-duotone fa-light fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">متوسط وقت الاستجابة</div>
+                            <div class="stat-value" id="avgResponseTime">2.3 ث</div>
+                            <div class="stat-change negative">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>3%</span>
+                                <small>تحسن عن الفترة السابقة</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">عدد المستخدمين النشطين</h6>
+                            <div class="chart-actions">
+                                <button class="btn btn-sm btn-outline-primary" onclick="toggleChartType('usersChart')">
+                                    <i class="fa-duotone fa-light fa-chart-bar"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="usersChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">توزيع المحادثات</h6>
+                            <div class="chart-actions">
+                                <button class="btn btn-sm btn-outline-primary" onclick="toggleChartType('chatsChart')">
+                                    <i class="fa-duotone fa-light fa-chart-pie"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="chatsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full Width Chart -->
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <h6 class="chart-title">نشاط المستخدمين على مدار الوقت</h6>
+                        <div class="chart-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="toggleChartType('activityChart')">
+                                <i class="fa-duotone fa-light fa-chart-area"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-card-body">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div class="dashboard-section" id="section-users">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-primary">
+                            <i class="fa-duotone fa-light fa-user-plus"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">مستخدمون جدد اليوم</div>
+                            <div class="stat-value" id="newUsersToday">42</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-success">
+                            <i class="fa-duotone fa-light fa-user-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">مستخدمون جدد هذا الأسبوع</div>
+                            <div class="stat-value" id="newUsersWeek">287</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-info">
+                            <i class="fa-duotone fa-light fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">مستخدمون جدد هذا الشهر</div>
+                            <div class="stat-value" id="newUsersMonth">1,142</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-warning">
+                            <i class="fa-duotone fa-light fa-user-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">مستخدمون نشطون الآن</div>
+                            <div class="stat-value" id="activeUsersNow">156</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <h6 class="chart-title">نمو المستخدمين</h6>
+                    </div>
+                    <div class="chart-card-body">
+                        <canvas id="usersGrowthChart" class="tall"></canvas>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <h6 class="table-title">أحدث المستخدمين</h6>
+                        <div class="table-actions">
+                            <input type="text" class="form-control form-control-sm" placeholder="بحث..." style="width: 200px;">
+                        </div>
+                    </div>
+                    <div class="table-card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>تاريخ التسجيل</th>
+                                    <th>عدد المحادثات</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- سيتم ملؤها ديناميكياً -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Satisfaction Section -->
+            <div class="dashboard-section" id="section-satisfaction">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-success">
+                            <i class="fa-duotone fa-light fa-face-smile-beam"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">راضٍ جداً</div>
+                            <div class="stat-value">62%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-primary">
+                            <i class="fa-duotone fa-light fa-face-smile"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">راضٍ</div>
+                            <div class="stat-value">25%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-warning">
+                            <i class="fa-duotone fa-light fa-face-meh"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">محايد</div>
+                            <div class="stat-value">8%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-danger">
+                            <i class="fa-duotone fa-light fa-face-frown"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">غير راضٍ</div>
+                            <div class="stat-value">5%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">توزيع مستويات الرضا</h6>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="satisfactionChart" class="tall"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">تطور معدل الرضا</h6>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="satisfactionTrendChart" class="tall"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Table -->
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <h6 class="table-title">أحدث التقييمات</h6>
+                    </div>
+                    <div class="table-card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>المستخدم</th>
+                                    <th>التقييم</th>
+                                    <th>التعليق</th>
+                                    <th>التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="feedbackTableBody">
+                                <!-- سيتم ملؤها ديناميكياً -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topics Section -->
+            <div class="dashboard-section" id="section-topics">
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <h6 class="chart-title">الموضوعات الأكثر طلباً</h6>
+                    </div>
+                    <div class="chart-card-body">
+                        <canvas id="topicsChart" class="tall"></canvas>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">توزيع الموضوعات</h6>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="topicsDistributionChart" class="tall"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">تطور الموضوعات</h6>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="topicsTrendChart" class="tall"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topics Table -->
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <h6 class="table-title">تفاصيل الموضوعات</h6>
+                    </div>
+                    <div class="table-card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>الموضوع</th>
+                                    <th>عدد الطلبات</th>
+                                    <th>معدل الرضا</th>
+                                    <th>الاتجاه</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topicsTableBody">
+                                <!-- سيتم ملؤها ديناميكياً -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="dashboard-section" id="section-analytics">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-primary">
+                            <i class="fa-duotone fa-light fa-message-dots"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">إجمالي الرسائل</div>
+                            <div class="stat-value">124,567</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-info">
+                            <i class="fa-duotone fa-light fa-chart-line-up"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">معدل التفاعل</div>
+                            <div class="stat-value">78%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-success">
+                            <i class="fa-duotone fa-light fa-check-double"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">معدل الحل</div>
+                            <div class="stat-value">92%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-warning">
+                            <i class="fa-duotone fa-light fa-user-group"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">متوسط المحادثات/مستخدم</div>
+                            <div class="stat-value">6.8</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <h6 class="chart-title">توزيع الاستخدام خلال اليوم</h6>
+                    </div>
+                    <div class="chart-card-body">
+                        <canvas id="usageByHourChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">توزيع أنواع الأجهزة</h6>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="devicesChart" class="tall"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">معدل الاحتفاظ بالمستخدمين</h6>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="retentionChart" class="tall"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div class="dashboard-section" id="section-reports">
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fa-duotone fa-light fa-file-chart-line"></i>
+                        </div>
+                        <div class="report-content">
+                            <h6 class="report-title">تقرير المستخدمين الشهري</h6>
+                            <p class="report-description">تقرير شامل عن نشاط المستخدمين خلال الشهر</p>
+                            <button class="btn btn-primary btn-sm" onclick="downloadReport('users-monthly')">
+                                <i class="fa-duotone fa-light fa-download me-2"></i>
+                                تحميل التقرير
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fa-duotone fa-light fa-file-chart-pie"></i>
+                        </div>
+                        <div class="report-content">
+                            <h6 class="report-title">تقرير الرضا</h6>
+                            <p class="report-description">تحليل معدلات رضا المستخدمين والتعليقات</p>
+                            <button class="btn btn-primary btn-sm" onclick="downloadReport('satisfaction')">
+                                <i class="fa-duotone fa-light fa-download me-2"></i>
+                                تحميل التقرير
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fa-duotone fa-light fa-file-chart-column"></i>
+                        </div>
+                        <div class="report-content">
+                            <h6 class="report-title">تقرير الموضوعات</h6>
+                            <p class="report-description">الموضوعات الأكثر طلباً واتجاهاتها</p>
+                            <button class="btn btn-primary btn-sm" onclick="downloadReport('topics')">
+                                <i class="fa-duotone fa-light fa-download me-2"></i>
+                                تحميل التقرير
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fa-duotone fa-light fa-file-lines"></i>
+                        </div>
+                        <div class="report-content">
+                            <h6 class="report-title">تقرير شامل</h6>
+                            <p class="report-description">تقرير كامل يشمل جميع البيانات والإحصائيات</p>
+                            <button class="btn btn-primary btn-sm" onclick="downloadReport('comprehensive')">
+                                <i class="fa-duotone fa-light fa-download me-2"></i>
+                                تحميل التقرير
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Report Generator -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fa-duotone fa-light fa-sliders me-2"></i>
+                            إنشاء تقرير مخصص
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">نوع التقرير</label>
+                                <select class="form-select">
+                                    <option>المستخدمون</option>
+                                    <option>المحادثات</option>
+                                    <option>الرضا</option>
+                                    <option>الموضوعات</option>
+                                    <option>شامل</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">الفترة الزمنية</label>
+                                <select class="form-select">
+                                    <option>اليوم</option>
+                                    <option>الأسبوع الحالي</option>
+                                    <option>الشهر الحالي</option>
+                                    <option>آخر 30 يوم</option>
+                                    <option>مخصص</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">من تاريخ</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">إلى تاريخ</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary" onclick="generateCustomReport()">
+                                    <i class="fa-duotone fa-light fa-file-export me-2"></i>
+                                    إنشاء التقرير
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="assets/js/kfu-icon.js"></script>
+    <script src="assets/js/theme-switcher.js"></script>
+    <script src="assets/js/settings-manager.js"></script>
+    <script src="assets/js/font-manager.js"></script>
+    <script src="assets/js/user-profile.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+</body>
+
+</html>
+

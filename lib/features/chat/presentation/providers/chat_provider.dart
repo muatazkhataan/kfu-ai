@@ -4,29 +4,66 @@ import '../../domain/models/message.dart';
 import '../../domain/models/message_type.dart';
 import '../../domain/models/chat_status.dart';
 import '../../../../state/chat_state.dart';
+import '../../../../services/api/api_manager.dart';
+import '../../../../services/api/chat/models/send_message_request.dart';
+import '../../../../services/api/chat/models/message_dto.dart';
 
 /// مزود حالة المحادثة الرئيسي
 ///
 /// يدير حالة المحادثة الحالية مع جميع العمليات المرتبطة بها
 class ChatNotifier extends StateNotifier<ChatState> {
-  ChatNotifier() : super(ChatState.initial);
+  final ApiManager _apiManager;
 
-  /// تحميل محادثة جديدة
-  Future<void> loadChat(String chatId) async {
+  ChatNotifier({ApiManager? apiManager})
+    : _apiManager = apiManager ?? ApiManager(),
+      super(ChatState.initial);
+
+  /// تحميل محادثة من API
+  Future<void> loadChat(String sessionId) async {
     try {
       state = state.copyWith(isLoadingChat: true, error: null);
 
-      // TODO: تحميل المحادثة من قاعدة البيانات
-      await Future.delayed(const Duration(milliseconds: 500));
+      // ignore: avoid_print
+      print('[ChatNotifier] 📥 تحميل المحادثة: $sessionId');
 
-      // محادثة وهمية للاختبار
-      final chat = Chat.createWelcome(userId: 'user_123', folderId: null);
+      // تحميل الجلسة من API
+      final response = await _apiManager.chat.getSession(sessionId);
+
+      if (!response.success || response.data == null) {
+        state = state.copyWith(
+          isLoadingChat: false,
+          error: response.error ?? 'فشل في تحميل المحادثة',
+        );
+        return;
+      }
+
+      final sessionDto = response.data!;
+
+      // ignore: avoid_print
+      print('[ChatNotifier] ✅ تم تحميل الجلسة: ${sessionDto.title}');
+
+      // تحويل SessionDto إلى Chat
+      final chat = Chat(
+        id: sessionDto.sessionId,
+        title: sessionDto.title,
+        userId: 'current_user', // سنحصل عليه من AuthProvider
+        folderId: sessionDto.folderId,
+        status: _getChatStatusFromDto(sessionDto),
+        createdAt: sessionDto.createdAt,
+        updatedAt: sessionDto.updatedAt,
+        messageCount: sessionDto.messageCount ?? 0,
+      );
 
       state = state.copyWith(currentChat: chat, isLoadingChat: false);
 
       // تحميل الرسائل
-      await loadMessages(chatId);
-    } catch (e) {
+      await loadMessages(sessionId);
+    } catch (e, stackTrace) {
+      // ignore: avoid_print
+      print('[ChatNotifier] ❌ خطأ في تحميل المحادثة: $e');
+      // ignore: avoid_print
+      print('[ChatNotifier] Stack: $stackTrace');
+
       state = state.copyWith(
         isLoadingChat: false,
         error: 'فشل في تحميل المحادثة: ${e.toString()}',
@@ -34,28 +71,108 @@ class ChatNotifier extends StateNotifier<ChatState> {
     }
   }
 
+  /// تحويل حالة الجلسة من DTO
+  ChatStatus _getChatStatusFromDto(dynamic sessionDto) {
+    // إذا كانت الجلسة مؤرشفة
+    if (sessionDto.metadata != null &&
+        sessionDto.metadata['isArchived'] == true) {
+      return ChatStatus.archived;
+    }
+
+    // إذا كانت محذوفة
+    if (sessionDto.metadata != null &&
+        sessionDto.metadata['isDeleted'] == true) {
+      return ChatStatus.deleted;
+    }
+
+    // نشطة بشكل افتراضي
+    return ChatStatus.active;
+  }
+
   /// تحميل الرسائل للمحادثة الحالية
-  Future<void> loadMessages(String chatId) async {
+  Future<void> loadMessages(String sessionId) async {
     try {
       state = state.copyWith(isLoadingMessages: true, messageError: null);
 
-      // TODO: تحميل الرسائل من قاعدة البيانات
-      await Future.delayed(const Duration(milliseconds: 300));
+      // ignore: avoid_print
+      print('[ChatNotifier] 📥 تحميل رسائل الجلسة: $sessionId');
 
-      // رسائل وهمية للاختبار
-      final messages = _generateMockMessages(chatId);
+      // تحميل الجلسة مع الرسائل من API
+      final response = await _apiManager.chat.getSession(sessionId);
+
+      if (!response.success || response.data == null) {
+        // في حالة فشل التحميل، نعرض قائمة فارغة
+        state = state.copyWith(messages: [], isLoadingMessages: false);
+        return;
+      }
+
+      final sessionDto = response.data!;
+
+      // تحويل MessageDto إلى Message
+      final messages = <Message>[];
+      if (sessionDto.messages != null && sessionDto.messages!.isNotEmpty) {
+        for (final messageDto in sessionDto.messages!) {
+          // تحديد المرسل بناءً على isFromUser
+          final senderName = messageDto.isFromUser
+              ? 'أنت'
+              : (messageDto.aiProvider ?? 'مساعد كفو');
+
+          messages.add(
+            Message(
+              id: messageDto.messageId,
+              content: messageDto.content,
+              type: _getMessageTypeFromDto(messageDto),
+              chatId: sessionId,
+              senderId:
+                  messageDto.senderId ??
+                  (messageDto.isFromUser ? 'user' : 'assistant'),
+              senderName: senderName,
+              createdAt: messageDto.createdAt,
+              state: MessageState.sent,
+            ),
+          );
+        }
+
+        // ignore: avoid_print
+        print('[ChatNotifier] ✅ تم تحميل ${messages.length} رسالة');
+        // ignore: avoid_print
+        print(
+          '[ChatNotifier] 📋 أول رسالة: ${messages.first.content.substring(0, messages.first.content.length > 50 ? 50 : messages.first.content.length)}...',
+        );
+      } else {
+        // ignore: avoid_print
+        print('[ChatNotifier] ℹ️ لا توجد رسائل في الجلسة');
+      }
 
       state = state.copyWith(
         messages: messages,
         isLoadingMessages: false,
         lastMessageId: messages.isNotEmpty ? messages.last.id : null,
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      // ignore: avoid_print
+      print('[ChatNotifier] ❌ خطأ في تحميل الرسائل: $e');
+      // ignore: avoid_print
+      print('[ChatNotifier] Stack: $stackTrace');
+
       state = state.copyWith(
         isLoadingMessages: false,
         messageError: 'فشل في تحميل الرسائل: ${e.toString()}',
       );
     }
+  }
+
+  /// تحديد نوع الرسالة من DTO
+  MessageType _getMessageTypeFromDto(MessageDto messageDto) {
+    // استخدام حقل type من DTO
+    if (messageDto.isAssistantMessage) {
+      return MessageType.assistant;
+    } else if (messageDto.isSystemMessage) {
+      return MessageType.system;
+    }
+
+    // رسالة من المستخدم بشكل افتراضي
+    return MessageType.user;
   }
 
   /// إرسال رسالة جديدة
@@ -65,60 +182,91 @@ class ChatNotifier extends StateNotifier<ChatState> {
     try {
       state = state.copyWith(isSendingMessage: true);
 
-      // إنشاء رسالة جديدة
-      final message = Message(
-        id: _generateMessageId(),
+      // إنشاء رسالة محلية مؤقتة
+      final tempMessageId = _generateMessageId();
+      final tempMessage = Message(
+        id: tempMessageId,
         content: content.trim(),
         type: MessageType.user,
         chatId: state.currentChat!.id,
-        senderId: 'user_123',
-        senderName: 'أحمد محمد',
+        senderId: 'current_user',
+        senderName: 'أنت',
         createdAt: DateTime.now(),
         state: MessageState.sending,
       );
 
-      // إضافة الرسالة للحالة
-      final updatedMessages = [...state.messages, message];
-      state = state.copyWith(
-        messages: updatedMessages,
-        isSendingMessage: false,
+      // إضافة الرسالة المؤقتة للحالة
+      final updatedMessages = [...state.messages, tempMessage];
+      state = state.copyWith(messages: updatedMessages);
+
+      // ignore: avoid_print
+      print('[ChatNotifier] 📤 إرسال رسالة...');
+
+      // إرسال الرسالة عبر API
+      final request = SendMessageRequest(
+        sessionId: state.currentChat!.id,
+        content: content.trim(),
       );
 
-      // محاكاة استجابة المساعد
-      await _simulateAssistantResponse();
-    } catch (e) {
+      final response = await _apiManager.chat.sendMessage(request);
+
+      if (!response.success || response.data == null) {
+        // تحديث حالة الرسالة لفشل الإرسال
+        final failedMessages = state.messages.map((m) {
+          if (m.id == tempMessageId) {
+            return m.copyWith(state: MessageState.failed);
+          }
+          return m;
+        }).toList();
+
+        state = state.copyWith(
+          messages: failedMessages,
+          isSendingMessage: false,
+          messageError: response.error ?? 'فشل في إرسال الرسالة',
+        );
+        return;
+      }
+
+      final messageDto = response.data!;
+
+      // ignore: avoid_print
+      print('[ChatNotifier] ✅ تم إرسال الرسالة بنجاح');
+
+      // تحديث الرسالة المؤقتة بالبيانات الفعلية
+      final sentMessages = state.messages.map((m) {
+        if (m.id == tempMessageId) {
+          return Message(
+            id: messageDto.messageId,
+            content: messageDto.content,
+            type: MessageType.user,
+            chatId: state.currentChat!.id,
+            senderId: messageDto.senderId ?? 'current_user',
+            senderName: messageDto.senderName ?? 'أنت',
+            createdAt: messageDto.createdAt,
+            state: MessageState.sent,
+          );
+        }
+        return m;
+      }).toList();
+
+      state = state.copyWith(messages: sentMessages, isSendingMessage: false);
+
+      // عرض مؤشر الكتابة لانتظار رد المساعد
+      startTyping();
+
+      // انتظار رد المساعد (سيأتي من الخادم)
+      // TODO: إضافة WebSocket أو polling للحصول على ردود المساعد في الوقت الفعلي
+    } catch (e, stackTrace) {
+      // ignore: avoid_print
+      print('[ChatNotifier] ❌ خطأ في إرسال الرسالة: $e');
+      // ignore: avoid_print
+      print('[ChatNotifier] Stack: $stackTrace');
+
       state = state.copyWith(
         isSendingMessage: false,
         messageError: 'فشل في إرسال الرسالة: ${e.toString()}',
       );
     }
-  }
-
-  /// محاكاة استجابة المساعد
-  Future<void> _simulateAssistantResponse() async {
-    // عرض مؤشر الكتابة
-    startTyping();
-
-    // انتظار لمحاكاة وقت المعالجة
-    await Future.delayed(const Duration(seconds: 2));
-
-    // إيقاف مؤشر الكتابة
-    stopTyping();
-
-    // إضافة رد المساعد
-    final assistantMessage = Message(
-      id: _generateMessageId(),
-      content: 'شكراً لك على رسالتك. كيف يمكنني مساعدتك اليوم؟',
-      type: MessageType.assistant,
-      chatId: state.currentChat!.id,
-      senderId: 'assistant',
-      senderName: 'مساعد كفو',
-      createdAt: DateTime.now(),
-      state: MessageState.sent,
-    );
-
-    final updatedMessages = [...state.messages, assistantMessage];
-    state = state.copyWith(messages: updatedMessages);
   }
 
   /// بدء مؤشر الكتابة
@@ -327,45 +475,6 @@ class ChatNotifier extends StateNotifier<ChatState> {
   /// مسح الأخطاء
   void clearErrors() {
     state = state.copyWith(error: null, messageError: null);
-  }
-
-  /// توليد رسائل وهمية للاختبار
-  List<Message> _generateMockMessages(String chatId) {
-    final now = DateTime.now();
-
-    return [
-      Message(
-        id: 'msg_1',
-        content: 'مرحباً بك في مساعد كفو! كيف يمكنني مساعدتك اليوم؟',
-        type: MessageType.welcome,
-        chatId: chatId,
-        senderId: 'assistant',
-        senderName: 'مساعد كفو',
-        createdAt: now.subtract(const Duration(minutes: 10)),
-        state: MessageState.sent,
-      ),
-      Message(
-        id: 'msg_2',
-        content: 'أريد مساعدة في حل مشكلة برمجية',
-        type: MessageType.user,
-        chatId: chatId,
-        senderId: 'user_123',
-        senderName: 'أحمد محمد',
-        createdAt: now.subtract(const Duration(minutes: 8)),
-        state: MessageState.sent,
-      ),
-      Message(
-        id: 'msg_3',
-        content:
-            'بالطبع! سأكون سعيداً لمساعدتك في حل مشكلتك البرمجية. هل يمكنك وصف المشكلة التي تواجهها؟',
-        type: MessageType.assistant,
-        chatId: chatId,
-        senderId: 'assistant',
-        senderName: 'مساعد كفو',
-        createdAt: now.subtract(const Duration(minutes: 7)),
-        state: MessageState.sent,
-      ),
-    ];
   }
 
   /// توليد معرف فريد للرسالة

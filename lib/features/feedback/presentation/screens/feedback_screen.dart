@@ -20,7 +20,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
 
   String _selectedType = 'bug';
   String _selectedPriority = 'medium';
-  List<String> _attachedImages = [];
+  final List<String> _attachedImages = [];
 
   @override
   void dispose() {
@@ -275,7 +275,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
         prefixIcon: Icon(icon),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         filled: true,
-        fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
       ),
     );
   }
@@ -297,7 +297,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
         prefixIcon: Icon(icon),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         filled: true,
-        fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
       ),
       items: items,
     );

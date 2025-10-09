@@ -10,6 +10,7 @@ class PasswordRelatedElements extends StatelessWidget {
   final VoidCallback? onPrevious;
   final VoidCallback? onLogin;
   final bool isRTL;
+  final bool isLoading;
 
   const PasswordRelatedElements({
     super.key,
@@ -19,6 +20,7 @@ class PasswordRelatedElements extends StatelessWidget {
     this.onPrevious,
     this.onLogin,
     this.isRTL = true,
+    this.isLoading = false,
   });
 
   @override
@@ -56,6 +58,7 @@ class PasswordRelatedElements extends StatelessWidget {
                     showPrevious: true,
                     onPrevious: onPrevious,
                     onLogin: onLogin,
+                    isLoading: isLoading,
                   ),
                 ),
               ],

@@ -8,12 +8,14 @@ class LoginNavigationButtons extends StatelessWidget {
   final VoidCallback? onPrevious;
   final VoidCallback? onLogin;
   final bool showPrevious;
+  final bool isLoading;
 
   const LoginNavigationButtons({
     super.key,
     this.onPrevious,
     this.onLogin,
     this.showPrevious = false,
+    this.isLoading = false,
   });
 
   @override
@@ -65,7 +67,7 @@ class LoginNavigationButtons extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: ElevatedButton(
-              onPressed: onLogin,
+              onPressed: isLoading ? null : onLogin,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -77,30 +79,41 @@ class LoginNavigationButtons extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      'دخول',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+              child: isLoading
+                  ? SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).colorScheme.onPrimary,
+                        ),
                       ),
-                      overflow: TextOverflow.ellipsis,
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            'دخول',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.identity()..scale(-1.0, 1.0),
+                          child: const Icon(
+                            FontAwesomeIcons.rightToBracket,
+                            size: 16,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: 2),
-                  Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.identity()..scale(-1.0, 1.0),
-                    child: const Icon(
-                      FontAwesomeIcons.rightToBracket,
-                      size: 16,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
         ),

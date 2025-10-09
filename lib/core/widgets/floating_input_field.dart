@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../generated/l10n/app_localizations.dart';
 
 /// Floating input field with rounded corners and icon
@@ -38,6 +39,7 @@ class _FloatingInputFieldState extends State<FloatingInputField>
   late Animation<double> _focusAnimation;
   late FocusNode _focusNode;
   bool _isFocused = false;
+  bool _obscurePassword = true;
 
   @override
   void initState() {
@@ -106,7 +108,7 @@ class _FloatingInputFieldState extends State<FloatingInputField>
                       TextFormField(
                         controller: widget.controller,
                         focusNode: _focusNode,
-                        obscureText: widget.isPassword,
+                        obscureText: widget.isPassword && _obscurePassword,
                         decoration: InputDecoration(
                           hintText: widget.hint,
                           prefixIcon: Icon(
@@ -117,6 +119,27 @@ class _FloatingInputFieldState extends State<FloatingInputField>
                                     context,
                                   ).colorScheme.onSurfaceVariant,
                           ),
+                          suffixIcon: widget.isPassword
+                              ? IconButton(
+                                  icon: Icon(
+                                    _obscurePassword
+                                        ? FontAwesomeIcons.eye
+                                        : FontAwesomeIcons.eyeSlash,
+                                    size: 18,
+                                  ),
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
+                                  tooltip: _obscurePassword
+                                      ? 'إظهار كلمة المرور'
+                                      : 'إخفاء كلمة المرور',
+                                )
+                              : null,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(
