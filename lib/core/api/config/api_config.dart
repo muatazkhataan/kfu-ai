@@ -3,7 +3,7 @@
 /// يحتوي على جميع الإعدادات المركزية للـ API
 class ApiConfig {
   /// Base URL للـ API
-  static const String baseUrl = 'https://kfuai-api.kfu.edu.sa';
+  static const String baseUrl = 'https://kfusmartapi.kfu.edu.sa';
 
   /// إصدار API
   static const String apiVersion = 'v1';

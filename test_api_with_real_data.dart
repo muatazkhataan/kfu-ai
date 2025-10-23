@@ -14,7 +14,7 @@ void main() async {
   const studentNumber = '2284896111'; // الرقم الجامعي
   const password = 'Kfu@ai@2025'; // كلمة مرورك
 
-  final baseUrl = 'https://kfuai-api.kfu.edu.sa';
+  final baseUrl = 'https://kfusmartapi.kfu.edu.sa';
 
   print('🔍 اختبار API مع بيانات حقيقية...\n');
   print('⚠️ تأكد أن البيانات صحيحة!\n');
@@ -69,7 +69,7 @@ void main() async {
     print('❌ خطأ في Login: $e');
   }
 
-  print('\n' + '=' * 60 + '\n');
+  print('\n${'=' * 60}\n');
 
   // إذا لم نحصل على token، توقف
   if (accessToken == null) {
@@ -116,7 +116,7 @@ void main() async {
     print('❌ خطأ في GetUserSessions: $e');
   }
 
-  print('\n' + '=' * 60 + '\n');
+  print('\n${'=' * 60}\n');
 
   // ==================== 3. GetRecentChats ====================
   print('3️⃣ اختبار GetRecentChats...');
@@ -140,7 +140,7 @@ void main() async {
     print('❌ خطأ في GetRecentChats: $e');
   }
 
-  print('\n' + '=' * 60 + '\n');
+  print('\n${'=' * 60}\n');
 
   // ==================== 4. GetAllFolder ====================
   print('4️⃣ اختبار GetAllFolder...');
@@ -164,7 +164,7 @@ void main() async {
     print('❌ خطأ في GetAllFolder: $e');
   }
 
-  print('\n' + '=' * 60 + '\n');
+  print('\n${'=' * 60}\n');
 
   // ==================== 5. CreateSession ====================
   print('5️⃣ اختبار CreateSession...');
@@ -193,7 +193,7 @@ void main() async {
     print('❌ خطأ في CreateSession: $e');
   }
 
-  print('\n' + '=' * 60);
+  print('\n${'=' * 60}');
   print('\n✅ انتهى الاختبار!');
   print('\n📝 الخطوة التالية:');
   print('   1. راجع الاستجابات أعلاه');

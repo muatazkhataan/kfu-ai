@@ -285,7 +285,7 @@ class HelpContentWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(
           context,
-        ).colorScheme.surfaceContainerHighest.withOpacity(0.5),
+        ).colorScheme.surfaceContainerHighest.withAlpha(128),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Theme.of(context).dividerColor, width: 1),
       ),

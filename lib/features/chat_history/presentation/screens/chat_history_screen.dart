@@ -356,7 +356,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
           Icon(
             Icons.chat_bubble_outline,
             size: 64,
-            color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+            color: theme.colorScheme.onSurfaceVariant.withAlpha(128),
           ),
           const SizedBox(height: 16),
           Text(

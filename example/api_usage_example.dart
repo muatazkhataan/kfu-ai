@@ -1,6 +1,7 @@
 /// مثال على استخدام خدمة API في تطبيق مساعد كفو
 ///
 /// هذا الملف يوضح كيفية استخدام جميع خدمات API بشكل عملي
+library;
 
 import 'package:kfu_ai/services/api/api_manager.dart';
 import 'package:kfu_ai/services/api/auth/models/login_request.dart';

@@ -393,7 +393,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
               height: 100,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: theme.colorScheme.outline.withOpacity(0.5),
+                  color: theme.colorScheme.outline.withAlpha(128),
                   style: BorderStyle.solid,
                 ),
                 borderRadius: BorderRadius.circular(8),

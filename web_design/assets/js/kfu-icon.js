@@ -7,6 +7,7 @@ class KFUIconManager {
     constructor() {
         this.iconClasses = {
             base: 'kfu-icon',
+            faKit: 'fa-kit fa-mosa3ed-kfu-icon',
             colors: {
                 white: 'kfu-icon-white',
                 primary: 'kfu-icon-primary',
@@ -28,7 +29,37 @@ class KFUIconManager {
     }
 
     /**
-     * إنشاء عنصر أيقونة مساعد كفو
+     * إنشاء عنصر أيقونة مساعد كفو باستخدام FontAwesome Kit
+     * @param {string} color - لون الأيقونة (white, primary, success, etc.)
+     * @param {string} size - حجم الأيقونة (sm, lg, xl, 2x, 3x)
+     * @param {string} additionalClasses - فئات CSS إضافية
+     * @returns {HTMLElement} عنصر الأيقونة
+     */
+    createFaKitIcon(color = 'primary', size = null, additionalClasses = '') {
+        const iconElement = document.createElement('i');
+        let classes = [this.iconClasses.faKit];
+
+        // إضافة لون الأيقونة
+        if (color && this.iconClasses.colors[color]) {
+            classes.push(this.iconClasses.colors[color]);
+        }
+
+        // إضافة حجم الأيقونة
+        if (size && this.iconClasses.sizes[size]) {
+            classes.push(this.iconClasses.sizes[size]);
+        }
+
+        // إضافة فئات إضافية
+        if (additionalClasses) {
+            classes.push(additionalClasses);
+        }
+
+        iconElement.className = classes.join(' ');
+        return iconElement;
+    }
+
+    /**
+     * إنشاء عنصر أيقونة مساعد كفو (الطريقة القديمة)
      * @param {string} color - لون الأيقونة (white, primary, success, etc.)
      * @param {string} size - حجم الأيقونة (sm, lg, xl, 2x, 3x)
      * @param {string} additionalClasses - فئات CSS إضافية

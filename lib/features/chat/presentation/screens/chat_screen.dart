@@ -16,7 +16,9 @@ import '../../../../core/theme/icons.dart';
 import '../../../../features/folders/domain/models/folder.dart';
 import '../../../../features/help/presentation/screens/help_screen.dart';
 import '../../../../features/auth/presentation/providers/auth_provider.dart';
+import '../../../../features/search/presentation/screens/search_screen.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/widgets/app_drawer.dart';
 
 /// الشاشة الرئيسية للمحادثة
 ///
@@ -99,13 +101,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     );
 
     return Scaffold(
-      // قائمة جانبية - Flutter يعكس في RTL تلقائياً، لذلك نعكس المنطق
-      drawer: isRTL
-          ? _buildNavigationDrawer(theme)
-          : null, // في RTL: drawer يفتح من اليمين!
-      endDrawer: isRTL
-          ? null
-          : _buildNavigationDrawer(theme), // في LTR: endDrawer يفتح من اليمين
+      // قائمة جانبية موحدة
+      drawer: const AppDrawer(),
       appBar: _buildAppBar(theme, chatState, isRTL),
       body: Stack(
         children: [
@@ -259,7 +256,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   /// بناء قائمة الرسائل
   Widget _buildMessagesList(ThemeData theme, dynamic chatState) {
     // عرض شاشة الترحيب إذا لم تكن هناك رسائل أو لم تكن هناك محادثة محددة
-    if (chatState.messages.isEmpty || _selectedChatId == null) {
+    if (chatState.messages.isEmpty || chatState.currentChat == null) {
       return _buildEmptyChatState(theme);
     }
 
@@ -708,7 +705,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     );
   }
 
-  /// بناء القائمة الجانبية الرئيسية (المجلدات والمحادثات)
+  /// بناء القائمة الجانبية الرئيسية (المجلدات والمحادثات) - DEPRECATED
   Widget _buildNavigationDrawer(ThemeData theme) {
     final authState = ref.watch(authProvider);
     final userName = authState.loginResponse?.profile?['fullName'] ?? 'مستخدم';
@@ -1088,19 +1085,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   /// الحصول على عنوان المحادثة
   String _getChatTitle(dynamic chatState) {
-    if (_selectedChatId != null) {
-      final chat = ref.read(chatHistoryProvider).getChatById(_selectedChatId!);
-      return chat?.title ?? 'محادثة جديدة';
+    if (chatState.currentChat != null) {
+      return chatState.currentChat.title;
     }
     return 'محادثة جديدة';
   }
 
   /// الحصول على العنوان الفرعي للمحادثة
   String _getChatSubtitle(dynamic chatState) {
-    if (_selectedChatId != null) {
-      final chat = ref.read(chatHistoryProvider).getChatById(_selectedChatId!);
-      if (chat != null && chat.hasMessages) {
-        return '${chat.messageCount} رسالة • آخر نشاط: ${chat.formattedLastActivity}';
+    if (chatState.currentChat != null) {
+      final chat = chatState.currentChat;
+      if (chat.messageCount > 0) {
+        return '${chat.messageCount} رسالة • آخر نشاط: ${chat.updatedAt.toString()}';
       }
     }
     return '';
@@ -1404,8 +1400,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     );
   }
 
-  /// بناء القائمة الجانبية الثانوية (البحث والإعدادات)
+  /// بناء القائمة الجانبية الثانوية (البحث والإعدادات) - DEPRECATED
   Widget _buildEndDrawer(ThemeData theme) {
+    print('[ChatScreen] 🎨 بناء EndDrawer مع زر البحث');
     return Drawer(
       child: Column(
         children: [
@@ -1432,22 +1429,57 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // شريط البحث
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: 'البحث في المحادثات...',
-                      prefixIcon: Icon(AppIcons.getIcon(AppIcon.search)),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(AppIcons.getIcon(AppIcon.close)),
+                  // زر البحث
+                  InkWell(
+                    onTap: () {
+                      print('🔥🔥🔥 تم النقر على زر البحث 🔥🔥🔥');
+                      print('[ChatScreen] 🔍 تم النقر على زر البحث');
+                      Navigator.pop(context);
+                      print('[ChatScreen] 🔍 تم إغلاق القائمة الجانبية');
+                      // الانتقال لشاشة البحث
+                      print('[ChatScreen] 🔍 بدء الانتقال لشاشة البحث...');
+                      Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                print('[ChatScreen] 🔍 بناء SearchScreen...');
+                                return const SearchScreen();
+                              },
+                            ),
+                          )
+                          .then((_) {
+                            print('[ChatScreen] 🔍 عودة من SearchScreen');
+                          })
+                          .catchError((error) {
+                            print(
+                              '[ChatScreen] ❌ خطأ في الانتقال لشاشة البحث: $error',
+                            );
+                          });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
                       ),
-                      filled: true,
-                      fillColor: theme.colorScheme.surface,
-                      border: OutlineInputBorder(
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
+                        border: Border.all(color: theme.colorScheme.outline),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            AppIcons.getIcon(AppIcon.search),
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            'البحث في المحادثات...',
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

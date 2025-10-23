@@ -39,6 +39,7 @@ function initializeCharts() {
     // Get CSS variables for colors
     const styles = getComputedStyle(document.documentElement);
     const primaryColor = '#25935f';
+    const secondaryColor = '#6c737f';
     const infoColor = '#2e90fa';
     const successColor = '#17b26a';
     const warningColor = '#f79009';
@@ -447,13 +448,14 @@ function initializeCharts() {
         charts.devicesChart = new Chart(document.getElementById('devicesChart'), {
             type: 'pie',
             data: {
-                labels: ['الهاتف المحمول', 'الحاسوب', 'اللوحي'],
+                labels: ['الهاتف المحمول', 'الحاسوب', 'اللوحي', 'متصفح الإنترنت'],
                 datasets: [{
-                    data: [58, 32, 10],
+                    data: [48, 25, 8, 19],
                     backgroundColor: [
                         primaryColor,
                         infoColor,
-                        successColor
+                        successColor,
+                        warningColor
                     ],
                     borderWidth: 0
                 }]
@@ -509,6 +511,145 @@ function initializeCharts() {
                 }
             }
         });
+    }
+
+    // Browser Analytics Chart
+    if (document.getElementById('browsersChart')) {
+        const ctx = document.getElementById('browsersChart');
+        charts.browsersChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Chrome', 'Safari', 'Firefox', 'Edge', 'Opera', 'أخرى'],
+                datasets: [{
+                    label: 'عدد المستخدمين',
+                    data: [1247, 892, 456, 234, 123, 89],
+                    backgroundColor: [
+                        primaryColor,
+                        infoColor,
+                        successColor,
+                        warningColor,
+                        dangerColor,
+                        secondaryColor
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        enforceCanvasHeight();
+    }
+
+    // Browser Types Chart
+    if (document.getElementById('browserTypesChart')) {
+        const ctx = document.getElementById('browserTypesChart');
+        charts.browserTypesChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['متصفحات سطح المكتب', 'متصفحات الهاتف المحمول', 'متصفحات التطبيقات'],
+                datasets: [{
+                    data: [45, 38, 17],
+                    backgroundColor: [
+                        primaryColor,
+                        infoColor,
+                        successColor
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        enforceCanvasHeight();
+    }
+
+    // Browser Usage Chart
+    if (document.getElementById('browserUsageChart')) {
+        const ctx = document.getElementById('browserUsageChart');
+        charts.browserUsageChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+                datasets: [{
+                    label: 'Chrome',
+                    data: [850, 920, 1100, 1247, 1350, 1420],
+                    borderColor: primaryColor,
+                    backgroundColor: primaryColor + '20',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 2
+                }, {
+                    label: 'Safari',
+                    data: [620, 680, 750, 892, 920, 980],
+                    borderColor: infoColor,
+                    backgroundColor: infoColor + '20',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 2
+                }, {
+                    label: 'Firefox',
+                    data: [380, 420, 450, 456, 480, 500],
+                    borderColor: successColor,
+                    backgroundColor: successColor + '20',
+                    fill: false,
+                    tension: 0.4,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+        enforceCanvasHeight();
     }
 }
 
@@ -595,6 +736,75 @@ function populateTables() {
                 <td>${topic.satisfaction}%</td>
                 <td>
                     <i class="fas fa-arrow-${topic.trend === 'up' ? 'up' : topic.trend === 'down' ? 'down' : 'right'} trend-icon ${topic.trend}"></i>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // Browsers table
+    const browsersTableBody = document.getElementById('browsersTableBody');
+    if (browsersTableBody) {
+        const browsersData = [
+            { browser: 'Chrome', icon: 'fa-brands fa-chrome', color: '#25935f', users: 1247, percentage: 41.5, satisfaction: 92, trend: 'up' },
+            { browser: 'Safari', icon: 'fa-brands fa-safari', color: '#2e90fa', users: 892, percentage: 29.7, satisfaction: 88, trend: 'up' },
+            { browser: 'Firefox', icon: 'fa-brands fa-firefox-browser', color: '#17b26a', users: 456, percentage: 15.2, satisfaction: 85, trend: 'stable' },
+            { browser: 'Edge', icon: 'fa-brands fa-edge', color: '#f79009', users: 234, percentage: 7.8, satisfaction: 83, trend: 'up' },
+            { browser: 'Opera', icon: 'fa-brands fa-opera', color: '#f70647', users: 123, percentage: 4.1, satisfaction: 81, trend: 'down' },
+            { browser: 'أخرى', icon: 'fa-solid fa-globe', color: '#6c737f', users: 89, percentage: 1.7, satisfaction: 79, trend: 'stable' }
+        ];
+        
+        browsersTableBody.innerHTML = browsersData.map(browser => `
+            <tr>
+                <td>
+                    <i class="${browser.icon} me-2" style="color: ${browser.color}; font-size: 1.2rem;"></i>
+                    <strong>${browser.browser}</strong>
+                </td>
+                <td>${browser.users.toLocaleString()}</td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                            <div class="progress-bar" role="progressbar" style="width: ${browser.percentage}%; background-color: ${browser.color}"></div>
+                        </div>
+                        <span>${browser.percentage}%</span>
+                    </div>
+                </td>
+                <td>${browser.satisfaction}%</td>
+                <td>
+                    <i class="fas fa-arrow-${browser.trend === 'up' ? 'up' : browser.trend === 'down' ? 'down' : 'right'} trend-icon ${browser.trend}"></i>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // Apps table
+    const appsTableBody = document.getElementById('appsTableBody');
+    if (appsTableBody) {
+        const appsData = [
+            { app: 'Android', icon: 'fa-android', color: '#17b26a', users: 1542, percentage: 48.5, satisfaction: 91, trend: 'up' },
+            { app: 'iOS', icon: 'fa-apple', color: '#6c737f', users: 892, percentage: 28.1, satisfaction: 94, trend: 'up' },
+            { app: 'Huawei', icon: 'fa-kit fa-huawei', color: '#f70647', users: 232, percentage: 7.3, satisfaction: 88, trend: 'up' },
+            { app: 'Windows App', icon: 'fa-windows', color: '#2e90fa', users: 324, percentage: 10.2, satisfaction: 87, trend: 'stable' },
+            { app: 'Apple Mac App', icon: 'fa-apple', color: '#25935f', users: 189, percentage: 5.9, satisfaction: 93, trend: 'up' }
+        ];
+        
+        appsTableBody.innerHTML = appsData.map(app => `
+            <tr>
+                <td>
+                    <i class="fa-brands ${app.icon} me-2" style="color: ${app.color}; font-size: 1.5rem;"></i>
+                    <strong>${app.app}</strong>
+                </td>
+                <td>${app.users.toLocaleString()}</td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="progress flex-grow-1 me-2" style="height: 10px;">
+                            <div class="progress-bar" role="progressbar" style="width: ${app.percentage}%; background-color: ${app.color}"></div>
+                        </div>
+                        <span><strong>${app.percentage}%</strong></span>
+                    </div>
+                </td>
+                <td>${app.satisfaction}%</td>
+                <td>
+                    <i class="fas fa-arrow-${app.trend === 'up' ? 'up' : app.trend === 'down' ? 'down' : 'right'} trend-icon ${app.trend}"></i>
                 </td>
             </tr>
         `).join('');
@@ -698,6 +908,52 @@ function updateChartData(period) {
         document.getElementById('totalUsers').textContent = '1,050';
         document.getElementById('totalChats').textContent = '6,234';
     }
+
+    // Update browser charts with new data based on period
+    if (charts.browsersChart) {
+        const browserData = getBrowserDataForPeriod(period);
+        charts.browsersChart.data.datasets[0].data = browserData;
+        charts.browsersChart.update();
+    }
+
+    if (charts.browserUsageChart) {
+        const usageData = getBrowserUsageDataForPeriod(period);
+        charts.browserUsageChart.data.datasets.forEach((dataset, index) => {
+            dataset.data = usageData[index];
+        });
+        charts.browserUsageChart.update();
+    }
+}
+
+// Helper functions for browser data
+function getBrowserDataForPeriod(period) {
+    const data = {
+        day: [1200, 850, 420, 200, 100, 75],
+        week: [1100, 780, 380, 180, 90, 65],
+        month: [1050, 720, 350, 160, 80, 55]
+    };
+    return data[period] || data.day;
+}
+
+function getBrowserUsageDataForPeriod(period) {
+    const data = {
+        day: [
+            [800, 850, 900, 950, 1000, 1050], // Chrome
+            [600, 650, 700, 750, 800, 850],  // Safari
+            [300, 320, 340, 360, 380, 400]   // Firefox
+        ],
+        week: [
+            [750, 800, 850, 900, 950, 1000],
+            [550, 600, 650, 700, 750, 800],
+            [280, 300, 320, 340, 360, 380]
+        ],
+        month: [
+            [700, 750, 800, 850, 900, 950],
+            [500, 550, 600, 650, 700, 750],
+            [250, 270, 290, 310, 330, 350]
+        ]
+    };
+    return data[period] || data.day;
 }
 
 // Toggle chart type

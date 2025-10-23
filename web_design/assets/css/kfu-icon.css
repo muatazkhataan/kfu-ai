@@ -12,6 +12,12 @@
     vertical-align: middle;
 }
 
+/* FontAwesome Kit Mosa3ed Icon Support */
+.fa-kit.fa-mosa3ed-kfu-icon {
+    color: var(--bs-primary);
+    vertical-align: middle;
+}
+
 /* KFU Icon with specific colors */
 .kfu-icon-white {
     color: var(--bs-white);

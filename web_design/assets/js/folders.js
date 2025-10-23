@@ -8,6 +8,7 @@ class FolderManager {
         this.folders = new Map();
         this.currentFolder = null;
         this.selectedIcon = null;
+        this.selectedColor = '#6c757d'; // اللون الافتراضي
         this.targetFolderId = null;
         this.init();
     }
@@ -115,6 +116,13 @@ class FolderManager {
             }
         });
 
+        // اختيار اللون
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.color-circle')) {
+                this.selectColor(e.target.closest('.color-circle'));
+            }
+        });
+
         // تطبيق الأيقونة
         const applyIconBtn = document.getElementById('applyIconBtn');
         if (applyIconBtn) {
@@ -162,6 +170,9 @@ class FolderManager {
         // حفظ الأيقونة المختارة
         this.selectedIcon = iconItem.dataset.icon;
         
+        // تحديث المعاينة
+        this.updateFolderPreview();
+        
         // تفعيل زر التطبيق
         document.getElementById('applyIconBtn').disabled = false;
         
@@ -180,6 +191,145 @@ class FolderManager {
         setTimeout(() => {
             iconItem.style.animation = '';
         }, 600);
+    }
+
+    // اختيار اللون
+    selectColor(colorCircle) {
+        // إزالة الاختيار من جميع الدوائر
+        document.querySelectorAll('.color-circle').forEach(circle => {
+            circle.classList.remove('active');
+        });
+        
+        // إضافة الاختيار للدائرة المحددة
+        colorCircle.classList.add('active');
+        
+        // حفظ اللون المختار
+        this.selectedColor = colorCircle.dataset.color;
+        
+        // تحديث المعاينة
+        this.updateFolderPreview();
+        
+        // تفعيل زر التطبيق إذا كانت الأيقونة مختارة
+        if (this.selectedIcon) {
+            document.getElementById('applyIconBtn').disabled = false;
+        }
+        
+        console.log('تم اختيار اللون:', this.selectedColor);
+    }
+
+    // تحديث معاينة المجلد
+    updateFolderPreview() {
+        const previewIcon = document.getElementById('previewIcon');
+        const previewFolderIcon = document.getElementById('previewFolderIcon');
+        
+        console.log('تحديث المعاينة - الأيقونة المختارة:', this.selectedIcon, 'اللون المختار:', this.selectedColor);
+        
+        if (previewIcon && previewFolderIcon) {
+            // تحديث الأيقونة - استخدام الأيقونة المحفوظة أو الافتراضية
+            const iconToUse = this.selectedIcon || 'fa-duotone fa-light fa-folder';
+            previewIcon.className = iconToUse;
+            console.log('تم تحديث الأيقونة في المعاينة إلى:', iconToUse);
+            
+            // تحديث لون الأيقونة
+            previewIcon.style.color = this.selectedColor;
+            console.log('تم تحديث لون الأيقونة في المعاينة إلى:', this.selectedColor);
+            
+            // تحديث لون خلفية المجلد بشفافية 20%
+            const rgbaColor = this.hexToRgba(this.selectedColor, 0.2);
+            previewFolderIcon.style.backgroundColor = rgbaColor;
+            console.log('تم تحديث لون خلفية المجلد إلى:', rgbaColor);
+            
+            // تحديث لون الجزء العلوي من المجلد
+            const rgbaColorTop = this.hexToRgba(this.selectedColor, 0.25);
+            
+            // تطبيق اللون على الجزء العلوي باستخدام CSS custom property
+            const style = document.createElement('style');
+            style.textContent = `
+                .preview-folder-icon::before {
+                    background: ${rgbaColorTop} !important;
+                }
+            `;
+            
+            // إزالة الأنماط السابقة
+            const existingStyle = document.getElementById('preview-folder-style');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            
+            style.id = 'preview-folder-style';
+            document.head.appendChild(style);
+            
+            console.log('تم تحديث الجزء العلوي من المجلد إلى:', rgbaColorTop);
+            
+            // إضافة تأثير بصري للمعاينة
+            previewFolderIcon.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                previewFolderIcon.style.transform = 'scale(1)';
+            }, 200);
+        } else {
+            console.error('لم يتم العثور على عناصر المعاينة');
+        }
+    }
+
+    // تحويل hex إلى rgba
+    hexToRgba(hex, alpha) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    // الحصول على اسم اللون
+    getColorName(hexColor) {
+        const colorNames = {
+            '#6c757d': 'رمادي فاتح',
+            '#dc3545': 'أحمر',
+            '#fd7e14': 'برتقالي',
+            '#ffc107': 'أصفر',
+            '#198754': 'أخضر',
+            '#0dcaf0': 'أزرق سماوي',
+            '#6f42c1': 'بنفسجي',
+            '#e83e8c': 'وردي'
+        };
+        return colorNames[hexColor] || hexColor;
+    }
+
+    // تحويل RGB إلى HEX
+    rgbToHex(rgb) {
+        // تحويل rgb(r, g, b) إلى hex
+        const match = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+        if (match) {
+            const r = parseInt(match[1]);
+            const g = parseInt(match[2]);
+            const b = parseInt(match[3]);
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+        return '#6c757d'; // افتراضي
+    }
+
+    // مقارنة الألوان للتأكد من التشابه
+    colorsAreSimilar(color1, color2) {
+        // تحويل الألوان إلى RGB للمقارنة
+        const rgb1 = this.hexToRgb(color1);
+        const rgb2 = this.hexToRgb(color2);
+        
+        if (!rgb1 || !rgb2) return false;
+        
+        // حساب الفرق بين الألوان
+        const diff = Math.abs(rgb1.r - rgb2.r) + Math.abs(rgb1.g - rgb2.g) + Math.abs(rgb1.b - rgb2.b);
+        
+        // إذا كان الفرق أقل من 30، اعتبر الألوان متشابهة
+        return diff < 30;
+    }
+
+    // تحويل HEX إلى RGB
+    hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
     }
 
     // إظهار اسم الأيقونة المختارة
@@ -211,14 +361,14 @@ class FolderManager {
             
             // محاكاة تأخير للتأثير البصري
             setTimeout(() => {
-                this.changeFolderIcon(this.targetFolderId, this.selectedIcon);
+                this.changeFolderIcon(this.targetFolderId, this.selectedIcon, this.selectedColor);
                 
                 // إغلاق المودال
                 const modal = bootstrap.Modal.getInstance(document.getElementById('changeIconModal'));
                 modal.hide();
                 
                 // إظهار رسالة نجاح
-                this.showSuccessMessage('تم تغيير أيقونة المجلد بنجاح');
+                this.showSuccessMessage('تم تغيير أيقونة ولون المجلد بنجاح');
                 
                 // إعادة تعيين الزر
                 applyBtn.innerHTML = originalText;
@@ -230,12 +380,33 @@ class FolderManager {
     // إعادة تعيين اختيار الأيقونة
     resetIconSelection() {
         this.selectedIcon = null;
+        this.selectedColor = '#6c757d'; // إعادة تعيين اللون الافتراضي
         this.targetFolderId = null;
         
         // إزالة الاختيار من جميع الأيقونات
         document.querySelectorAll('.category-panel .icon-item').forEach(item => {
             item.classList.remove('selected');
         });
+        
+        // إعادة تعيين اختيار الألوان
+        document.querySelectorAll('.color-circle').forEach(circle => {
+            circle.classList.remove('active');
+        });
+        
+        // تحديد اللون الافتراضي
+        const defaultColorCircle = document.querySelector('[data-color="#6c757d"]');
+        if (defaultColorCircle) {
+            defaultColorCircle.classList.add('active');
+        }
+        
+        // إعادة تعيين الأيقونة الافتراضية في المعاينة
+        const previewIcon = document.getElementById('previewIcon');
+        if (previewIcon) {
+            previewIcon.className = 'fa-duotone fa-light fa-folder';
+        }
+        
+        // إعادة تعيين المعاينة
+        this.updateFolderPreview();
         
         // إعادة تعيين زر التطبيق
         this.resetApplyButton();
@@ -251,29 +422,190 @@ class FolderManager {
         applyBtn.style.transform = '';
     }
 
+    // الحصول على الأيقونة واللون الحالي للمجلد
+    getCurrentFolderIconAndColor(folderId) {
+        // البحث بطرق متعددة
+        let folderItem = document.getElementById(`folder-${folderId}`);
+        
+        if (!folderItem) {
+            folderItem = document.querySelector(`[onclick*="openFolder('${folderId}')"]`);
+        }
+        
+        if (!folderItem) {
+            folderItem = document.querySelector(`[onclick*="openFolder('${folderId}',"]`);
+        }
+        
+        // البحث في جميع المجلدات إذا لم نجد
+        if (!folderItem) {
+            const allFolders = document.querySelectorAll('.folder-item');
+            for (let folder of allFolders) {
+                const onclickAttr = folder.getAttribute('onclick');
+                if (onclickAttr && onclickAttr.includes(`openFolder('${folderId}'`)) {
+                    folderItem = folder;
+                    break;
+                }
+            }
+        }
+        
+        let currentIconClass = 'fa-duotone fa-light fa-folder'; // افتراضي
+        let currentColor = '#6c757d'; // افتراضي
+        
+        console.log('البحث عن المجلد:', folderId);
+        console.log('العنصر الموجود:', folderItem);
+        
+        if (folderItem) {
+            const currentIcon = folderItem.querySelector('.folder-icon i');
+            if (currentIcon) {
+                currentIconClass = currentIcon.className;
+                console.log('الأيقونة الموجودة في HTML:', currentIconClass);
+                
+                // الحصول على اللون بطرق متعددة
+                let detectedColor = '#6c757d'; // افتراضي
+                
+                // 1. البحث عن اللون في style attribute
+                if (currentIcon.style.color) {
+                    detectedColor = currentIcon.style.color;
+                    console.log('تم العثور على اللون في style:', detectedColor);
+                } else {
+                    // 2. البحث عن اللون في computed style
+                    const computedStyle = window.getComputedStyle(currentIcon);
+                    detectedColor = computedStyle.color || '#6c757d';
+                    console.log('تم العثور على اللون في computed style:', detectedColor);
+                }
+                
+                // تحويل RGB إلى HEX إذا لزم الأمر
+                if (detectedColor.startsWith('rgb')) {
+                    detectedColor = this.rgbToHex(detectedColor);
+                }
+                
+                currentColor = detectedColor;
+            } else {
+                console.log('لم يتم العثور على أيقونة في المجلد');
+            }
+        } else {
+            console.log('لم يتم العثور على المجلد:', folderId);
+            console.log('جميع عناصر المجلدات:', document.querySelectorAll('.folder-item'));
+            console.log('جميع onclick attributes:', 
+                Array.from(document.querySelectorAll('.folder-item')).map(f => f.getAttribute('onclick'))
+            );
+        }
+        
+        console.log('الأيقونة الحالية:', currentIconClass, 'اللون الحالي:', currentColor);
+        return { icon: currentIconClass, color: currentColor };
+    }
+
     // فتح مودال تغيير الأيقونة
     openIconModal(folderId) {
         this.targetFolderId = folderId;
         
-        // الحصول على الأيقونة الحالية للمجلد
-        const folderItem = document.querySelector(`[onclick*="openFolder('${folderId}')"]`);
-        if (folderItem) {
-            const currentIcon = folderItem.querySelector('.folder-icon i').className;
-            
-            // تحديد الأيقونة الحالية في المودال
-            setTimeout(() => {
-                const currentIconItem = document.querySelector(`[data-icon="${currentIcon}"]`);
-                if (currentIconItem) {
-                    currentIconItem.classList.add('selected');
-                    this.selectedIcon = currentIcon;
-                    document.getElementById('applyIconBtn').disabled = false;
-                }
-            }, 100);
-        }
+        // الحصول على الأيقونة واللون الحالي للمجلد
+        const currentData = this.getCurrentFolderIconAndColor(folderId);
+        
+        // حفظ البيانات الحالية
+        this.selectedIcon = currentData.icon;
+        this.selectedColor = currentData.color;
+        
+        // تحديث المعاينة فوراً قبل فتح المودال
+        setTimeout(() => {
+            this.updateFolderPreview();
+        }, 50);
         
         // فتح المودال
         const modal = new bootstrap.Modal(document.getElementById('changeIconModal'));
         modal.show();
+        
+        // انتظار حتى يظهر المودال ثم تحديث المحتوى
+        document.getElementById('changeIconModal').addEventListener('shown.bs.modal', () => {
+            // إزالة جميع الاختيارات السابقة
+            document.querySelectorAll('.category-panel .icon-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.color-circle').forEach(circle => {
+                circle.classList.remove('active');
+            });
+            
+            // تحديد الأيقونة الحالية - البحث بطريقة أكثر مرونة
+            let currentIconItem = document.querySelector(`[data-icon="${this.selectedIcon}"]`);
+            
+            console.log('البحث عن الأيقونة في المودال:', this.selectedIcon);
+            console.log('النتيجة الأولى:', currentIconItem);
+            
+            // إذا لم توجد بالضبط، ابحث عن أيقونة مشابهة
+            if (!currentIconItem) {
+                // البحث عن أيقونة بنفس الاسم الأساسي
+                const iconName = this.selectedIcon.split(' ').pop(); // الحصول على الجزء الأخير
+                console.log('البحث عن أيقونة تحتوي على:', iconName);
+                
+                const allIconItems = document.querySelectorAll('.icon-item');
+                console.log('عدد الأيقونات في المودال:', allIconItems.length);
+                
+                for (let item of allIconItems) {
+                    const itemIcon = item.querySelector('i');
+                    if (itemIcon && itemIcon.className.includes(iconName)) {
+                        currentIconItem = item;
+                        console.log('تم العثور على أيقونة مطابقة:', itemIcon.className);
+                        break;
+                    }
+                }
+            }
+            
+            if (currentIconItem) {
+                currentIconItem.classList.add('selected');
+                console.log('تم تحديد الأيقونة الحالية:', this.selectedIcon);
+            } else {
+                console.log('لم يتم العثور على الأيقونة الحالية في المودال:', this.selectedIcon);
+                console.log('الأيقونات المتاحة في المودال:', 
+                    Array.from(document.querySelectorAll('.icon-item')).map(item => 
+                        item.querySelector('i')?.className
+                    ).filter(Boolean)
+                );
+                
+                // إذا لم توجد الأيقونة، اختر أيقونة افتراضية
+                const defaultIconItem = document.querySelector('[data-icon="fa-duotone fa-light fa-folder"]');
+                if (defaultIconItem) {
+                    defaultIconItem.classList.add('selected');
+                    this.selectedIcon = 'fa-duotone fa-light fa-folder';
+                }
+            }
+            
+            // تحديد اللون الحالي - البحث بطرق متعددة
+            let currentColorCircle = document.querySelector(`[data-color="${this.selectedColor}"]`);
+            
+            if (!currentColorCircle) {
+                // البحث عن لون مشابه
+                const allColorCircles = document.querySelectorAll('.color-circle');
+                for (let circle of allColorCircles) {
+                    const circleColor = circle.dataset.color;
+                    if (this.colorsAreSimilar(this.selectedColor, circleColor)) {
+                        currentColorCircle = circle;
+                        console.log('تم العثور على لون مشابه:', circleColor, 'لـ', this.selectedColor);
+                        break;
+                    }
+                }
+            }
+            
+            if (currentColorCircle) {
+                currentColorCircle.classList.add('active');
+                this.selectedColor = currentColorCircle.dataset.color;
+                console.log('تم تحديد اللون الحالي:', this.selectedColor);
+            } else {
+                // إذا لم يتم العثور على اللون، استخدم الافتراضي
+                const defaultColorCircle = document.querySelector('[data-color="#6c757d"]');
+                if (defaultColorCircle) {
+                    defaultColorCircle.classList.add('active');
+                    this.selectedColor = '#6c757d';
+                    console.log('تم استخدام اللون الافتراضي');
+                }
+            }
+            
+            // تحديث المعاينة
+            this.updateFolderPreview();
+            
+            // تفعيل زر التطبيق
+            document.getElementById('applyIconBtn').disabled = false;
+            
+            console.log('تم تحديث المودال بنجاح');
+        }, { once: true }); // مرة واحدة فقط
     }
 
     // إنشاء HTML شبكة الأيقونات للمودال
@@ -501,8 +833,8 @@ class FolderManager {
     }
 
     // تغيير أيقونة المجلد
-    changeFolderIcon(folderId, newIconClass) {
-        console.log('تغيير أيقونة المجلد:', folderId, 'إلى:', newIconClass);
+    changeFolderIcon(folderId, newIconClass, newColor = null) {
+        console.log('تغيير أيقونة المجلد:', folderId, 'إلى:', newIconClass, 'باللون:', newColor);
         
         // البحث عن المجلد
         let folderItem = document.getElementById(`folder-${folderId}`);
@@ -534,16 +866,54 @@ class FolderManager {
         // تطبيق الأيقونة الجديدة
         iconElement.className = newIconClass;
         
+        // تطبيق اللون الجديد إذا تم تحديده
+        if (newColor) {
+            // تطبيق لون الأيقونة
+            iconElement.style.color = newColor;
+            
+            // تطبيق لون خلفية المجلد بشفافية 20%
+            const folderIcon = folderItem.querySelector('.folder-icon');
+            if (folderIcon) {
+                const rgbaColor = this.hexToRgba(newColor, 0.2);
+                folderIcon.style.backgroundColor = rgbaColor;
+                
+                // تطبيق لون الجزء العلوي من المجلد
+                const rgbaColorTop = this.hexToRgba(newColor, 0.25);
+                folderIcon.style.setProperty('--folder-top-color', rgbaColorTop);
+                
+                // تطبيق اللون على الجزء العلوي باستخدام CSS custom property
+                const style = document.createElement('style');
+                style.textContent = `
+                    #folder-${folderId} .folder-icon::before {
+                        background: ${rgbaColorTop} !important;
+                    }
+                `;
+                style.id = `folder-${folderId}-style`;
+                
+                // إزالة الأنماط السابقة لهذا المجلد
+                const existingStyle = document.getElementById(`folder-${folderId}-style`);
+                if (existingStyle) {
+                    existingStyle.remove();
+                }
+                
+                document.head.appendChild(style);
+            }
+        }
+        
         // إغلاق جميع القوائم المنسدلة والقوائم الفرعية
         this.closeAllDropdowns();
         
         // رسالة نجاح
         const iconName = this.getIconName(newIconClass);
-        this.showSuccessMessage(`تم تغيير الأيقونة إلى ${iconName} بنجاح!`);
+        const colorMessage = newColor ? ` واللون ${this.getColorName(newColor)}` : '';
+        this.showSuccessMessage(`تم تغيير الأيقونة إلى ${iconName}${colorMessage} بنجاح!`);
         
         // تحديث البيانات المحلية
         if (this.folders.has(folderId)) {
             this.folders.get(folderId).icon = newIconClass;
+            if (newColor) {
+                this.folders.get(folderId).color = newColor;
+            }
         }
     }
 

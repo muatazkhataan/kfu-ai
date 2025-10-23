@@ -477,6 +477,75 @@ class ChatNotifier extends StateNotifier<ChatState> {
     state = state.copyWith(error: null, messageError: null);
   }
 
+  // ==================== إدارة المحادثات ====================
+
+  /// أرشفة محادثة
+  Future<void> archiveSession(String sessionId) async {
+    try {
+      // TODO: استدعاء API لأرشفة المحادثة
+      // await _apiManager.chat.archiveSession(sessionId);
+
+      // ignore: avoid_print
+      print('[ChatNotifier] ✅ تم أرشفة المحادثة: $sessionId');
+    } catch (e) {
+      // ignore: avoid_print
+      print('[ChatNotifier] ❌ خطأ في أرشفة المحادثة: $e');
+      rethrow;
+    }
+  }
+
+  /// استعادة محادثة من الأرشيف
+  Future<void> restoreSession(String sessionId) async {
+    try {
+      // TODO: استدعاء API لاستعادة المحادثة
+      // await _apiManager.chat.restoreSession(sessionId);
+
+      // ignore: avoid_print
+      print('[ChatNotifier] ✅ تم استعادة المحادثة: $sessionId');
+    } catch (e) {
+      // ignore: avoid_print
+      print('[ChatNotifier] ❌ خطأ في استعادة المحادثة: $e');
+      rethrow;
+    }
+  }
+
+  /// حذف محادثة
+  Future<void> deleteSession(String sessionId) async {
+    try {
+      // TODO: استدعاء API لحذف المحادثة
+      // await _apiManager.chat.deleteSession(sessionId);
+
+      // ignore: avoid_print
+      print('[ChatNotifier] ✅ تم حذف المحادثة: $sessionId');
+    } catch (e) {
+      // ignore: avoid_print
+      print('[ChatNotifier] ❌ خطأ في حذف المحادثة: $e');
+      rethrow;
+    }
+  }
+
+  /// تحديث عنوان محادثة
+  Future<void> updateSessionTitle(String sessionId, String newTitle) async {
+    try {
+      // TODO: استدعاء API لتحديث العنوان
+      // await _apiManager.chat.updateSessionTitle(sessionId, newTitle);
+
+      // تحديث الحالة المحلية
+      if (state.currentChat?.id == sessionId) {
+        state = state.copyWith(
+          currentChat: state.currentChat!.copyWith(title: newTitle),
+        );
+      }
+
+      // ignore: avoid_print
+      print('[ChatNotifier] ✅ تم تحديث عنوان المحادثة: $sessionId');
+    } catch (e) {
+      // ignore: avoid_print
+      print('[ChatNotifier] ❌ خطأ في تحديث العنوان: $e');
+      rethrow;
+    }
+  }
+
   /// توليد معرف فريد للرسالة
   String _generateMessageId() {
     return 'msg_${DateTime.now().millisecondsSinceEpoch}_${(DateTime.now().microsecond % 1000).toString().padLeft(3, '0')}';

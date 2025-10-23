@@ -10,13 +10,8 @@
     <link rel="stylesheet" type="text/css" id="themestylesheet" href="assets/css/ksa.bootstrap.rtl.css" />
 
     <!-- FontAwesome -->
-    <script src="https://kit.fontawesome.com/d27eb6fc68.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/0c50a450bf.js" crossorigin="anonymous"></script>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&display=swap"
-        rel="stylesheet" />
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -34,7 +29,7 @@
         <div class="sidebar-resizer" id="sidebarResizer"></div>
         <div class="sidebar-header">
             <a href="index.html" class="sidebar-brand">
-                <i class="kfu-icon kfu-icon-primary me-2"></i>
+                <i class="fa-kit fa-mosa3ed-kfu-icon fa-2xl me-2"></i>
                 لوحة التحكم
             </a>
         </div>
@@ -212,7 +207,7 @@
             <div class="dashboard-section active" id="section-overview">
                 <!-- Banner for Dashboard -->
                 <div class="d-flex align-items-center mb-4 p-4 bg-white rounded-3 border shadow-sm">
-                    <img src="assets/images/mosa3ed_kfu_icon.png" alt="شعار مساعد كفو" class="me-3" style="width: 60px; height: 60px; object-fit: contain;">
+                    <img src="assets/images/mosa3ed_kfu_icon.png" alt="شعار مساعد كفو" class="me-3" style="width:75px; height: 75px; object-fit: contain;">
                     <div>
                         <h3 class="mb-0 text-muted">لوحة تحكم إدارة تطبيق</h3>
                         <h1 class="mb-0 text-primary">مساعد كفو</h1>
@@ -622,6 +617,97 @@
                         <div class="chart-card-body">
                             <canvas id="retentionChart" class="tall"></canvas>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Browser Analytics Section -->
+                <div class="chart-card">
+                    <div class="chart-card-header">
+                        <h6 class="chart-title">
+                            <i class="fa-brands fa-chrome me-2 text-primary"></i>
+                            تحليلات المتصفحات
+                        </h6>
+                    </div>
+                    <div class="chart-card-body">
+                        <canvas id="browsersChart" class="tall"></canvas>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">
+                                <i class="fa-solid fa-browser me-2 text-info"></i>
+                                أنواع المتصفحات المستخدمة
+                            </h6>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="browserTypesChart" class="tall"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-card-header">
+                            <h6 class="chart-title">
+                                <i class="fa-solid fa-chart-line me-2 text-success"></i>
+                                معدلات الدخول من المتصفحات
+                            </h6>
+                        </div>
+                        <div class="chart-card-body">
+                            <canvas id="browserUsageChart" class="tall"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Browsers Table -->
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <h6 class="table-title">
+                            <i class="fa-solid fa-table me-2"></i>
+                            إحصائيات المتصفحات التفصيلية
+                        </h6>
+                    </div>
+                    <div class="table-card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>المتصفح</th>
+                                    <th>عدد المستخدمين</th>
+                                    <th>النسبة المئوية</th>
+                                    <th>معدل الرضا</th>
+                                    <th>الاتجاه</th>
+                                </tr>
+                            </thead>
+                            <tbody id="browsersTableBody">
+                                <!-- سيتم ملؤها ديناميكياً -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Apps Table -->
+                <div class="table-card">
+                    <div class="table-card-header">
+                        <h6 class="table-title">
+                            <i class="fa-solid fa-mobile-screen-button me-2"></i>
+                            إحصائيات التطبيقات
+                        </h6>
+                    </div>
+                    <div class="table-card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>التطبيق</th>
+                                    <th>عدد المستخدمين</th>
+                                    <th>النسبة المئوية</th>
+                                    <th>معدل الرضا</th>
+                                    <th>الاتجاه</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appsTableBody">
+                                <!-- سيتم ملؤها ديناميكياً -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -284,7 +284,7 @@ class ApiClient {
             : data as T?;
 
         return ApiResponse<T>.success(
-          data: parsedData!,
+          data: parsedData as T,
           statusCode: statusCode,
         );
       } catch (e) {
