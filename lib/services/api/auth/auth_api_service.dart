@@ -33,8 +33,12 @@ class AuthApiService {
   /// تسجيل الدخول
   ///
   /// [request] - بيانات تسجيل الدخول
+  /// [rememberMe] - خيار "تذكرني"
   /// Returns [ApiResponse<LoginResponse>]
-  Future<ApiResponse<LoginResponse>> login(LoginRequest request) async {
+  Future<ApiResponse<LoginResponse>> login(
+    LoginRequest request, {
+    bool rememberMe = false,
+  }) async {
     _logDebug('🔐 بدء عملية تسجيل الدخول');
     _logDebug('📝 الرقم الجامعي: ${request.studentNumber}');
     _logDebug('📝 طول كلمة المرور: ${request.password.length} حرف');
@@ -102,17 +106,22 @@ class AuthApiService {
 
         // حفظ Tokens
         _logDebug('💾 حفظ Tokens في Secure Storage...');
+        _logDebug('💾 تذكرني: $rememberMe');
         await _tokenManager.saveTokens(
           accessToken: loginResponse.accessToken,
           refreshToken: loginResponse.refreshToken,
           userId: loginResponse.userId,
           expiresIn: loginResponse.expiresIn,
+          rememberMe: rememberMe,
         );
         _logDebug('✅ تم حفظ Tokens بنجاح');
 
         // إنشاء جلسة
         _logDebug('🔓 إنشاء جلسة...');
-        await _sessionManager.createSession(loginResponse);
+        await _sessionManager.createSession(
+          loginResponse,
+          rememberMe: rememberMe,
+        );
         _logDebug('✅ تم إنشاء الجلسة بنجاح');
       } else {
         _logError('❌ فشل تسجيل الدخول');

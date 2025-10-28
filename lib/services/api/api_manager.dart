@@ -156,4 +156,9 @@ class ApiManager {
   Future<void> reloadSession() async {
     await _sessionManager.reloadSession();
   }
+
+  /// التحقق من إمكانية التسجيل التلقائي (تذكرني)
+  Future<bool> shouldAutoLogin() async {
+    return await _sessionManager.shouldAutoLogin();
+  }
 }

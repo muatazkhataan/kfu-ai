@@ -46,7 +46,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   /// تسجيل الدخول
-  Future<bool> login(String studentNumber, String password) async {
+  Future<bool> login(
+    String studentNumber,
+    String password, {
+    bool rememberMe = false,
+  }) async {
     // ignore: avoid_print
     print('\n╔═══════════════════════════════════════════════');
     // ignore: avoid_print
@@ -70,8 +74,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       // ignore: avoid_print
       print('📤 إرسال طلب تسجيل الدخول...\n');
+      // ignore: avoid_print
+      print('📝 تذكرني: $rememberMe');
 
-      final response = await _apiManager.auth.login(request);
+      final response = await _apiManager.auth.login(
+        request,
+        rememberMe: rememberMe,
+      );
 
       // ignore: avoid_print
       print('\n╔═══════════════════════════════════════════════');
@@ -197,15 +206,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // محاولة إعادة تحميل الجلسة من TokenManager
       await _apiManager.reloadSession();
 
-      // التحقق من صلاحية الجلسة
-      final isValid = await _apiManager.isSessionValid();
+      // التحقق من إمكانية التسجيل التلقائي (تذكرني + جلسة صالحة)
+      final shouldAutoLogin = await _apiManager.shouldAutoLogin();
 
-      if (isValid) {
+      if (shouldAutoLogin) {
         // الحصول على userId من TokenManager
         final userId = await _apiManager.getCurrentUserId();
 
         // ignore: avoid_print
-        print('[AuthProvider] ✅ جلسة صالحة - User ID: $userId');
+        print('[AuthProvider] ✅ جلسة صالحة مع تذكرني - User ID: $userId');
 
         // تحديث الحالة
         state = state.copyWith(
@@ -217,7 +226,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return true;
       } else {
         // ignore: avoid_print
-        print('[AuthProvider] ❌ الجلسة منتهية أو غير موجودة');
+        print('[AuthProvider] ❌ الجلسة منتهية أو المستخدم لم يختر "تذكرني"');
         return false;
       }
     } catch (e) {

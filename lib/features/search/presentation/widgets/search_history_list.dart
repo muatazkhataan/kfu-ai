@@ -30,7 +30,7 @@ class SearchHistoryList extends ConsumerWidget {
             Icon(
               AppIcons.getIcon(AppIcon.history),
               size: 48,
-              color: colorScheme.onSurfaceVariant.withOpacity(0.5),
+              color: colorScheme.onSurfaceVariant.withAlpha(128),
             ),
             const SizedBox(height: 16),
             Text(

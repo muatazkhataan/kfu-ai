@@ -28,7 +28,10 @@ class SessionManager {
   bool get isAuthenticated => _currentState == SessionState.authenticated;
 
   /// إنشاء جلسة جديدة
-  Future<void> createSession(LoginResponse loginResponse) async {
+  Future<void> createSession(
+    LoginResponse loginResponse, {
+    bool rememberMe = false,
+  }) async {
     try {
       // حفظ Tokens
       await _tokenManager.saveTokens(
@@ -36,6 +39,7 @@ class SessionManager {
         refreshToken: loginResponse.refreshToken,
         userId: loginResponse.userId,
         expiresIn: loginResponse.expiresIn,
+        rememberMe: rememberMe,
       );
 
       // حفظ معلومات المستخدم
@@ -120,6 +124,20 @@ class SessionManager {
     } else {
       _currentState = SessionState.unauthenticated;
     }
+  }
+
+  /// التحقق من تفضيل "تذكرني"
+  Future<bool> getRememberMe() async {
+    return await _tokenManager.getRememberMe();
+  }
+
+  /// التحقق من وجود جلسة محفوظة مع تفضيل "تذكرني"
+  Future<bool> shouldAutoLogin() async {
+    final hasTokens = await _tokenManager.hasTokens();
+    final rememberMe = await _tokenManager.getRememberMe();
+    final isValid = await isSessionValid();
+
+    return hasTokens && rememberMe && isValid;
   }
 }
 

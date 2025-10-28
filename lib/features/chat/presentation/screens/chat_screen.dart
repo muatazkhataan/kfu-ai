@@ -8,17 +8,19 @@ import '../widgets/recent_chats_widget.dart';
 // import '../../../../features/chat_history/presentation/widgets/chat_list_sidebar.dart';
 import '../providers/chat_provider.dart';
 import '../providers/chat_sessions_provider.dart';
-import '../../../../features/chat_history/presentation/providers/chat_history_provider.dart';
 import '../../../../core/widgets/neural_network_effect.dart';
 import '../../../../core/theme/icons.dart';
 // import '../../domain/models/chat.dart';
 // import '../../domain/models/message.dart';
 import '../../../../features/folders/domain/models/folder.dart';
 import '../../../../features/help/presentation/screens/help_screen.dart';
+import '../../../../features/settings/presentation/screens/settings_screen.dart'
+    as settings;
 import '../../../../features/auth/presentation/providers/auth_provider.dart';
 import '../../../../features/search/presentation/screens/search_screen.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/widgets/app_drawer.dart';
+import '../../../../app/app.dart';
 
 /// الشاشة الرئيسية للمحادثة
 ///
@@ -207,7 +209,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                       size: 24,
                     ),
                     onPressed: () {
-                      // TODO: فتح شاشة الإعدادات
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const settings.SettingsScreen(),
+                        ),
+                      );
                     },
                     tooltip: 'الإعدادات',
                   ),
@@ -803,12 +809,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                       Navigator.pop(context);
                       await ref.read(authProvider.notifier).logout();
                       if (context.mounted) {
-                        Navigator.of(context).pushReplacement(
+                        // العودة إلى SplashScreen بعد تسجيل الخروج
+                        Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                            builder: (context) => const Scaffold(
-                              body: Center(child: Text('تم تسجيل الخروج')),
-                            ),
+                            builder: (context) => const SplashScreen(),
                           ),
+                          (route) => false,
                         );
                       }
                     },

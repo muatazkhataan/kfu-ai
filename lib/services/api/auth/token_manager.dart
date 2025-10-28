@@ -12,6 +12,7 @@ class TokenManager {
   static const String _refreshTokenKey = 'refresh_token';
   static const String _userIdKey = 'user_id';
   static const String _tokenExpiryKey = 'token_expiry';
+  static const String _rememberMeKey = 'remember_me';
 
   /// Constructor
   TokenManager({FlutterSecureStorage? storage})
@@ -30,11 +31,13 @@ class TokenManager {
     required String refreshToken,
     required String userId,
     int? expiresIn,
+    bool rememberMe = false,
   }) async {
     await Future.wait([
       _storage.write(key: _accessTokenKey, value: accessToken),
       _storage.write(key: _refreshTokenKey, value: refreshToken),
       _storage.write(key: _userIdKey, value: userId),
+      _storage.write(key: _rememberMeKey, value: rememberMe.toString()),
       if (expiresIn != null)
         _storage.write(
           key: _tokenExpiryKey,
@@ -67,6 +70,13 @@ class TokenManager {
     return DateTime.tryParse(expiryStr);
   }
 
+  /// الحصول على تفضيل "تذكرني"
+  Future<bool> getRememberMe() async {
+    final rememberMeStr = await _storage.read(key: _rememberMeKey);
+    if (rememberMeStr == null) return false;
+    return rememberMeStr.toLowerCase() == 'true';
+  }
+
   /// التحقق من صلاحية Token
   Future<bool> isTokenValid() async {
     final token = await getAccessToken();
@@ -92,6 +102,7 @@ class TokenManager {
       _storage.delete(key: _refreshTokenKey),
       _storage.delete(key: _userIdKey),
       _storage.delete(key: _tokenExpiryKey),
+      _storage.delete(key: _rememberMeKey),
     ]);
   }
 
@@ -124,6 +135,7 @@ class TokenManager {
     final refreshToken = await getRefreshToken();
     final userId = await getUserId();
     final expiry = await getTokenExpiry();
+    final rememberMe = await getRememberMe();
 
     if (accessToken == null || refreshToken == null || userId == null) {
       return null;
@@ -134,6 +146,7 @@ class TokenManager {
       refreshToken: refreshToken,
       userId: userId,
       expiry: expiry,
+      rememberMe: rememberMe,
     );
   }
 }
@@ -144,12 +157,14 @@ class TokenInfo {
   final String refreshToken;
   final String userId;
   final DateTime? expiry;
+  final bool rememberMe;
 
   const TokenInfo({
     required this.accessToken,
     required this.refreshToken,
     required this.userId,
     this.expiry,
+    this.rememberMe = false,
   });
 
   bool get isExpired => expiry != null && DateTime.now().isAfter(expiry!);
@@ -158,6 +173,6 @@ class TokenInfo {
 
   @override
   String toString() {
-    return 'TokenInfo(userId: $userId, isExpired: $isExpired)';
+    return 'TokenInfo(userId: $userId, isExpired: $isExpired, rememberMe: $rememberMe)';
   }
 }

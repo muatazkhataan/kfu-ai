@@ -145,63 +145,62 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   void _navigateToNextScreen() {
-    Future.delayed(const Duration(seconds: 2), () async {
-      if (!mounted) return;
+    // التحقق الفوري من الجلسة
+    _checkSessionAndNavigate();
+  }
 
-      // ignore: avoid_print
-      print('\n╔═══════════════════════════════════════════════');
-      // ignore: avoid_print
-      print('║ 🚀 SplashScreen: التحقق من تسجيل الدخول');
-      // ignore: avoid_print
-      print('╚═══════════════════════════════════════════════\n');
+  Future<void> _checkSessionAndNavigate() async {
+    // ignore: avoid_print
+    print('\n╔═══════════════════════════════════════════════');
+    // ignore: avoid_print
+    print('║ 🚀 SplashScreen: التحقق الفوري من تسجيل الدخول');
+    // ignore: avoid_print
+    print('╚═══════════════════════════════════════════════\n');
 
-      try {
-        // التحقق من وجود جلسة محفوظة
-        final authState = ref.read(authProvider);
+    try {
+      // التحقق من وجود جلسة محفوظة مع "تذكرني"
+      final sessionValid = await ref
+          .read(authProvider.notifier)
+          .checkSavedSession();
 
+      if (sessionValid && mounted) {
         // ignore: avoid_print
-        print('📊 Is Authenticated: ${authState.isAuthenticated}');
+        print('✅ جلسة صالحة مع "تذكرني" - انتقال فوري إلى ChatScreen\n');
 
-        // محاولة تحميل الجلسة من TokenManager
-        // ignore: avoid_print
-        print('🔍 البحث عن جلسة محفوظة...');
+        // تحميل المحادثات الأخيرة
+        await ref.read(chatSessionsProvider.notifier).loadRecentChats();
 
-        final sessionValid = await ref
-            .read(authProvider.notifier)
-            .checkSavedSession();
-
-        if (sessionValid && mounted) {
-          // ignore: avoid_print
-          print('✅ تم العثور على جلسة صالحة - الانتقال إلى ChatScreen\n');
-
-          // تحميل المحادثات الأخيرة
-          await ref.read(chatSessionsProvider.notifier).loadRecentChats();
-
-          if (mounted) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const ChatScreen()),
-            );
-          }
-        } else {
-          // ignore: avoid_print
-          print('❌ لا توجد جلسة محفوظة - الانتقال إلى LoginScreen\n');
-
-          if (mounted) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-            );
-          }
-        }
-      } catch (e) {
-        // ignore: avoid_print
-        print('❌ خطأ في التحقق من الجلسة: $e\n');
-
-        // في حالة الخطأ، الانتقال إلى LoginScreen
         if (mounted) {
+          // انتقال فوري بدون تأخير
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            MaterialPageRoute(builder: (context) => const ChatScreen()),
           );
         }
+      } else {
+        // ignore: avoid_print
+        print(
+          '❌ لا توجد جلسة صالحة أو لم يتم تفعيل "تذكرني" - عرض SplashScreen\n',
+        );
+
+        // عرض SplashScreen مع تأخير للمستخدمين الجدد
+        _showSplashScreenWithDelay();
+      }
+    } catch (e) {
+      // ignore: avoid_print
+      print('❌ خطأ في التحقق من الجلسة: $e\n');
+
+      // في حالة الخطأ، عرض SplashScreen
+      _showSplashScreenWithDelay();
+    }
+  }
+
+  void _showSplashScreenWithDelay() {
+    // عرض SplashScreen مع تأخير للمستخدمين غير المسجلين أو الجدد
+    Future.delayed(const Duration(seconds: 2), () async {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
       }
     });
   }
@@ -543,6 +542,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     print(
       '║ 📝 كلمة المرور: ${password.length > 3 ? password.substring(0, 3) : password}***',
     );
+    // ignore: avoid_print
+    print('║ 📝 تذكرني: $_rememberMe');
 
     if (studentNumber.isEmpty || password.isEmpty) {
       // ignore: avoid_print
@@ -569,7 +570,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
     final success = await ref
         .read(authProvider.notifier)
-        .login(studentNumber, password);
+        .login(studentNumber, password, rememberMe: _rememberMe);
 
     if (!mounted) return;
 

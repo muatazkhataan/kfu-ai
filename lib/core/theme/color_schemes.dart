@@ -8,7 +8,7 @@ class AppColorSchemes {
   // KFU Institutional Colors
   static const Color kfuPrimary = Color(0xFF1B8354); // Saudi green (primary)
   static const Color kfuPrimaryDark = Color(
-    0xFF104631,
+    0xFFFFFFFF,
   ); // Lighter green for dark theme
   static const Color kfuSecondary = Color(
     0xFFF9FAFB,
@@ -49,7 +49,7 @@ class AppColorSchemes {
     onTertiary: Color(0xFF1f2328),
     error: Color(0xFFf56565), // Lighter red for dark theme
     onError: Color(0xFF1f2328),
-    surface: Color(0xFF0f1115), // Dark surface
+    surface: Color(0xFF104631), // Dark surface with KFU green
     onSurface: Color(0xFFe6e8ea), // Light text on dark surface
     surfaceContainerHighest: Color(0xFF171a21), // Darker gray background
     onSurfaceVariant: Color(0xFFa0a6ad), // Secondary text for dark

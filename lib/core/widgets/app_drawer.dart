@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/search/presentation/screens/search_screen.dart';
 import '../../features/help/presentation/screens/help_screen.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart'
+    as settings;
 import '../../features/chat/presentation/providers/chat_provider.dart';
 import '../../features/chat/presentation/widgets/recent_chats_widget.dart';
 import '../theme/icons.dart';
 import '../extensions/context_extensions.dart';
+import '../../app/app.dart';
 
 /// القائمة الجانبية الرئيسية للتطبيق
 class AppDrawer extends ConsumerWidget {
@@ -150,12 +153,10 @@ class AppDrawer extends ConsumerWidget {
               Navigator.pop(context);
               await ref.read(authProvider.notifier).logout();
               if (context.mounted) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const Scaffold(
-                      body: Center(child: Text('تم تسجيل الخروج')),
-                    ),
-                  ),
+                // العودة إلى SplashScreen بعد تسجيل الخروج
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const SplashScreen()),
+                  (route) => false,
                 );
               }
             },
@@ -366,7 +367,11 @@ class AppDrawer extends ConsumerWidget {
             title: 'الإعدادات',
             onTap: () {
               Navigator.pop(context);
-              // TODO: فتح الإعدادات
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const settings.SettingsScreen(),
+                ),
+              );
             },
           ),
           const SizedBox(height: 4),
