@@ -522,5 +522,690 @@
   "authRememberMe": "تذكرني",
   "@authRememberMe": {
     "description": "خيار تذكر المستخدم"
+  },
+
+  "settingsGeneralTitle": "الإعدادات العامة",
+  "@settingsGeneralTitle": {
+    "description": "عنوان قسم الإعدادات العامة"
+  },
+
+  "settingsGeneralDescription": "تخصيص الإعدادات الأساسية للتطبيق",
+  "@settingsGeneralDescription": {
+    "description": "وصف قسم الإعدادات العامة"
+  },
+
+  "settingsAppearanceTitle": "المظهر والتخصيص",
+  "@settingsAppearanceTitle": {
+    "description": "عنوان قسم المظهر"
+  },
+
+  "settingsAppearanceDescription": "تخصيص مظهر التطبيق حسب تفضيلاتك",
+  "@settingsAppearanceDescription": {
+    "description": "وصف قسم المظهر"
+  },
+
+  "settingsChatTitle": "إعدادات المحادثة",
+  "@settingsChatTitle": {
+    "description": "عنوان قسم إعدادات المحادثة"
+  },
+
+  "settingsChatDescription": "تخصيص تجربة المحادثة مع المساعد الذكي",
+  "@settingsChatDescription": {
+    "description": "وصف قسم إعدادات المحادثة"
+  },
+
+  "settingsPrivacyTitle": "الخصوصية والأمان",
+  "@settingsPrivacyTitle": {
+    "description": "عنوان قسم الخصوصية"
+  },
+
+  "settingsPrivacyDescription": "التحكم في خصوصية بياناتك ومعلوماتك",
+  "@settingsPrivacyDescription": {
+    "description": "وصف قسم الخصوصية"
+  },
+
+  "settingsNotificationsTitle": "الإشعارات",
+  "@settingsNotificationsTitle": {
+    "description": "عنوان قسم الإشعارات"
+  },
+
+  "settingsNotificationsDescription": "تخصيص الإشعارات والتنبيهات",
+  "@settingsNotificationsDescription": {
+    "description": "وصف قسم الإشعارات"
+  },
+
+  "settingsAITitle": "الذكاء الاصطناعي",
+  "@settingsAITitle": {
+    "description": "عنوان قسم الذكاء الاصطناعي"
+  },
+
+  "settingsAIDescription": "تخصيص سلوك المساعد الذكي",
+  "@settingsAIDescription": {
+    "description": "وصف قسم الذكاء الاصطناعي"
+  },
+
+  "settingsDataTitle": "إدارة البيانات",
+  "@settingsDataTitle": {
+    "description": "عنوان قسم البيانات"
+  },
+
+  "settingsDataDescription": "إدارة البيانات والنسخ الاحتياطية",
+  "@settingsDataDescription": {
+    "description": "وصف قسم البيانات"
+  },
+
+  "settingsAboutTitle": "حول التطبيق",
+  "@settingsAboutTitle": {
+    "description": "عنوان قسم حول التطبيق"
+  },
+
+  "settingsAboutDescription": "معلومات عن التطبيق والإصدار",
+  "@settingsAboutDescription": {
+    "description": "وصف قسم حول التطبيق"
+  },
+
+  "settingsDefaultLanguage": "اللغة الافتراضية",
+  "@settingsDefaultLanguage": {
+    "description": "إعداد اللغة الافتراضية"
+  },
+
+  "settingsDefaultLanguageSubtitle": "اختر اللغة التي تريد استخدامها في التطبيق",
+  "@settingsDefaultLanguageSubtitle": {
+    "description": "وصف إعداد اللغة"
+  },
+
+  "settingsTimezone": "المنطقة الزمنية",
+  "@settingsTimezone": {
+    "description": "إعداد المنطقة الزمنية"
+  },
+
+  "settingsTimezoneSubtitle": "اختر المنطقة الزمنية الخاصة بك",
+  "@settingsTimezoneSubtitle": {
+    "description": "وصف إعداد المنطقة الزمنية"
+  },
+
+  "settingsBetaMode": "الوضع التجريبي",
+  "@settingsBetaMode": {
+    "description": "إعداد الوضع التجريبي"
+  },
+
+  "settingsBetaModeSubtitle": "الوصول إلى الميزات الجديدة قبل إطلاقها الرسمي",
+  "@settingsBetaModeSubtitle": {
+    "description": "وصف الوضع التجريبي"
+  },
+
+  "settingsAutoUpdate": "التحديث التلقائي",
+  "@settingsAutoUpdate": {
+    "description": "إعداد التحديث التلقائي"
+  },
+
+  "settingsAutoUpdateSubtitle": "تحديث التطبيق تلقائياً عند توفر إصدارات جديدة",
+  "@settingsAutoUpdateSubtitle": {
+    "description": "وصف التحديث التلقائي"
+  },
+
+  "settingsAnimations": "الرسوم المتحركة",
+  "@settingsAnimations": {
+    "description": "إعداد الرسوم المتحركة"
+  },
+
+  "settingsAnimationsSubtitle": "إظهار الرسوم المتحركة والانتقالات",
+  "@settingsAnimationsSubtitle": {
+    "description": "وصف الرسوم المتحركة"
+  },
+
+  "settingsHapticFeedback": "اللمس الاهتزازي",
+  "@settingsHapticFeedback": {
+    "description": "إعداد اللمس الاهتزازي"
+  },
+
+  "settingsHapticFeedbackSubtitle": "اهتزاز خفيف عند التفاعل",
+  "@settingsHapticFeedbackSubtitle": {
+    "description": "وصف اللمس الاهتزازي"
+  },
+
+  "settingsResponseStyle": "نمط الرد",
+  "@settingsResponseStyle": {
+    "description": "إعداد نمط الرد"
+  },
+
+  "settingsResponseStyleSubtitle": "اختر كيفية رد المساعد على أسئلتك",
+  "@settingsResponseStyleSubtitle": {
+    "description": "وصف نمط الرد"
+  },
+
+  "settingsMaxMessages": "الحد الأقصى للرسائل",
+  "@settingsMaxMessages": {
+    "description": "إعداد الحد الأقصى للرسائل"
+  },
+
+  "settingsMaxMessagesSubtitle": "عدد الرسائل المحفوظة في المحادثة الواحدة",
+  "@settingsMaxMessagesSubtitle": {
+    "description": "وصف الحد الأقصى للرسائل"
+  },
+
+  "settingsAutoResponse": "الرد التلقائي",
+  "@settingsAutoResponse": {
+    "description": "إعداد الرد التلقائي"
+  },
+
+  "settingsAutoResponseSubtitle": "السماح للمساعد بالرد تلقائياً على بعض الأسئلة",
+  "@settingsAutoResponseSubtitle": {
+    "description": "وصف الرد التلقائي"
+  },
+
+  "settingsShowSuggestions": "اقتراحات المحادثة",
+  "@settingsShowSuggestions": {
+    "description": "إعداد اقتراحات المحادثة"
+  },
+
+  "settingsShowSuggestionsSubtitle": "إظهار اقتراحات للأسئلة التالية",
+  "@settingsShowSuggestionsSubtitle": {
+    "description": "وصف اقتراحات المحادثة"
+  },
+
+  "settingsAutoCorrect": "التصحيح التلقائي",
+  "@settingsAutoCorrect": {
+    "description": "إعداد التصحيح التلقائي"
+  },
+
+  "settingsAutoCorrectSubtitle": "تصحيح الأخطاء الإملائية تلقائياً",
+  "@settingsAutoCorrectSubtitle": {
+    "description": "وصف التصحيح التلقائي"
+  },
+
+  "settingsAnalytics": "جمع البيانات التحليلية",
+  "@settingsAnalytics": {
+    "description": "إعداد جمع البيانات التحليلية"
+  },
+
+  "settingsAnalyticsSubtitle": "السماح بجمع بيانات الاستخدام لتحسين التطبيق",
+  "@settingsAnalyticsSubtitle": {
+    "description": "وصف جمع البيانات التحليلية"
+  },
+
+  "settingsSaveChatHistory": "حفظ سجل المحادثات",
+  "@settingsSaveChatHistory": {
+    "description": "إعداد حفظ سجل المحادثات"
+  },
+
+  "settingsSaveChatHistorySubtitle": "حفظ المحادثات محلياً على جهازك",
+  "@settingsSaveChatHistorySubtitle": {
+    "description": "وصف حفظ سجل المحادثات"
+  },
+
+  "settingsAllowSharing": "مشاركة المحادثات",
+  "@settingsAllowSharing": {
+    "description": "إعداد مشاركة المحادثات"
+  },
+
+  "settingsAllowSharingSubtitle": "السماح بمشاركة المحادثات مع الآخرين",
+  "@settingsAllowSharingSubtitle": {
+    "description": "وصف مشاركة المحادثات"
+  },
+
+  "settingsEnableNotifications": "تفعيل الإشعارات",
+  "@settingsEnableNotifications": {
+    "description": "إعداد تفعيل الإشعارات"
+  },
+
+  "settingsEnableNotificationsSubtitle": "استلام إشعارات من التطبيق",
+  "@settingsEnableNotificationsSubtitle": {
+    "description": "وصف تفعيل الإشعارات"
+  },
+
+  "settingsUpdateNotifications": "إشعارات التحديثات",
+  "@settingsUpdateNotifications": {
+    "description": "إعداد إشعارات التحديثات"
+  },
+
+  "settingsUpdateNotificationsSubtitle": "إشعارات عند توفر تحديثات جديدة",
+  "@settingsUpdateNotificationsSubtitle": {
+    "description": "وصف إشعارات التحديثات"
+  },
+
+  "settingsFeatureNotifications": "إشعارات الميزات الجديدة",
+  "@settingsFeatureNotifications": {
+    "description": "إعداد إشعارات الميزات الجديدة"
+  },
+
+  "settingsFeatureNotificationsSubtitle": "إشعارات عند إضافة ميزات جديدة",
+  "@settingsFeatureNotificationsSubtitle": {
+    "description": "وصف إشعارات الميزات الجديدة"
+  },
+
+  "settingsNotificationSound": "صوت الإشعارات",
+  "@settingsNotificationSound": {
+    "description": "إعداد صوت الإشعارات"
+  },
+
+  "settingsNotificationSoundSubtitle": "تشغيل صوت عند استلام إشعارات",
+  "@settingsNotificationSoundSubtitle": {
+    "description": "وصف صوت الإشعارات"
+  },
+
+  "settingsAIModel": "نموذج الذكاء الاصطناعي",
+  "@settingsAIModel": {
+    "description": "إعداد نموذج الذكاء الاصطناعي"
+  },
+
+  "settingsAIModelSubtitle": "اختر النموذج المستخدم للمساعد",
+  "@settingsAIModelSubtitle": {
+    "description": "وصف نموذج الذكاء الاصطناعي"
+  },
+
+  "settingsContextLength": "السياق المحفوظ",
+  "@settingsContextLength": {
+    "description": "إعداد السياق المحفوظ"
+  },
+
+  "settingsContextLengthSubtitle": "عدد الرسائل المحفوظة للسياق",
+  "@settingsContextLengthSubtitle": {
+    "description": "وصف السياق المحفوظ"
+  },
+
+  "settingsAdaptiveLearning": "التعلم التكيفي",
+  "@settingsAdaptiveLearning": {
+    "description": "إعداد التعلم التكيفي"
+  },
+
+  "settingsAdaptiveLearningSubtitle": "تحسين الردود بناءً على تفضيلاتك",
+  "@settingsAdaptiveLearningSubtitle": {
+    "description": "وصف التعلم التكيفي"
+  },
+
+  "settingsExperimentalAI": "الميزات التجريبية للذكاء الاصطناعي",
+  "@settingsExperimentalAI": {
+    "description": "إعداد الميزات التجريبية"
+  },
+
+  "settingsExperimentalAISubtitle": "تجربة ميزات جديدة في الذكاء الاصطناعي",
+  "@settingsExperimentalAISubtitle": {
+    "description": "وصف الميزات التجريبية"
+  },
+
+  "settingsAutoBackup": "النسخ الاحتياطي التلقائي",
+  "@settingsAutoBackup": {
+    "description": "إعداد النسخ الاحتياطي التلقائي"
+  },
+
+  "settingsAutoBackupSubtitle": "إنشاء نسخ احتياطية تلقائياً",
+  "@settingsAutoBackupSubtitle": {
+    "description": "وصف النسخ الاحتياطي التلقائي"
+  },
+
+  "settingsBackupFrequency": "تكرار النسخ الاحتياطي",
+  "@settingsBackupFrequency": {
+    "description": "إعداد تكرار النسخ الاحتياطي"
+  },
+
+  "settingsBackupFrequencySubtitle": "متى يتم إنشاء النسخ الاحتياطية",
+  "@settingsBackupFrequencySubtitle": {
+    "description": "وصف تكرار النسخ الاحتياطي"
+  },
+
+  "settingsStorageUsed": "مساحة التخزين المستخدمة",
+  "@settingsStorageUsed": {
+    "description": "معلومات مساحة التخزين"
+  },
+
+  "settingsExportData": "تصدير البيانات",
+  "@settingsExportData": {
+    "description": "زر تصدير البيانات"
+  },
+
+  "settingsDeleteAllData": "حذف جميع البيانات",
+  "@settingsDeleteAllData": {
+    "description": "زر حذف جميع البيانات"
+  },
+
+  "settingsChats": "المحادثات",
+  "@settingsChats": {
+    "description": "عدد المحادثات"
+  },
+
+  "settingsMessages": "الرسائل",
+  "@settingsMessages": {
+    "description": "عدد الرسائل"
+  },
+
+  "settingsLastBackup": "آخر نسخة",
+  "@settingsLastBackup": {
+    "description": "آخر نسخة احتياطية"
+  },
+
+  "settingsNoBackup": "لا توجد",
+  "@settingsNoBackup": {
+    "description": "لا توجد نسخة احتياطية"
+  },
+
+  "settingsAppVersion": "الإصدار {version}",
+  "@settingsAppVersion": {
+    "description": "إصدار التطبيق",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+
+  "settingsAppDescription": "مساعد ذكي لطلبة جامعة الملك فيصل، مصمم لمساعدتك في الشؤون الأكاديمية والدراسية.",
+  "@settingsAppDescription": {
+    "description": "وصف التطبيق"
+  },
+
+  "settingsPrivacyPolicy": "سياسة الخصوصية",
+  "@settingsPrivacyPolicy": {
+    "description": "رابط سياسة الخصوصية"
+  },
+
+  "settingsPrivacyPolicySubtitle": "اقرأ سياسة الخصوصية",
+  "@settingsPrivacyPolicySubtitle": {
+    "description": "وصف سياسة الخصوصية"
+  },
+
+  "settingsTermsOfService": "شروط الاستخدام",
+  "@settingsTermsOfService": {
+    "description": "رابط شروط الاستخدام"
+  },
+
+  "settingsTermsOfServiceSubtitle": "اقرأ شروط الاستخدام",
+  "@settingsTermsOfServiceSubtitle": {
+    "description": "وصف شروط الاستخدام"
+  },
+
+  "settingsHelpAndSupport": "المساعدة والدعم",
+  "@settingsHelpAndSupport": {
+    "description": "رابط المساعدة والدعم"
+  },
+
+  "settingsHelpAndSupportSubtitle": "احصل على المساعدة",
+  "@settingsHelpAndSupportSubtitle": {
+    "description": "وصف المساعدة والدعم"
+  },
+
+  "settingsSendFeedback": "إرسال ملاحظات",
+  "@settingsSendFeedback": {
+    "description": "رابط إرسال الملاحظات"
+  },
+
+  "settingsSendFeedbackSubtitle": "ساعدنا في تحسين التطبيق",
+  "@settingsSendFeedbackSubtitle": {
+    "description": "وصف إرسال الملاحظات"
+  },
+
+  "settingsDevelopedBy": "تم التطوير بواسطة فريق جامعة الملك فيصل",
+  "@settingsDevelopedBy": {
+    "description": "معلومات المطور"
+  },
+
+  "settingsCopyright": "جميع الحقوق محفوظة © 2024",
+  "@settingsCopyright": {
+    "description": "حقوق النشر"
+  },
+
+  "settingsSave": "حفظ الإعدادات",
+  "@settingsSave": {
+    "description": "زر حفظ الإعدادات"
+  },
+
+  "settingsReset": "إعادة تعيين",
+  "@settingsReset": {
+    "description": "زر إعادة تعيين الإعدادات"
+  },
+
+  "settingsExport": "تصدير",
+  "@settingsExport": {
+    "description": "زر تصدير الإعدادات"
+  },
+
+  "settingsImport": "استيراد",
+  "@settingsImport": {
+    "description": "زر استيراد الإعدادات"
+  },
+
+  "settingsResetDialogTitle": "إعادة تعيين الإعدادات",
+  "@settingsResetDialogTitle": {
+    "description": "عنوان حوار إعادة التعيين"
+  },
+
+  "settingsResetDialogContent": "هل أنت متأكد من إعادة تعيين جميع الإعدادات إلى القيم الافتراضية؟",
+  "@settingsResetDialogContent": {
+    "description": "محتوى حوار إعادة التعيين"
+  },
+
+  "settingsResetSuccess": "تم إعادة تعيين الإعدادات",
+  "@settingsResetSuccess": {
+    "description": "رسالة نجاح إعادة التعيين"
+  },
+
+  "settingsExportDialogTitle": "تصدير الإعدادات",
+  "@settingsExportDialogTitle": {
+    "description": "عنوان حوار التصدير"
+  },
+
+  "settingsExportSuccess": "تم تصدير الإعدادات بنجاح:",
+  "@settingsExportSuccess": {
+    "description": "رسالة نجاح التصدير"
+  },
+
+  "settingsExportError": "خطأ في التصدير: {error}",
+  "@settingsExportError": {
+    "description": "رسالة خطأ التصدير",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "settingsImportFeature": "ميزة الاستيراد قيد التطوير",
+  "@settingsImportFeature": {
+    "description": "رسالة ميزة الاستيراد"
+  },
+
+  "settingsDeleteDialogTitle": "حذف جميع البيانات",
+  "@settingsDeleteDialogTitle": {
+    "description": "عنوان حوار الحذف"
+  },
+
+  "settingsDeleteDialogContent": "هل أنت متأكد من حذف جميع البيانات؟ هذا الإجراء لا يمكن التراجع عنه.",
+  "@settingsDeleteDialogContent": {
+    "description": "محتوى حوار الحذف"
+  },
+
+  "settingsDeleteSuccess": "تم حذف جميع البيانات",
+  "@settingsDeleteSuccess": {
+    "description": "رسالة نجاح الحذف"
+  },
+
+  "settingsDeleteButton": "حذف",
+  "@settingsDeleteButton": {
+    "description": "زر الحذف"
+  },
+
+  "settingsOK": "موافق",
+  "@settingsOK": {
+    "description": "زر الموافقة"
+  },
+
+  "settingsMessagesCount": "{count} رسالة",
+  "@settingsMessagesCount": {
+    "description": "عدد الرسائل",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "settingsContextMessagesCount": "{count} رسائل",
+  "@settingsContextMessagesCount": {
+    "description": "عدد رسائل السياق",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "languageArabic": "العربية",
+  "@languageArabic": {
+    "description": "اسم اللغة العربية"
+  },
+
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "اسم اللغة الإنجليزية"
+  },
+
+  "timezoneRiyadh": "الرياض (GMT+3)",
+  "@timezoneRiyadh": {
+    "description": "منطقة الرياض الزمنية"
+  },
+
+  "timezoneDubai": "دبي (GMT+4)",
+  "@timezoneDubai": {
+    "description": "منطقة دبي الزمنية"
+  },
+
+  "timezoneKuwait": "الكويت (GMT+3)",
+  "@timezoneKuwait": {
+    "description": "منطقة الكويت الزمنية"
+  },
+
+  "fontSizeSmall": "صغير",
+  "@fontSizeSmall": {
+    "description": "حجم خط صغير"
+  },
+
+  "fontSizeMedium": "متوسط",
+  "@fontSizeMedium": {
+    "description": "حجم خط متوسط"
+  },
+
+  "fontSizeLarge": "كبير",
+  "@fontSizeLarge": {
+    "description": "حجم خط كبير"
+  },
+
+  "fontSizeExtraLarge": "كبير جداً",
+  "@fontSizeExtraLarge": {
+    "description": "حجم خط كبير جداً"
+  },
+
+  "fontSizeSelectorTitle": "حجم الخط",
+  "@fontSizeSelectorTitle": {
+    "description": "عنوان محدد حجم الخط"
+  },
+
+  "fontSizeSelectorSubtitle": "تعديل حجم النص في التطبيق",
+  "@fontSizeSelectorSubtitle": {
+    "description": "وصف محدد حجم الخط"
+  },
+
+  "fontSizeExample": "مثال على النص",
+  "@fontSizeExample": {
+    "description": "نص المثال في محدد حجم الخط"
+  },
+
+  "themeSelectorTitle": "المظهر",
+  "@themeSelectorTitle": {
+    "description": "عنوان محدد المظهر"
+  },
+
+  "themeSelectorSubtitle": "اختر بين المظهر الفاتح أو الداكن",
+  "@themeSelectorSubtitle": {
+    "description": "وصف محدد المظهر"
+  },
+
+  "responseStyleDetailed": "مفصل وموسع",
+  "@responseStyleDetailed": {
+    "description": "نمط رد مفصل"
+  },
+
+  "responseStyleConcise": "مختصر ومباشر",
+  "@responseStyleConcise": {
+    "description": "نمط رد مختصر"
+  },
+
+  "responseStyleBalanced": "متوازن",
+  "@responseStyleBalanced": {
+    "description": "نمط رد متوازن"
+  },
+
+  "aiModelGPT4": "GPT-4 (الأكثر دقة)",
+  "@aiModelGPT4": {
+    "description": "نموذج GPT-4"
+  },
+
+  "aiModelGPT35": "GPT-3.5 (متوازن)",
+  "@aiModelGPT35": {
+    "description": "نموذج GPT-3.5"
+  },
+
+  "aiModelClaude": "Claude (مفصل)",
+  "@aiModelClaude": {
+    "description": "نموذج Claude"
+  },
+
+  "backupFrequencyNever": "أبداً",
+  "@backupFrequencyNever": {
+    "description": "تكرار نسخ احتياطي: أبداً"
+  },
+
+  "backupFrequencyDaily": "يومياً",
+  "@backupFrequencyDaily": {
+    "description": "تكرار نسخ احتياطي: يومياً"
+  },
+
+  "backupFrequencyWeekly": "أسبوعياً",
+  "@backupFrequencyWeekly": {
+    "description": "تكرار نسخ احتياطي: أسبوعياً"
+  },
+
+  "backupFrequencyMonthly": "شهرياً",
+  "@backupFrequencyMonthly": {
+    "description": "تكرار نسخ احتياطي: شهرياً"
+  },
+
+  "creativityLevelTitle": "درجة الإبداع",
+  "@creativityLevelTitle": {
+    "description": "عنوان درجة الإبداع"
+  },
+
+  "creativityLevelSubtitle": "مستوى الإبداع في ردود المساعد",
+  "@creativityLevelSubtitle": {
+    "description": "وصف درجة الإبداع"
+  },
+
+  "creativityConservative": "محافظ",
+  "@creativityConservative": {
+    "description": "تسمية نمط محافظ"
+  },
+
+  "creativityBalanced": "متوازن",
+  "@creativityBalanced": {
+    "description": "تسمية نمط متوازن"
+  },
+
+  "creativityCreative": "إبداعي",
+  "@creativityCreative": {
+    "description": "تسمية نمط إبداعي"
+  },
+
+  "creativityDescriptionConservative": "ردود محافظة ودقيقة بناءً على المعرفة المؤكدة",
+  "@creativityDescriptionConservative": {
+    "description": "وصف النمط المحافظ"
+  },
+
+  "creativityDescriptionBalanced": "توازن بين الدقة والإبداع في الردود",
+  "@creativityDescriptionBalanced": {
+    "description": "وصف النمط المتوازن"
+  },
+
+  "creativityDescriptionCreative": "ردود إبداعية ومبتكرة مع المرونة في التفسير",
+  "@creativityDescriptionCreative": {
+    "description": "وصف النمط الإبداعي"
   }
 }

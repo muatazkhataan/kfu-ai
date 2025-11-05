@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../generated/l10n/app_localizations.dart';
 
-/// Remember me checkbox widget
+/// Remember me toggle switch widget
 class RememberMeCheckbox extends StatefulWidget {
   final bool initialValue;
   final ValueChanged<bool>? onChanged;
@@ -26,27 +26,43 @@ class _RememberMeCheckboxState extends State<RememberMeCheckbox> {
   }
 
   @override
+  void didUpdateWidget(RememberMeCheckbox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialValue != widget.initialValue) {
+      _isChecked = widget.initialValue;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Checkbox(
-          value: _isChecked,
-          onChanged: (value) {
-            setState(() {
-              _isChecked = value ?? false;
-            });
-            widget.onChanged?.call(_isChecked);
-          },
-          activeColor: Theme.of(context).colorScheme.primary,
-        ),
-        Text(
-          AppLocalizations.of(context)!.authRememberMe,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // النص على الجانب
+          Text(
+            AppLocalizations.of(context)!.authRememberMe,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.w500,
+              color: theme.colorScheme.onSurface,
+            ),
           ),
-        ),
-      ],
+          // زر التبديل على الجانب
+          Switch(
+            value: _isChecked,
+            onChanged: (value) {
+              setState(() {
+                _isChecked = value;
+              });
+              widget.onChanged?.call(_isChecked);
+            },
+            activeColor: theme.colorScheme.primary,
+          ),
+        ],
+      ),
     );
   }
 }

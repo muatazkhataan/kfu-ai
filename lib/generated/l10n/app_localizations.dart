@@ -709,6 +709,804 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تذكرني'**
   String get authRememberMe;
+
+  /// عنوان قسم الإعدادات العامة
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات العامة'**
+  String get settingsGeneralTitle;
+
+  /// وصف قسم الإعدادات العامة
+  ///
+  /// In ar, this message translates to:
+  /// **'تخصيص الإعدادات الأساسية للتطبيق'**
+  String get settingsGeneralDescription;
+
+  /// عنوان قسم المظهر
+  ///
+  /// In ar, this message translates to:
+  /// **'المظهر والتخصيص'**
+  String get settingsAppearanceTitle;
+
+  /// وصف قسم المظهر
+  ///
+  /// In ar, this message translates to:
+  /// **'تخصيص مظهر التطبيق حسب تفضيلاتك'**
+  String get settingsAppearanceDescription;
+
+  /// عنوان قسم إعدادات المحادثة
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات المحادثة'**
+  String get settingsChatTitle;
+
+  /// وصف قسم إعدادات المحادثة
+  ///
+  /// In ar, this message translates to:
+  /// **'تخصيص تجربة المحادثة مع المساعد الذكي'**
+  String get settingsChatDescription;
+
+  /// عنوان قسم الخصوصية
+  ///
+  /// In ar, this message translates to:
+  /// **'الخصوصية والأمان'**
+  String get settingsPrivacyTitle;
+
+  /// وصف قسم الخصوصية
+  ///
+  /// In ar, this message translates to:
+  /// **'التحكم في خصوصية بياناتك ومعلوماتك'**
+  String get settingsPrivacyDescription;
+
+  /// عنوان قسم الإشعارات
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get settingsNotificationsTitle;
+
+  /// وصف قسم الإشعارات
+  ///
+  /// In ar, this message translates to:
+  /// **'تخصيص الإشعارات والتنبيهات'**
+  String get settingsNotificationsDescription;
+
+  /// عنوان قسم الذكاء الاصطناعي
+  ///
+  /// In ar, this message translates to:
+  /// **'الذكاء الاصطناعي'**
+  String get settingsAITitle;
+
+  /// وصف قسم الذكاء الاصطناعي
+  ///
+  /// In ar, this message translates to:
+  /// **'تخصيص سلوك المساعد الذكي'**
+  String get settingsAIDescription;
+
+  /// عنوان قسم البيانات
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة البيانات'**
+  String get settingsDataTitle;
+
+  /// وصف قسم البيانات
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة البيانات والنسخ الاحتياطية'**
+  String get settingsDataDescription;
+
+  /// عنوان قسم حول التطبيق
+  ///
+  /// In ar, this message translates to:
+  /// **'حول التطبيق'**
+  String get settingsAboutTitle;
+
+  /// وصف قسم حول التطبيق
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات عن التطبيق والإصدار'**
+  String get settingsAboutDescription;
+
+  /// إعداد اللغة الافتراضية
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة الافتراضية'**
+  String get settingsDefaultLanguage;
+
+  /// وصف إعداد اللغة
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر اللغة التي تريد استخدامها في التطبيق'**
+  String get settingsDefaultLanguageSubtitle;
+
+  /// إعداد المنطقة الزمنية
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة الزمنية'**
+  String get settingsTimezone;
+
+  /// وصف إعداد المنطقة الزمنية
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المنطقة الزمنية الخاصة بك'**
+  String get settingsTimezoneSubtitle;
+
+  /// إعداد الوضع التجريبي
+  ///
+  /// In ar, this message translates to:
+  /// **'الوضع التجريبي'**
+  String get settingsBetaMode;
+
+  /// وصف الوضع التجريبي
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصول إلى الميزات الجديدة قبل إطلاقها الرسمي'**
+  String get settingsBetaModeSubtitle;
+
+  /// إعداد التحديث التلقائي
+  ///
+  /// In ar, this message translates to:
+  /// **'التحديث التلقائي'**
+  String get settingsAutoUpdate;
+
+  /// وصف التحديث التلقائي
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث التطبيق تلقائياً عند توفر إصدارات جديدة'**
+  String get settingsAutoUpdateSubtitle;
+
+  /// إعداد الرسوم المتحركة
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسوم المتحركة'**
+  String get settingsAnimations;
+
+  /// وصف الرسوم المتحركة
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهار الرسوم المتحركة والانتقالات'**
+  String get settingsAnimationsSubtitle;
+
+  /// إعداد اللمس الاهتزازي
+  ///
+  /// In ar, this message translates to:
+  /// **'اللمس الاهتزازي'**
+  String get settingsHapticFeedback;
+
+  /// وصف اللمس الاهتزازي
+  ///
+  /// In ar, this message translates to:
+  /// **'اهتزاز خفيف عند التفاعل'**
+  String get settingsHapticFeedbackSubtitle;
+
+  /// إعداد نمط الرد
+  ///
+  /// In ar, this message translates to:
+  /// **'نمط الرد'**
+  String get settingsResponseStyle;
+
+  /// وصف نمط الرد
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر كيفية رد المساعد على أسئلتك'**
+  String get settingsResponseStyleSubtitle;
+
+  /// إعداد الحد الأقصى للرسائل
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأقصى للرسائل'**
+  String get settingsMaxMessages;
+
+  /// وصف الحد الأقصى للرسائل
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الرسائل المحفوظة في المحادثة الواحدة'**
+  String get settingsMaxMessagesSubtitle;
+
+  /// إعداد الرد التلقائي
+  ///
+  /// In ar, this message translates to:
+  /// **'الرد التلقائي'**
+  String get settingsAutoResponse;
+
+  /// وصف الرد التلقائي
+  ///
+  /// In ar, this message translates to:
+  /// **'السماح للمساعد بالرد تلقائياً على بعض الأسئلة'**
+  String get settingsAutoResponseSubtitle;
+
+  /// إعداد اقتراحات المحادثة
+  ///
+  /// In ar, this message translates to:
+  /// **'اقتراحات المحادثة'**
+  String get settingsShowSuggestions;
+
+  /// وصف اقتراحات المحادثة
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهار اقتراحات للأسئلة التالية'**
+  String get settingsShowSuggestionsSubtitle;
+
+  /// إعداد التصحيح التلقائي
+  ///
+  /// In ar, this message translates to:
+  /// **'التصحيح التلقائي'**
+  String get settingsAutoCorrect;
+
+  /// وصف التصحيح التلقائي
+  ///
+  /// In ar, this message translates to:
+  /// **'تصحيح الأخطاء الإملائية تلقائياً'**
+  String get settingsAutoCorrectSubtitle;
+
+  /// إعداد جمع البيانات التحليلية
+  ///
+  /// In ar, this message translates to:
+  /// **'جمع البيانات التحليلية'**
+  String get settingsAnalytics;
+
+  /// وصف جمع البيانات التحليلية
+  ///
+  /// In ar, this message translates to:
+  /// **'السماح بجمع بيانات الاستخدام لتحسين التطبيق'**
+  String get settingsAnalyticsSubtitle;
+
+  /// إعداد حفظ سجل المحادثات
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ سجل المحادثات'**
+  String get settingsSaveChatHistory;
+
+  /// وصف حفظ سجل المحادثات
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ المحادثات محلياً على جهازك'**
+  String get settingsSaveChatHistorySubtitle;
+
+  /// إعداد مشاركة المحادثات
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة المحادثات'**
+  String get settingsAllowSharing;
+
+  /// وصف مشاركة المحادثات
+  ///
+  /// In ar, this message translates to:
+  /// **'السماح بمشاركة المحادثات مع الآخرين'**
+  String get settingsAllowSharingSubtitle;
+
+  /// إعداد تفعيل الإشعارات
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل الإشعارات'**
+  String get settingsEnableNotifications;
+
+  /// وصف تفعيل الإشعارات
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام إشعارات من التطبيق'**
+  String get settingsEnableNotificationsSubtitle;
+
+  /// إعداد إشعارات التحديثات
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات التحديثات'**
+  String get settingsUpdateNotifications;
+
+  /// وصف إشعارات التحديثات
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات عند توفر تحديثات جديدة'**
+  String get settingsUpdateNotificationsSubtitle;
+
+  /// إعداد إشعارات الميزات الجديدة
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات الميزات الجديدة'**
+  String get settingsFeatureNotifications;
+
+  /// وصف إشعارات الميزات الجديدة
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات عند إضافة ميزات جديدة'**
+  String get settingsFeatureNotificationsSubtitle;
+
+  /// إعداد صوت الإشعارات
+  ///
+  /// In ar, this message translates to:
+  /// **'صوت الإشعارات'**
+  String get settingsNotificationSound;
+
+  /// وصف صوت الإشعارات
+  ///
+  /// In ar, this message translates to:
+  /// **'تشغيل صوت عند استلام إشعارات'**
+  String get settingsNotificationSoundSubtitle;
+
+  /// إعداد نموذج الذكاء الاصطناعي
+  ///
+  /// In ar, this message translates to:
+  /// **'نموذج الذكاء الاصطناعي'**
+  String get settingsAIModel;
+
+  /// وصف نموذج الذكاء الاصطناعي
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر النموذج المستخدم للمساعد'**
+  String get settingsAIModelSubtitle;
+
+  /// إعداد السياق المحفوظ
+  ///
+  /// In ar, this message translates to:
+  /// **'السياق المحفوظ'**
+  String get settingsContextLength;
+
+  /// وصف السياق المحفوظ
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الرسائل المحفوظة للسياق'**
+  String get settingsContextLengthSubtitle;
+
+  /// إعداد التعلم التكيفي
+  ///
+  /// In ar, this message translates to:
+  /// **'التعلم التكيفي'**
+  String get settingsAdaptiveLearning;
+
+  /// وصف التعلم التكيفي
+  ///
+  /// In ar, this message translates to:
+  /// **'تحسين الردود بناءً على تفضيلاتك'**
+  String get settingsAdaptiveLearningSubtitle;
+
+  /// إعداد الميزات التجريبية
+  ///
+  /// In ar, this message translates to:
+  /// **'الميزات التجريبية للذكاء الاصطناعي'**
+  String get settingsExperimentalAI;
+
+  /// وصف الميزات التجريبية
+  ///
+  /// In ar, this message translates to:
+  /// **'تجربة ميزات جديدة في الذكاء الاصطناعي'**
+  String get settingsExperimentalAISubtitle;
+
+  /// إعداد النسخ الاحتياطي التلقائي
+  ///
+  /// In ar, this message translates to:
+  /// **'النسخ الاحتياطي التلقائي'**
+  String get settingsAutoBackup;
+
+  /// وصف النسخ الاحتياطي التلقائي
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء نسخ احتياطية تلقائياً'**
+  String get settingsAutoBackupSubtitle;
+
+  /// إعداد تكرار النسخ الاحتياطي
+  ///
+  /// In ar, this message translates to:
+  /// **'تكرار النسخ الاحتياطي'**
+  String get settingsBackupFrequency;
+
+  /// وصف تكرار النسخ الاحتياطي
+  ///
+  /// In ar, this message translates to:
+  /// **'متى يتم إنشاء النسخ الاحتياطية'**
+  String get settingsBackupFrequencySubtitle;
+
+  /// معلومات مساحة التخزين
+  ///
+  /// In ar, this message translates to:
+  /// **'مساحة التخزين المستخدمة'**
+  String get settingsStorageUsed;
+
+  /// زر تصدير البيانات
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير البيانات'**
+  String get settingsExportData;
+
+  /// زر حذف جميع البيانات
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف جميع البيانات'**
+  String get settingsDeleteAllData;
+
+  /// عدد المحادثات
+  ///
+  /// In ar, this message translates to:
+  /// **'المحادثات'**
+  String get settingsChats;
+
+  /// عدد الرسائل
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسائل'**
+  String get settingsMessages;
+
+  /// آخر نسخة احتياطية
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر نسخة'**
+  String get settingsLastBackup;
+
+  /// لا توجد نسخة احتياطية
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد'**
+  String get settingsNoBackup;
+
+  /// إصدار التطبيق
+  ///
+  /// In ar, this message translates to:
+  /// **'الإصدار {version}'**
+  String settingsAppVersion(String version);
+
+  /// وصف التطبيق
+  ///
+  /// In ar, this message translates to:
+  /// **'مساعد ذكي لطلبة جامعة الملك فيصل، مصمم لمساعدتك في الشؤون الأكاديمية والدراسية.'**
+  String get settingsAppDescription;
+
+  /// رابط سياسة الخصوصية
+  ///
+  /// In ar, this message translates to:
+  /// **'سياسة الخصوصية'**
+  String get settingsPrivacyPolicy;
+
+  /// وصف سياسة الخصوصية
+  ///
+  /// In ar, this message translates to:
+  /// **'اقرأ سياسة الخصوصية'**
+  String get settingsPrivacyPolicySubtitle;
+
+  /// رابط شروط الاستخدام
+  ///
+  /// In ar, this message translates to:
+  /// **'شروط الاستخدام'**
+  String get settingsTermsOfService;
+
+  /// وصف شروط الاستخدام
+  ///
+  /// In ar, this message translates to:
+  /// **'اقرأ شروط الاستخدام'**
+  String get settingsTermsOfServiceSubtitle;
+
+  /// رابط المساعدة والدعم
+  ///
+  /// In ar, this message translates to:
+  /// **'المساعدة والدعم'**
+  String get settingsHelpAndSupport;
+
+  /// وصف المساعدة والدعم
+  ///
+  /// In ar, this message translates to:
+  /// **'احصل على المساعدة'**
+  String get settingsHelpAndSupportSubtitle;
+
+  /// رابط إرسال الملاحظات
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال ملاحظات'**
+  String get settingsSendFeedback;
+
+  /// وصف إرسال الملاحظات
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعدنا في تحسين التطبيق'**
+  String get settingsSendFeedbackSubtitle;
+
+  /// معلومات المطور
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التطوير بواسطة فريق جامعة الملك فيصل'**
+  String get settingsDevelopedBy;
+
+  /// حقوق النشر
+  ///
+  /// In ar, this message translates to:
+  /// **'جميع الحقوق محفوظة © 2024'**
+  String get settingsCopyright;
+
+  /// زر حفظ الإعدادات
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الإعدادات'**
+  String get settingsSave;
+
+  /// زر إعادة تعيين الإعدادات
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تعيين'**
+  String get settingsReset;
+
+  /// زر تصدير الإعدادات
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير'**
+  String get settingsExport;
+
+  /// زر استيراد الإعدادات
+  ///
+  /// In ar, this message translates to:
+  /// **'استيراد'**
+  String get settingsImport;
+
+  /// عنوان حوار إعادة التعيين
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تعيين الإعدادات'**
+  String get settingsResetDialogTitle;
+
+  /// محتوى حوار إعادة التعيين
+  ///
+  /// In ar, this message translates to:
+  /// **'هل أنت متأكد من إعادة تعيين جميع الإعدادات إلى القيم الافتراضية؟'**
+  String get settingsResetDialogContent;
+
+  /// رسالة نجاح إعادة التعيين
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إعادة تعيين الإعدادات'**
+  String get settingsResetSuccess;
+
+  /// عنوان حوار التصدير
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير الإعدادات'**
+  String get settingsExportDialogTitle;
+
+  /// رسالة نجاح التصدير
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تصدير الإعدادات بنجاح:'**
+  String get settingsExportSuccess;
+
+  /// رسالة خطأ التصدير
+  ///
+  /// In ar, this message translates to:
+  /// **'خطأ في التصدير: {error}'**
+  String settingsExportError(String error);
+
+  /// رسالة ميزة الاستيراد
+  ///
+  /// In ar, this message translates to:
+  /// **'ميزة الاستيراد قيد التطوير'**
+  String get settingsImportFeature;
+
+  /// عنوان حوار الحذف
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف جميع البيانات'**
+  String get settingsDeleteDialogTitle;
+
+  /// محتوى حوار الحذف
+  ///
+  /// In ar, this message translates to:
+  /// **'هل أنت متأكد من حذف جميع البيانات؟ هذا الإجراء لا يمكن التراجع عنه.'**
+  String get settingsDeleteDialogContent;
+
+  /// رسالة نجاح الحذف
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حذف جميع البيانات'**
+  String get settingsDeleteSuccess;
+
+  /// زر الحذف
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get settingsDeleteButton;
+
+  /// زر الموافقة
+  ///
+  /// In ar, this message translates to:
+  /// **'موافق'**
+  String get settingsOK;
+
+  /// عدد الرسائل
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} رسالة'**
+  String settingsMessagesCount(int count);
+
+  /// عدد رسائل السياق
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} رسائل'**
+  String settingsContextMessagesCount(int count);
+
+  /// اسم اللغة العربية
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get languageArabic;
+
+  /// اسم اللغة الإنجليزية
+  ///
+  /// In ar, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// منطقة الرياض الزمنية
+  ///
+  /// In ar, this message translates to:
+  /// **'الرياض (GMT+3)'**
+  String get timezoneRiyadh;
+
+  /// منطقة دبي الزمنية
+  ///
+  /// In ar, this message translates to:
+  /// **'دبي (GMT+4)'**
+  String get timezoneDubai;
+
+  /// منطقة الكويت الزمنية
+  ///
+  /// In ar, this message translates to:
+  /// **'الكويت (GMT+3)'**
+  String get timezoneKuwait;
+
+  /// حجم خط صغير
+  ///
+  /// In ar, this message translates to:
+  /// **'صغير'**
+  String get fontSizeSmall;
+
+  /// حجم خط متوسط
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط'**
+  String get fontSizeMedium;
+
+  /// حجم خط كبير
+  ///
+  /// In ar, this message translates to:
+  /// **'كبير'**
+  String get fontSizeLarge;
+
+  /// حجم خط كبير جداً
+  ///
+  /// In ar, this message translates to:
+  /// **'كبير جداً'**
+  String get fontSizeExtraLarge;
+
+  /// عنوان محدد حجم الخط
+  ///
+  /// In ar, this message translates to:
+  /// **'حجم الخط'**
+  String get fontSizeSelectorTitle;
+
+  /// وصف محدد حجم الخط
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل حجم النص في التطبيق'**
+  String get fontSizeSelectorSubtitle;
+
+  /// نص المثال في محدد حجم الخط
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال على النص'**
+  String get fontSizeExample;
+
+  /// عنوان محدد المظهر
+  ///
+  /// In ar, this message translates to:
+  /// **'المظهر'**
+  String get themeSelectorTitle;
+
+  /// وصف محدد المظهر
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر بين المظهر الفاتح أو الداكن'**
+  String get themeSelectorSubtitle;
+
+  /// نمط رد مفصل
+  ///
+  /// In ar, this message translates to:
+  /// **'مفصل وموسع'**
+  String get responseStyleDetailed;
+
+  /// نمط رد مختصر
+  ///
+  /// In ar, this message translates to:
+  /// **'مختصر ومباشر'**
+  String get responseStyleConcise;
+
+  /// نمط رد متوازن
+  ///
+  /// In ar, this message translates to:
+  /// **'متوازن'**
+  String get responseStyleBalanced;
+
+  /// نموذج GPT-4
+  ///
+  /// In ar, this message translates to:
+  /// **'GPT-4 (الأكثر دقة)'**
+  String get aiModelGPT4;
+
+  /// نموذج GPT-3.5
+  ///
+  /// In ar, this message translates to:
+  /// **'GPT-3.5 (متوازن)'**
+  String get aiModelGPT35;
+
+  /// نموذج Claude
+  ///
+  /// In ar, this message translates to:
+  /// **'Claude (مفصل)'**
+  String get aiModelClaude;
+
+  /// تكرار نسخ احتياطي: أبداً
+  ///
+  /// In ar, this message translates to:
+  /// **'أبداً'**
+  String get backupFrequencyNever;
+
+  /// تكرار نسخ احتياطي: يومياً
+  ///
+  /// In ar, this message translates to:
+  /// **'يومياً'**
+  String get backupFrequencyDaily;
+
+  /// تكرار نسخ احتياطي: أسبوعياً
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوعياً'**
+  String get backupFrequencyWeekly;
+
+  /// تكرار نسخ احتياطي: شهرياً
+  ///
+  /// In ar, this message translates to:
+  /// **'شهرياً'**
+  String get backupFrequencyMonthly;
+
+  /// عنوان درجة الإبداع
+  ///
+  /// In ar, this message translates to:
+  /// **'درجة الإبداع'**
+  String get creativityLevelTitle;
+
+  /// وصف درجة الإبداع
+  ///
+  /// In ar, this message translates to:
+  /// **'مستوى الإبداع في ردود المساعد'**
+  String get creativityLevelSubtitle;
+
+  /// تسمية نمط محافظ
+  ///
+  /// In ar, this message translates to:
+  /// **'محافظ'**
+  String get creativityConservative;
+
+  /// تسمية نمط متوازن
+  ///
+  /// In ar, this message translates to:
+  /// **'متوازن'**
+  String get creativityBalanced;
+
+  /// تسمية نمط إبداعي
+  ///
+  /// In ar, this message translates to:
+  /// **'إبداعي'**
+  String get creativityCreative;
+
+  /// وصف النمط المحافظ
+  ///
+  /// In ar, this message translates to:
+  /// **'ردود محافظة ودقيقة بناءً على المعرفة المؤكدة'**
+  String get creativityDescriptionConservative;
+
+  /// وصف النمط المتوازن
+  ///
+  /// In ar, this message translates to:
+  /// **'توازن بين الدقة والإبداع في الردود'**
+  String get creativityDescriptionBalanced;
+
+  /// وصف النمط الإبداعي
+  ///
+  /// In ar, this message translates to:
+  /// **'ردود إبداعية ومبتكرة مع المرونة في التفسير'**
+  String get creativityDescriptionCreative;
 }
 
 class _AppLocalizationsDelegate

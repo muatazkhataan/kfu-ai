@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/localization/l10n.dart';
 
 /// شريط تمرير درجة الإبداع في الذكاء الاصطناعي
 class CreativitySlider extends StatelessWidget {
@@ -30,7 +31,7 @@ class CreativitySlider extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'درجة الإبداع',
+              context.l10n.creativityLevelTitle,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: theme.colorScheme.onSurface,
@@ -53,16 +54,16 @@ class CreativitySlider extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
 
         Text(
-          'مستوى الإبداع في ردود المساعد',
-          style: theme.textTheme.bodyMedium?.copyWith(
+          context.l10n.creativityLevelSubtitle,
+          style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
 
         // الشريط
         SliderTheme(
@@ -92,22 +93,31 @@ class CreativitySlider extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildLabel('محافظ', theme, value <= 30),
-            _buildLabel('متوازن', theme, value > 30 && value <= 70),
-            _buildLabel('إبداعي', theme, value > 70),
+            _buildLabel(context, theme, value <= 30),
+            _buildLabel(context, theme, value > 30 && value <= 70, isBalanced: true),
+            _buildLabel(context, theme, value > 70, isCreative: true),
           ],
         ),
 
         const SizedBox(height: 12),
 
         // وصف الحالة الحالية
-        _buildDescription(theme, value),
+        _buildDescription(context, theme, value),
       ],
     );
   }
 
   /// بناء تسمية
-  Widget _buildLabel(String label, ThemeData theme, bool isActive) {
+  Widget _buildLabel(BuildContext context, ThemeData theme, bool isActive, {bool isBalanced = false, bool isCreative = false}) {
+    String label;
+    if (isCreative) {
+      label = context.l10n.creativityCreative;
+    } else if (isBalanced) {
+      label = context.l10n.creativityBalanced;
+    } else {
+      label = context.l10n.creativityConservative;
+    }
+
     return Text(
       label,
       style: theme.textTheme.bodySmall?.copyWith(
@@ -120,18 +130,18 @@ class CreativitySlider extends StatelessWidget {
   }
 
   /// بناء وصف الحالة
-  Widget _buildDescription(ThemeData theme, int value) {
+  Widget _buildDescription(BuildContext context, ThemeData theme, int value) {
     String description;
     IconData icon;
 
     if (value <= 30) {
-      description = 'ردود محافظة ودقيقة بناءً على المعرفة المؤكدة';
+      description = context.l10n.creativityDescriptionConservative;
       icon = Icons.shield_outlined;
     } else if (value <= 70) {
-      description = 'توازن بين الدقة والإبداع في الردود';
+      description = context.l10n.creativityDescriptionBalanced;
       icon = Icons.balance;
     } else {
-      description = 'ردود إبداعية ومبتكرة مع المرونة في التفسير';
+      description = context.l10n.creativityDescriptionCreative;
       icon = Icons.auto_awesome;
     }
 
@@ -192,7 +202,7 @@ class SimpleCreativitySlider extends StatelessWidget {
 
     return Row(
       children: [
-        Text('محافظ', style: theme.textTheme.bodySmall),
+        Text(context.l10n.creativityConservative, style: theme.textTheme.bodySmall),
         Expanded(
           child: Slider(
             value: value.toDouble(),
@@ -201,7 +211,7 @@ class SimpleCreativitySlider extends StatelessWidget {
             onChanged: (newValue) => onChanged(newValue.round()),
           ),
         ),
-        Text('إبداعي', style: theme.textTheme.bodySmall),
+        Text(context.l10n.creativityCreative, style: theme.textTheme.bodySmall),
       ],
     );
   }

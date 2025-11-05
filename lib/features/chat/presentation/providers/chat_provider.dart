@@ -6,7 +6,9 @@ import '../../domain/models/chat_status.dart';
 import '../../../../state/chat_state.dart';
 import '../../../../services/api/api_manager.dart';
 import '../../../../services/api/chat/models/send_message_request.dart';
+import '../../../../services/api/chat/models/create_session_request.dart';
 import '../../../../services/api/chat/models/message_dto.dart';
+import '../../../../services/api/chat/models/update_session_title_request.dart';
 
 /// مزود حالة المحادثة الرئيسي
 ///
@@ -175,12 +177,31 @@ class ChatNotifier extends StateNotifier<ChatState> {
     return MessageType.user;
   }
 
-  /// إرسال رسالة جديدة
+  /// إرسال رسالة جديدة - مع إنشاء تلقائي للمحادثة
   Future<void> sendMessage(String content) async {
-    if (content.trim().isEmpty || state.currentChat == null) return;
+    if (content.trim().isEmpty) return;
 
     try {
-      state = state.copyWith(isSendingMessage: true);
+      // إذا لم تكن هناك محادثة حالية، إنشاء واحدة جديدة
+      if (state.currentChat == null) {
+        // ignore: avoid_print
+        print('[ChatNotifier] 📝 لا توجد محادثة حالية - إنشاء محادثة جديدة...');
+
+        await createNewChat(title: _generateChatTitleFromMessage(content));
+
+        // التأكد من نجاح إنشاء المحادثة
+        if (state.currentChat == null) {
+          state = state.copyWith(messageError: 'فشل في إنشاء محادثة جديدة');
+          return;
+        }
+
+        // ignore: avoid_print
+        print(
+          '[ChatNotifier] ✅ تم إنشاء محادثة جديدة بنجاح: ${state.currentChat!.id}',
+        );
+      }
+
+      state = state.copyWith(isSendingMessage: true, messageError: null);
 
       // إنشاء رسالة محلية مؤقتة
       final tempMessageId = _generateMessageId();
@@ -200,7 +221,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
       state = state.copyWith(messages: updatedMessages);
 
       // ignore: avoid_print
-      print('[ChatNotifier] 📤 إرسال رسالة...');
+      print(
+        '[ChatNotifier] 📤 إرسال رسالة إلى الجلسة: ${state.currentChat!.id}',
+      );
 
       // إرسال الرسالة عبر API
       final request = SendMessageRequest(
@@ -232,12 +255,14 @@ class ChatNotifier extends StateNotifier<ChatState> {
       // ignore: avoid_print
       print('[ChatNotifier] ✅ تم إرسال الرسالة بنجاح');
 
-      // تحديث الرسالة المؤقتة بالبيانات الفعلية
+      // تحديث الرسالة المؤقتة بالبيانات الفعلية مع حماية من محتوى فارغ
       final sentMessages = state.messages.map((m) {
         if (m.id == tempMessageId) {
           return Message(
             id: messageDto.messageId,
-            content: messageDto.content,
+            content: (messageDto.content.isNotEmpty)
+                ? messageDto.content
+                : m.content,
             type: MessageType.user,
             chatId: state.currentChat!.id,
             senderId: messageDto.senderId ?? 'current_user',
@@ -251,11 +276,26 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
       state = state.copyWith(messages: sentMessages, isSendingMessage: false);
 
-      // عرض مؤشر الكتابة لانتظار رد المساعد
-      startTyping();
+      // تحديث إحصائيات المحادثة
+      final updatedChat = state.currentChat!.copyWith(
+        messageCount: state.currentChat!.messageCount + 1,
+        updatedAt: DateTime.now(),
+        lastMessagePreview: content.trim().length > 50
+            ? '${content.trim().substring(0, 50)}...'
+            : content.trim(),
+        lastActivityAt: DateTime.now(),
+      );
+      state = state.copyWith(currentChat: updatedChat);
 
-      // انتظار رد المساعد (سيأتي من الخادم)
-      // TODO: إضافة WebSocket أو polling للحصول على ردود المساعد في الوقت الفعلي
+      // إذا كان هذا أول إرسال للمحادثة وكان العنوان افتراضيًا، حدّث العنوان من أول رسالة
+      if ((state.currentChat?.messageCount ?? 0) <= 1) {
+        final generatedTitle = _generateChatTitleFromMessage(content);
+        _ensureSessionTitleUpdated(state.currentChat!.id, generatedTitle);
+      }
+
+      // عرض مؤشر الكتابة ثم بدء الاستطلاع لجلب رد المساعد وتدفقه
+      startTyping();
+      _pollForAssistantResponse();
     } catch (e, stackTrace) {
       // ignore: avoid_print
       print('[ChatNotifier] ❌ خطأ في إرسال الرسالة: $e');
@@ -287,24 +327,183 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
   }
 
+  /// استطلاع دوري لجلب رد المساعد وإظهاره بتدفق تدريجي
+  Future<void> _pollForAssistantResponse() async {
+    // حماية: يجب أن توجد محادثة
+    if (state.currentChat == null) return;
+
+    final String sessionId = state.currentChat!.id;
+
+    // سنحاول لعدد محدد من المحاولات
+    const int maxAttempts = 30; // ~30 ثانية بانتظار الرد
+    for (int attempt = 0; attempt < maxAttempts; attempt++) {
+      await Future.delayed(const Duration(seconds: 1));
+
+      try {
+        final response = await _apiManager.chat.getSession(sessionId);
+        if (response.success && response.data != null) {
+          final sessionDto = response.data!;
+
+          // إذا وصلت رسالة مساعد جديدة غير موجودة محليًا
+          if ((sessionDto.messages?.isNotEmpty ?? false)) {
+            final lastDto = sessionDto.messages!.last;
+            final isAssistant = lastDto.isAssistantMessage;
+            final notExists =
+                state.messages.indexWhere((m) => m.id == lastDto.messageId) ==
+                -1;
+
+            if (isAssistant && notExists) {
+              // أنشئ رسالة مساعد محلية فارغة ثم قم بتعبئتها تدريجيًا
+              final assistantMsgId = lastDto.messageId;
+              final fullText = lastDto.content;
+
+              // أضف رسالة فارغة أولاً
+              final assistantMessage = Message(
+                id: assistantMsgId,
+                content: '',
+                type: MessageType.assistant,
+                chatId: sessionId,
+                senderId: lastDto.senderId ?? 'assistant',
+                senderName: lastDto.aiProvider ?? 'مساعد كفو',
+                createdAt: lastDto.createdAt,
+                state: MessageState.sent,
+              );
+
+              state = state.copyWith(
+                messages: [...state.messages, assistantMessage],
+              );
+
+              // نفذ بثًا تدريجيًا للنص
+              await _animateAssistantStreaming(assistantMsgId, fullText);
+
+              // أوقف مؤشر الكتابة بعد اكتمال الرد
+              stopTyping();
+              return;
+            }
+          }
+        }
+      } catch (_) {
+        // تجاهل أخطاء الاستطلاع المؤقتة
+      }
+    }
+
+    // في حال عدم وصول رد خلال الزمن المحدد، أوقف مؤشر الكتابة
+    stopTyping();
+  }
+
+  /// بث النص تدريجيًا داخل رسالة المساعد المحددة
+  Future<void> _animateAssistantStreaming(
+    String messageId,
+    String fullText,
+  ) async {
+    // قسّم النص إلى كلمات لإظهارها على دفعات
+    final words = fullText.split(' ');
+    final StringBuffer buffer = StringBuffer();
+
+    for (int i = 0; i < words.length; i++) {
+      if (i > 0) buffer.write(' ');
+      buffer.write(words[i]);
+
+      // حدث محتوى الرسالة في الحالة
+      final updated = state.messages.map((m) {
+        if (m.id == messageId) {
+          return m.copyWith(
+            content: buffer.toString(),
+            updatedAt: DateTime.now(),
+          );
+        }
+        return m;
+      }).toList();
+
+      state = state.copyWith(messages: updated);
+
+      // مهلة قصيرة بين كل دفعة
+      await Future.delayed(const Duration(milliseconds: 35));
+    }
+  }
+
+  /// ضمان تحديث عنوان الجلسة على الخادم والمحلي
+  Future<void> _ensureSessionTitleUpdated(
+    String sessionId,
+    String newTitle,
+  ) async {
+    if (newTitle.trim().isEmpty) return;
+    try {
+      // تحديث محلي
+      if (state.currentChat?.id == sessionId) {
+        state = state.copyWith(
+          currentChat: state.currentChat!.copyWith(title: newTitle.trim()),
+        );
+      }
+
+      // استدعاء API لتحديث العنوان إن توفر
+      try {
+        // يوجد موديل UpdateSessionTitleRequest
+        final req = UpdateSessionTitleRequest(
+          sessionId: sessionId,
+          title: newTitle.trim(),
+        );
+        await _apiManager.chat.updateSessionTitle(req);
+      } catch (_) {
+        // تجاهل فشل الشبكة، على الأقل العنوان محدث محليًا
+      }
+    } catch (_) {
+      // تجاهل الأخطاء غير الحرجة
+    }
+  }
+
   /// إنشاء محادثة جديدة
   Future<void> createNewChat({String? title, String? folderId}) async {
     try {
-      final chat = Chat.create(
-        title: title ?? 'محادثة جديدة',
-        userId: 'user_123',
-        folderId: folderId,
+      state = state.copyWith(isLoadingChat: true, error: null);
+
+      // إنشاء طلب إنشاء جلسة جديدة
+      final request = CreateSessionRequest(title: title ?? 'محادثة جديدة');
+
+      // إرسال الطلب للخادم
+      final response = await _apiManager.chat.createSession(request);
+
+      if (!response.success || response.data == null) {
+        state = state.copyWith(
+          isLoadingChat: false,
+          error: response.error ?? 'فشل في إنشاء المحادثة',
+        );
+        return;
+      }
+
+      final sessionDto = response.data!;
+
+      // تحويل SessionDto إلى Chat
+      final chat = Chat(
+        id: sessionDto.sessionId,
+        title: sessionDto.title,
+        userId: 'user_123', // قيمة افتراضية - SessionDto لا يحتوي على userId
+        folderId: sessionDto.folderId,
+        createdAt: sessionDto.createdAt,
+        updatedAt: sessionDto.updatedAt,
+        status: ChatStatus.active,
+        messageCount: sessionDto.messageCount ?? 0,
+        lastActivityAt: sessionDto.updatedAt,
       );
 
-      // إنشاء محادثة فارغة بدون رسائل
+      // تحديث الحالة مع المحادثة الجديدة
       state = state.copyWith(
         currentChat: chat,
-        messages: [], // قائمة رسائل فارغة
-        isLoadingMessages: false,
-        messageError: null,
+        messages: [],
+        isLoadingChat: false,
+        error: null,
       );
-    } catch (e) {
+
+      // ignore: avoid_print
+      print('[ChatNotifier] ✅ تم إنشاء المحادثة الجديدة: ${chat.id}');
+    } catch (e, stackTrace) {
+      // ignore: avoid_print
+      print('[ChatNotifier] ❌ خطأ في إنشاء المحادثة: $e');
+      // ignore: avoid_print
+      print('[ChatNotifier] Stack: $stackTrace');
+
       state = state.copyWith(
+        isLoadingChat: false,
         error: 'فشل في إنشاء محادثة جديدة: ${e.toString()}',
       );
     }
@@ -549,6 +748,19 @@ class ChatNotifier extends StateNotifier<ChatState> {
   /// توليد معرف فريد للرسالة
   String _generateMessageId() {
     return 'msg_${DateTime.now().millisecondsSinceEpoch}_${(DateTime.now().microsecond % 1000).toString().padLeft(3, '0')}';
+  }
+
+  /// إنشاء عنوان ذكي للمحادثة من الرسالة الأولى
+  String _generateChatTitleFromMessage(String message) {
+    final cleanMessage = message.trim();
+
+    // إذا كانت الرسالة قصيرة، استخدمها كعنوان
+    if (cleanMessage.length <= 30) {
+      return cleanMessage;
+    }
+
+    // خذ أول 30 حرف مع إضافة "..."
+    return '${cleanMessage.substring(0, 30)}...';
   }
 }
 

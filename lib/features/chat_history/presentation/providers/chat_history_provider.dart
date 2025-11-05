@@ -2,34 +2,73 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../chat/domain/models/chat.dart';
 import '../../../chat/domain/models/chat_status.dart';
 import '../../../../state/chat_history_state.dart';
+import '../../../../services/api/api_manager.dart';
+import '../../../../services/api/chat/models/session_dto.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
 /// مزود حالة سجل المحادثات
 ///
 /// يدير حالة سجل المحادثات مع البحث والتصفية والترتيب
 class ChatHistoryNotifier extends StateNotifier<ChatHistoryState> {
-  ChatHistoryNotifier() : super(ChatHistoryState.initial);
+  final ApiManager _apiManager;
+
+  ChatHistoryNotifier(this._apiManager) : super(ChatHistoryState.initial);
 
   /// تحميل سجل المحادثات
   Future<void> loadChatHistory() async {
     try {
       state = state.copyWith(isLoadingChats: true, error: null);
 
-      // TODO: تحميل المحادثات من قاعدة البيانات
-      await Future.delayed(const Duration(milliseconds: 800));
+      print('[ChatHistory] 🔄 تحميل سجل المحادثات من الخادم...');
 
-      // إنشاء محادثات وهمية للاختبار
-      final chats = _generateMockChats();
+      // تحميل جميع جلسات المستخدم من API
+      final response = await _apiManager.chat.getUserSessions();
+
+      if (response.success && response.data != null) {
+        print(
+          '[ChatHistory] ✅ تم تحميل ${response.data!.length} محادثة من الخادم',
+        );
+
+        // تحويل SessionDto إلى Chat
+        final chats = response.data!
+            .map((sessionDto) => _convertSessionDtoToChat(sessionDto))
+            .toList();
+
+        state = state.copyWith(
+          allChats: chats,
+          filteredChats: chats,
+          isLoadingChats: false,
+          hasLoadedInitial: true,
+          error: null,
+        );
+
+        print('[ChatHistory] 📋 تم تحميل المحادثات بنجاح');
+      } else {
+        print('[ChatHistory] ❌ فشل في تحميل المحادثات: ${response.error}');
+
+        // في حالة فشل التحميل، استخدم البيانات الوهمية كبديل
+        final mockChats = _generateMockChats();
+
+        state = state.copyWith(
+          allChats: mockChats,
+          filteredChats: mockChats,
+          isLoadingChats: false,
+          hasLoadedInitial: true,
+          error: 'تعذر تحميل المحادثات من الخادم، عرض بيانات تجريبية',
+        );
+      }
+    } catch (e) {
+      print('[ChatHistory] ❌ خطأ في تحميل المحادثات: $e');
+
+      // في حالة وجود خطأ، استخدم البيانات الوهمية
+      final mockChats = _generateMockChats();
 
       state = state.copyWith(
-        allChats: chats,
-        filteredChats: chats,
+        allChats: mockChats,
+        filteredChats: mockChats,
         isLoadingChats: false,
         hasLoadedInitial: true,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoadingChats: false,
-        error: 'فشل في تحميل سجل المحادثات: ${e.toString()}',
+        error: 'حدث خطأ في التحميل من الخادم: ${e.toString()}',
       );
     }
   }
@@ -362,6 +401,76 @@ class ChatHistoryNotifier extends StateNotifier<ChatHistoryState> {
     await loadChatHistory();
   }
 
+  /// تحويل SessionDto إلى Chat
+  Chat _convertSessionDtoToChat(SessionDto sessionDto) {
+    final now = DateTime.now();
+
+    // حساب آخر نشاط
+    final lastActivity = sessionDto.updatedAt ?? sessionDto.createdAt;
+    final timeDiff = now.difference(lastActivity);
+
+    String lastActivityText;
+    if (timeDiff.inMinutes < 1) {
+      lastActivityText = 'الآن';
+    } else if (timeDiff.inHours < 1) {
+      lastActivityText = 'منذ ${timeDiff.inMinutes} دقيقة';
+    } else if (timeDiff.inDays < 1) {
+      lastActivityText = 'منذ ${timeDiff.inHours} ساعة';
+    } else if (timeDiff.inDays < 7) {
+      lastActivityText = 'منذ ${timeDiff.inDays} يوم';
+    } else {
+      lastActivityText = 'منذ ${(timeDiff.inDays / 7).floor()} أسبوع';
+    }
+
+    // استخراج معاينة الرسالة الأخيرة
+    String? lastMessagePreview;
+    if (sessionDto.messages != null && sessionDto.messages!.isNotEmpty) {
+      final lastMessage = sessionDto.messages!.last;
+      lastMessagePreview = lastMessage.content.length > 100
+          ? '${lastMessage.content.substring(0, 100)}...'
+          : lastMessage.content;
+    }
+
+    return Chat(
+      id: sessionDto.sessionId,
+      title: sessionDto.title.isNotEmpty ? sessionDto.title : 'محادثة جديدة',
+      description: sessionDto.metadata?['description']
+          ?.toString(), // استخراج الوصف من metadata
+      userId: 'current_user', // سيتم الحصول عليه من AuthProvider
+      folderId: sessionDto.folderId,
+      createdAt: sessionDto.createdAt,
+      updatedAt: sessionDto.updatedAt,
+      lastActivityAt: lastActivity,
+      messageCount: sessionDto.messageCount ?? 0,
+      lastMessagePreview: lastMessagePreview ?? 'لا توجد رسائل بعد',
+      lastMessageType: sessionDto.messages?.isNotEmpty == true
+          ? (sessionDto.messages!.last.isFromUser ? 'user' : 'assistant')
+          : null,
+      lastMessageAt: sessionDto.messages?.isNotEmpty == true
+          ? sessionDto.messages!.last.createdAt
+          : null,
+      lastSenderName: sessionDto.messages?.isNotEmpty == true
+          ? (sessionDto.messages!.last.isFromUser ? 'أنت' : 'مساعد كفو')
+          : null,
+      status: _getChatStatusFromSessionDto(sessionDto),
+      // يمكن إضافة خصائص إضافية من metadata إذا كانت متوفرة
+      isPinned: sessionDto.metadata?['isPinned'] == true,
+      isFavorite: sessionDto.metadata?['isFavorite'] == true,
+      metadata: {...?sessionDto.metadata, 'lastActivityText': lastActivityText},
+    );
+  }
+
+  /// تحويل حالة الجلسة من SessionDto
+  ChatStatus _getChatStatusFromSessionDto(SessionDto sessionDto) {
+    if (sessionDto.metadata?['isArchived'] == true) {
+      return ChatStatus.archived;
+    }
+    if (sessionDto.metadata?['isDeleted'] == true) {
+      return ChatStatus.deleted;
+    }
+    return ChatStatus.active;
+  }
+
   /// توليد محادثات وهمية للاختبار
   List<Chat> _generateMockChats() {
     final now = DateTime.now();
@@ -451,7 +560,8 @@ class ChatHistoryNotifier extends StateNotifier<ChatHistoryState> {
 /// مزود حالة سجل المحادثات
 final chatHistoryProvider =
     StateNotifierProvider<ChatHistoryNotifier, ChatHistoryState>((ref) {
-      return ChatHistoryNotifier();
+      final apiManager = ref.watch(apiManagerProvider);
+      return ChatHistoryNotifier(apiManager);
     });
 
 /// مزود قائمة المحادثات

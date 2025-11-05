@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/typing_indicator.dart';
-import '../widgets/chat_input_field.dart';
+import '../widgets/chatgpt_style_input_field.dart';
 import '../widgets/recent_chats_widget.dart';
 // import '../../../../features/folders/presentation/widgets/folder_sidebar.dart';
 // import '../../../../features/chat_history/presentation/widgets/chat_list_sidebar.dart';
@@ -20,7 +20,9 @@ import '../../../../features/auth/presentation/providers/auth_provider.dart';
 import '../../../../features/search/presentation/screens/search_screen.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/widgets/app_drawer.dart';
+import '../../../../core/providers/sidebar_provider.dart';
 import '../../../../app/app.dart';
+import '../../../../core/localization/l10n.dart';
 
 /// الشاشة الرئيسية للمحادثة
 ///
@@ -44,6 +46,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   // String? _selectedFolderId;
   // bool _showSidebar = true;
   bool _isSearching = false;
+
+  final GlobalKey _messagesAreaKey = GlobalKey();
+
+  // متغيرات للمراقبة
+  int _previousMessageCount = 0;
+  bool _previousTyping = false;
 
   @override
   void initState() {
@@ -89,10 +97,26 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     final chatState = ref.watch(chatProvider);
     final isRTL = context.isRTL;
 
+    // مراقبة التغييرات في الرسائل ومؤشر الكتابة
+    final currentMessageCount = chatState.messages.length;
+    final currentTyping = chatState.isTyping;
+
+    // إذا تغير عدد الرسائل أو مؤشر الكتابة، قم بالتمرير
+    if (currentMessageCount != _previousMessageCount ||
+        currentTyping != _previousTyping) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToBottom();
+      });
+      _previousMessageCount = currentMessageCount;
+      _previousTyping = currentTyping;
+    }
+
     // ignore: avoid_print
     print('[ChatScreen] 🌍 isRTL: $isRTL');
     // ignore: avoid_print
-    print('[ChatScreen] 📍 TextDirection: ${context.textDirection}');
+    print(
+      '[ChatScreen] 📍 TextDirection: ${ContextExtensions(context).textDirection}',
+    );
     // ignore: avoid_print
     print(
       '[ChatScreen] 🗂️ drawer: ${isRTL ? 'set (يفتح من اليمين)' : 'null'}',
@@ -102,21 +126,70 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       '[ChatScreen] 🗂️ endDrawer: ${isRTL ? 'null' : 'set (يفتح من اليمين)'}',
     );
 
-    return Scaffold(
-      // قائمة جانبية موحدة
-      drawer: const AppDrawer(),
-      appBar: _buildAppBar(theme, chatState, isRTL),
-      body: Stack(
-        children: [
-          // خلفية التأثير البصري
-          NeuralNetworkEffect(
-            animation: _particleAnimation,
-            primaryColor: theme.colorScheme.primary,
+    // التحقق من حالة sidebar
+    final sidebarOpen = ref.watch(sidebarProvider);
+
+    // التحقق من حجم الشاشة (يدعم التابلت وأجهزة الفولد مثل Samsung Fold)
+    // نستخدم MediaQuery للحصول على حجم الشاشة الكامل
+    // الحد الأدنى 600px يدعم: التابلت، أجهزة الفولد، والشاشات العريضة
+    final isWideScreen = !context.isSmallScreen; // أي شاشة >= 600px
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // في الشاشات العريضة (التابلت والفولد)، نستخدم sidebar دائم
+        // نستخدم أيضاً constraints.maxWidth كمعيار إضافي للتأكد
+        final canUseSidebar = isWideScreen || constraints.maxWidth >= 600;
+
+        if (canUseSidebar) {
+          return Scaffold(
+            appBar: _buildAppBar(theme, chatState, isRTL, isWideScreen: true),
+            body: Row(
+              children: [
+                // Sidebar في الشاشات العريضة
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  width: sidebarOpen ? 320 : 0,
+                  child: sidebarOpen
+                      ? const AppDrawer(isSidebar: true)
+                      : const SizedBox.shrink(),
+                ),
+                // المحتوى الرئيسي
+                Expanded(
+                  child: Stack(
+                    children: [
+                      // خلفية التأثير البصري
+                      NeuralNetworkEffect(
+                        animation: _particleAnimation,
+                        primaryColor: theme.colorScheme.primary,
+                      ),
+                      // المحادثة الرئيسية
+                      _buildMainChatArea(theme, chatState),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        // في الشاشات الصغيرة، نستخدم drawer عادي
+        return Scaffold(
+          drawer: const AppDrawer(),
+          appBar: _buildAppBar(theme, chatState, isRTL, isWideScreen: false),
+          body: Stack(
+            children: [
+              // خلفية التأثير البصري
+              NeuralNetworkEffect(
+                animation: _particleAnimation,
+                primaryColor: theme.colorScheme.primary,
+              ),
+              // المحادثة الرئيسية (تأخذ الشاشة كاملة)
+              _buildMainChatArea(theme, chatState),
+            ],
           ),
-          // المحادثة الرئيسية (تأخذ الشاشة كاملة)
-          _buildMainChatArea(theme, chatState),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -124,8 +197,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   PreferredSizeWidget _buildAppBar(
     ThemeData theme,
     dynamic chatState,
-    bool isRTL,
-  ) {
+    bool isRTL, {
+    bool isWideScreen = false,
+  }) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: Container(
@@ -144,25 +218,38 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               return Row(
                 children: [
                   // أيقونة القائمة - من اليمين في RTL
-                  IconButton(
-                    icon: Icon(
-                      AppIcons.getIcon(AppIcon.menu),
-                      color: theme.colorScheme.primary,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      // ignore: avoid_print
-                      print('[Menu Button] 🔘 تم الضغط على زر القائمة');
-                      // ignore: avoid_print
-                      print('[Menu Button] 🌍 isRTL: $isRTL');
-                      // ignore: avoid_print
-                      print(
-                        '[Menu Button] 🗂️ سيتم فتح: drawer (من اليمين في RTL)',
-                      );
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final sidebarOpen = ref.watch(sidebarProvider);
+                      return IconButton(
+                        icon: Icon(
+                          AppIcons.getIcon(AppIcon.menu),
+                          color: theme.colorScheme.primary,
+                          size: 24,
+                        ),
+                        onPressed: () {
+                          if (isWideScreen) {
+                            // في الشاشات العريضة، نستخدم toggle
+                            ref.read(sidebarProvider.notifier).toggle();
+                          } else {
+                            // في الشاشات الصغيرة، نستخدم drawer عادي
+                            // ignore: avoid_print
+                            print('[Menu Button] 🔘 تم الضغط على زر القائمة');
+                            // ignore: avoid_print
+                            print('[Menu Button] 🌍 isRTL: $isRTL');
+                            // ignore: avoid_print
+                            print(
+                              '[Menu Button] 🗂️ سيتم فتح: drawer (من اليمين في RTL)',
+                            );
 
-                      builderContext.openAdaptiveDrawer();
+                            builderContext.openAdaptiveDrawer();
+                          }
+                        },
+                        tooltip: isWideScreen
+                            ? (sidebarOpen ? 'إغلاق القائمة' : 'فتح القائمة')
+                            : 'القائمة',
+                      );
                     },
-                    tooltip: 'القائمة',
                   ),
 
                   // المسافة
@@ -250,11 +337,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   /// بناء منطقة الرسائل
   Widget _buildMessagesArea(ThemeData theme, dynamic chatState) {
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: _isSearching
-            ? _buildSearchResults(theme)
-            : _buildMessagesList(theme, chatState),
+      child: Stack(
+        key: _messagesAreaKey,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: _isSearching
+                ? _buildSearchResults(theme)
+                : _buildMessagesList(theme, chatState),
+          ),
+        ],
       ),
     );
   }
@@ -268,7 +360,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
     return ListView.builder(
       controller: _messageScrollController,
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.only(
+        top: 8,
+        bottom: 16, // مساحة إضافية في الأسفل
+      ),
       itemCount: chatState.messages.length + (chatState.isTyping ? 1 : 0),
       itemBuilder: (context, index) {
         if (index < chatState.messages.length) {
@@ -278,13 +373,36 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             child: MessageBubble(message: message),
           );
         } else {
-          // مؤشر الكتابة
-          return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 4),
-            child: TypingIndicator(),
+          // مؤشر الكتابة مع أيقونة المساعد
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildAssistantAvatar(context.theme),
+                const SizedBox(width: 8),
+                TypingIndicator(userName: context.l10n.appNameShort),
+              ],
+            ),
           );
         }
       },
+    );
+  }
+
+  /// بناء صورة شخصية المساعد لظهور مؤشر الكتابة بجوارها
+  Widget _buildAssistantAvatar(ThemeData theme) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: 32,
+        height: 32,
+        color: theme.colorScheme.secondary,
+        child: Image.asset(
+          'assets/images/mosa3ed_kfu_icon_app.jpg',
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 
@@ -452,8 +570,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: isSmallScreen
-              ? const EdgeInsets.all(16)
-              : const EdgeInsets.all(20),
+              ? const EdgeInsets.all(12)
+              : const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
@@ -514,45 +632,81 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                     ),
                   ],
                 )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // الإيموجي في الشاشات الكبيرة
-                    Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      child: Center(
-                        child: Text(
-                          suggestion['icon']!,
-                          style: const TextStyle(fontSize: 22),
+              : LayoutBuilder(
+                  builder: (context, constraints) {
+                    // حساب حجم النص بناءً على حجم الزر المتاح
+                    final availableHeight = constraints.maxHeight;
+
+                    // حساب الأحجام بناءً على الحجم المتاح مع حدود دنيا وعليا
+                    final iconSize = (availableHeight * 0.3).clamp(28.0, 48.0);
+                    final fontSizeTitle = (availableHeight * 0.15).clamp(
+                      11.0,
+                      15.0,
+                    );
+                    final fontSizeSubtitle = (availableHeight * 0.11).clamp(
+                      9.0,
+                      13.0,
+                    );
+                    final spacingBetween = (availableHeight * 0.06).clamp(
+                      4.0,
+                      12.0,
+                    );
+
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // الإيموجي في الشاشات الكبيرة - يتكيف مع الحجم
+                        Container(
+                          width: iconSize,
+                          height: iconSize,
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(iconSize / 2),
+                          ),
+                          child: Center(
+                            child: Text(
+                              suggestion['icon']!,
+                              style: TextStyle(fontSize: iconSize * 0.48),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      suggestion['title']!,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      suggestion['subtitle']!,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                        height: 1.3,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                        SizedBox(height: spacingBetween),
+                        // العنوان - يتكيف مع الحجم
+                        Flexible(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              suggestion['title']!,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.onSurface,
+                                fontSize: fontSizeTitle,
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: spacingBetween * 0.7),
+                        // العنوان الفرعي - يتكيف مع الحجم
+                        Flexible(
+                          child: Text(
+                            suggestion['subtitle']!,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                              fontSize: fontSizeSubtitle,
+                              height: 1.15,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
         ),
       ),
@@ -692,22 +846,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   /// بناء حقل إدخال المحادثة
   Widget _buildChatInput(ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        border: Border(
-          top: BorderSide(
-            color: theme.colorScheme.outline.withAlpha(50),
-            width: 1,
-          ),
-        ),
-      ),
-      child: ChatInputField(
-        onSend: () => _onMessageSent(_getCurrentMessageText()),
-        onAttachFile: () => _onAttachmentSelected('file'),
-        enabled: !_isSearching,
-      ),
+    return ChatGPTStyleInputField(
+      onSend: (message) => _onMessageSent(message),
+      onAttachFile: () => _onAttachmentSelected('file'),
+      enabled: !_isSearching,
+      hintText: 'اكتب رسالتك هنا...',
+      onTextChanged: (text) {
+        // يمكن إضافة معالجة تغيير النص هنا إذا لزم الأمر
+      },
     );
   }
 
@@ -1207,24 +1353,53 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   void _onMessageSent(String message) {
     if (message.trim().isNotEmpty) {
+      // إخفاء لوحة المفاتيح
+      FocusScope.of(context).unfocus();
+
+      // إرسال الرسالة عبر ChatProvider
       ref.read(chatProvider.notifier).sendMessage(message);
 
-      // التمرير إلى آخر رسالة
+      // التمرير إلى آخر رسالة بعد فترة قصيرة
       Future.delayed(const Duration(milliseconds: 100), () {
-        if (_messageScrollController.hasClients) {
-          _messageScrollController.animateTo(
-            _messageScrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        }
+        _scrollToBottom();
       });
     }
   }
 
+  /// تمرير إلى آخر رسالة
+  void _scrollToBottom({bool animate = true}) {
+    if (!_messageScrollController.hasClients) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_messageScrollController.hasClients) return;
+
+      final maxScroll = _messageScrollController.position.maxScrollExtent;
+
+      if (animate) {
+        _messageScrollController.animateTo(
+          maxScroll,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic,
+        );
+      } else {
+        _messageScrollController.jumpTo(maxScroll);
+      }
+    });
+  }
+
   void _onSuggestionTapped(String message) {
-    // إرسال الرسالة المقترحة
-    _onMessageSent(message);
+    // إرسال الرسالة المقترحة مباشرة
+    if (message.trim().isNotEmpty) {
+      // إخفاء لوحة المفاتيح
+      FocusScope.of(context).unfocus();
+
+      ref.read(chatProvider.notifier).sendMessage(message);
+
+      // التمرير للأسفل بعد فترة قصيرة
+      Future.delayed(const Duration(milliseconds: 100), () {
+        _scrollToBottom();
+      });
+    }
   }
 
   void _onAttachmentSelected(String attachmentType) {
@@ -1235,11 +1410,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         duration: const Duration(seconds: 2),
       ),
     );
-  }
-
-  String _getCurrentMessageText() {
-    // TODO: الحصول على النص الحالي من حقل الإدخال
-    return '';
   }
 
   void _onSearch(String query) {

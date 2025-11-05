@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/localization/l10n.dart';
 
 /// محدد المظهر مع معاينة بصرية
 class ThemeSelector extends StatelessWidget {
@@ -27,20 +28,20 @@ class ThemeSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'المظهر',
+          context.l10n.themeSelectorTitle,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: theme.colorScheme.onSurface,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         Text(
-          'اختر بين المظهر الفاتح أو الداكن',
-          style: theme.textTheme.bodyMedium?.copyWith(
+          context.l10n.themeSelectorSubtitle,
+          style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
 
         // خيارات المظهر
         Row(
@@ -48,7 +49,7 @@ class ThemeSelector extends StatelessWidget {
             Expanded(
               child: _ThemeOption(
                 mode: ThemeMode.light,
-                title: 'فاتح',
+                title: context.l10n.settingsThemeLight,
                 isSelected: selectedMode == ThemeMode.light,
                 onTap: isEnabled ? () => onChanged(ThemeMode.light) : null,
               ),
@@ -57,7 +58,7 @@ class ThemeSelector extends StatelessWidget {
             Expanded(
               child: _ThemeOption(
                 mode: ThemeMode.system,
-                title: 'تلقائي',
+                title: context.l10n.settingsThemeAuto,
                 isSelected: selectedMode == ThemeMode.system,
                 onTap: isEnabled ? () => onChanged(ThemeMode.system) : null,
               ),
@@ -66,7 +67,7 @@ class ThemeSelector extends StatelessWidget {
             Expanded(
               child: _ThemeOption(
                 mode: ThemeMode.dark,
-                title: 'داكن',
+                title: context.l10n.settingsThemeDark,
                 isSelected: selectedMode == ThemeMode.dark,
                 onTap: isEnabled ? () => onChanged(ThemeMode.dark) : null,
               ),
@@ -107,7 +108,7 @@ class _ThemeOption extends StatelessWidget {
           border: Border.all(
             color: isSelected
                 ? theme.colorScheme.primary
-                : theme.colorScheme.outline.withOpacity(0.3),
+                : theme.colorScheme.outline.withAlpha(76),
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(12),

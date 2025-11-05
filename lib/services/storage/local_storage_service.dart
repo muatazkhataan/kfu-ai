@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 class LocalStorageService {
   static const String _searchHistoryBoxName = 'search_history';
   static const String _settingsBoxName = 'app_settings';
+  static const String _authBoxName = 'auth_storage';
 
   /// Singleton instance
   static final LocalStorageService _instance = LocalStorageService._internal();
@@ -26,6 +27,10 @@ class LocalStorageService {
     print('[LocalStorageService] 📦 فتح settings box...');
     await Hive.openBox<Map>(_settingsBoxName);
     print('[LocalStorageService] ✅ تم فتح settings box');
+
+    print('[LocalStorageService] 📦 فتح auth box...');
+    await Hive.openBox<dynamic>(_authBoxName);
+    print('[LocalStorageService] ✅ تم فتح auth box');
 
     print('[LocalStorageService] 🎉 تم تهيئة LocalStorageService بالكامل');
   }
@@ -124,6 +129,33 @@ class LocalStorageService {
   /// مسح جميع البيانات
   Future<void> clear() async {
     final box = await _openBox<dynamic>(_settingsBoxName);
+    await box.clear();
+  }
+
+  // ==================== تخزين التوثيق (سطح المكتب) ====================
+
+  /// حفظ قيمة نصية في auth storage (لمنصات سطح المكتب)
+  Future<void> setAuthString(String key, String value) async {
+    final box = await _openBox<dynamic>(_authBoxName);
+    await box.put(key, value);
+  }
+
+  /// قراءة قيمة نصية من auth storage
+  Future<String?> getAuthString(String key) async {
+    final box = await _openBox<dynamic>(_authBoxName);
+    final value = box.get(key);
+    return value is String ? value : value?.toString();
+  }
+
+  /// حذف مفتاح من auth storage
+  Future<void> removeAuthKey(String key) async {
+    final box = await _openBox<dynamic>(_authBoxName);
+    await box.delete(key);
+  }
+
+  /// مسح جميع بيانات auth storage
+  Future<void> clearAuth() async {
+    final box = await _openBox<dynamic>(_authBoxName);
     await box.clear();
   }
 }

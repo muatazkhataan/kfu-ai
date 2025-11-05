@@ -52,25 +52,20 @@ class SettingsCard extends StatelessWidget {
 
         // المحتوى
         if (!isCollapsible || initiallyExpanded) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           ...children,
         ],
       ],
     );
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 8),
       child: Card(
         elevation: 0,
         color: theme.colorScheme.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color:
-                accentColor?.withOpacity(0.2) ??
-                theme.colorScheme.outline.withOpacity(0.1),
-            width: accentColor != null ? 2 : 1,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide.none,
         ),
         child: isCollapsible
             ? ExpansionTile(
@@ -79,13 +74,13 @@ class SettingsCard extends StatelessWidget {
                 leading: icon != null ? _buildIcon(theme) : null,
                 initiallyExpanded: initiallyExpanded,
                 onExpansionChanged: onExpansionChanged,
-                childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 children: children,
               )
-            : Padding(padding: const EdgeInsets.all(16), child: cardContent),
+            : Padding(padding: const EdgeInsets.all(12), child: cardContent),
       ),
     );
   }
@@ -109,7 +104,7 @@ class SettingsCard extends StatelessWidget {
 
         // الوصف
         if (description != null) ...[
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           _buildDescription(theme),
         ],
       ],
@@ -173,19 +168,16 @@ class SimpleSettingsCard extends StatelessWidget {
     final theme = context.theme;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 8),
       child: Card(
         elevation: 0,
         color: backgroundColor ?? theme.colorScheme.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color: theme.colorScheme.outline.withOpacity(0.1),
-            width: 1,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide.none,
         ),
         child: Padding(
-          padding: padding ?? const EdgeInsets.all(16),
+          padding: padding ?? const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: children,

@@ -41,7 +41,7 @@ class HelpContentWidget extends StatelessWidget {
         gradient: LinearGradient(
           colors: [
             Theme.of(context).colorScheme.primaryContainer,
-            Theme.of(context).colorScheme.primaryContainer.withOpacity(0.7),
+            Theme.of(context).colorScheme.primaryContainer.withAlpha(153),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -83,7 +83,7 @@ class HelpContentWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Theme.of(
                 context,
-              ).colorScheme.onPrimaryContainer.withOpacity(0.8),
+              ).colorScheme.onPrimaryContainer.withAlpha(202),
             ),
             textAlign: TextAlign.center,
           ),
@@ -200,7 +200,7 @@ class HelpContentWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(
           context,
-        ).colorScheme.surfaceContainerHighest.withOpacity(0.3),
+        ).colorScheme.surfaceContainerHighest.withAlpha(76),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Theme.of(context).dividerColor, width: 1),
       ),

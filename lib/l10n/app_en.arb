@@ -522,5 +522,690 @@
   "authRememberMe": "Remember me",
   "@authRememberMe": {
     "description": "Remember me option"
+  },
+
+  "settingsGeneralTitle": "General Settings",
+  "@settingsGeneralTitle": {
+    "description": "General settings section title"
+  },
+
+  "settingsGeneralDescription": "Customize the basic app settings",
+  "@settingsGeneralDescription": {
+    "description": "General settings section description"
+  },
+
+  "settingsAppearanceTitle": "Appearance & Customization",
+  "@settingsAppearanceTitle": {
+    "description": "Appearance section title"
+  },
+
+  "settingsAppearanceDescription": "Customize the app appearance to your preferences",
+  "@settingsAppearanceDescription": {
+    "description": "Appearance section description"
+  },
+
+  "settingsChatTitle": "Chat Settings",
+  "@settingsChatTitle": {
+    "description": "Chat settings section title"
+  },
+
+  "settingsChatDescription": "Customize your chat experience with the AI assistant",
+  "@settingsChatDescription": {
+    "description": "Chat settings section description"
+  },
+
+  "settingsPrivacyTitle": "Privacy & Security",
+  "@settingsPrivacyTitle": {
+    "description": "Privacy section title"
+  },
+
+  "settingsPrivacyDescription": "Control your data and information privacy",
+  "@settingsPrivacyDescription": {
+    "description": "Privacy section description"
+  },
+
+  "settingsNotificationsTitle": "Notifications",
+  "@settingsNotificationsTitle": {
+    "description": "Notifications section title"
+  },
+
+  "settingsNotificationsDescription": "Customize notifications and alerts",
+  "@settingsNotificationsDescription": {
+    "description": "Notifications section description"
+  },
+
+  "settingsAITitle": "AI Settings",
+  "@settingsAITitle": {
+    "description": "AI settings section title"
+  },
+
+  "settingsAIDescription": "Customize the AI assistant behavior",
+  "@settingsAIDescription": {
+    "description": "AI settings section description"
+  },
+
+  "settingsDataTitle": "Data Management",
+  "@settingsDataTitle": {
+    "description": "Data section title"
+  },
+
+  "settingsDataDescription": "Manage data and backups",
+  "@settingsDataDescription": {
+    "description": "Data section description"
+  },
+
+  "settingsAboutTitle": "About",
+  "@settingsAboutTitle": {
+    "description": "About section title"
+  },
+
+  "settingsAboutDescription": "App information and version",
+  "@settingsAboutDescription": {
+    "description": "About section description"
+  },
+
+  "settingsDefaultLanguage": "Default Language",
+  "@settingsDefaultLanguage": {
+    "description": "Default language setting"
+  },
+
+  "settingsDefaultLanguageSubtitle": "Choose the language you want to use in the app",
+  "@settingsDefaultLanguageSubtitle": {
+    "description": "Language setting description"
+  },
+
+  "settingsTimezone": "Timezone",
+  "@settingsTimezone": {
+    "description": "Timezone setting"
+  },
+
+  "settingsTimezoneSubtitle": "Choose your timezone",
+  "@settingsTimezoneSubtitle": {
+    "description": "Timezone setting description"
+  },
+
+  "settingsBetaMode": "Beta Mode",
+  "@settingsBetaMode": {
+    "description": "Beta mode setting"
+  },
+
+  "settingsBetaModeSubtitle": "Access new features before official release",
+  "@settingsBetaModeSubtitle": {
+    "description": "Beta mode description"
+  },
+
+  "settingsAutoUpdate": "Auto Update",
+  "@settingsAutoUpdate": {
+    "description": "Auto update setting"
+  },
+
+  "settingsAutoUpdateSubtitle": "Automatically update the app when new versions are available",
+  "@settingsAutoUpdateSubtitle": {
+    "description": "Auto update description"
+  },
+
+  "settingsAnimations": "Animations",
+  "@settingsAnimations": {
+    "description": "Animations setting"
+  },
+
+  "settingsAnimationsSubtitle": "Show animations and transitions",
+  "@settingsAnimationsSubtitle": {
+    "description": "Animations description"
+  },
+
+  "settingsHapticFeedback": "Haptic Feedback",
+  "@settingsHapticFeedback": {
+    "description": "Haptic feedback setting"
+  },
+
+  "settingsHapticFeedbackSubtitle": "Light vibration on interaction",
+  "@settingsHapticFeedbackSubtitle": {
+    "description": "Haptic feedback description"
+  },
+
+  "settingsResponseStyle": "Response Style",
+  "@settingsResponseStyle": {
+    "description": "Response style setting"
+  },
+
+  "settingsResponseStyleSubtitle": "Choose how the assistant responds to your questions",
+  "@settingsResponseStyleSubtitle": {
+    "description": "Response style description"
+  },
+
+  "settingsMaxMessages": "Max Messages",
+  "@settingsMaxMessages": {
+    "description": "Max messages setting"
+  },
+
+  "settingsMaxMessagesSubtitle": "Number of messages saved in a single chat",
+  "@settingsMaxMessagesSubtitle": {
+    "description": "Max messages description"
+  },
+
+  "settingsAutoResponse": "Auto Response",
+  "@settingsAutoResponse": {
+    "description": "Auto response setting"
+  },
+
+  "settingsAutoResponseSubtitle": "Allow the assistant to automatically respond to some questions",
+  "@settingsAutoResponseSubtitle": {
+    "description": "Auto response description"
+  },
+
+  "settingsShowSuggestions": "Chat Suggestions",
+  "@settingsShowSuggestions": {
+    "description": "Chat suggestions setting"
+  },
+
+  "settingsShowSuggestionsSubtitle": "Show suggestions for next questions",
+  "@settingsShowSuggestionsSubtitle": {
+    "description": "Chat suggestions description"
+  },
+
+  "settingsAutoCorrect": "Auto Correct",
+  "@settingsAutoCorrect": {
+    "description": "Auto correct setting"
+  },
+
+  "settingsAutoCorrectSubtitle": "Automatically correct spelling errors",
+  "@settingsAutoCorrectSubtitle": {
+    "description": "Auto correct description"
+  },
+
+  "settingsAnalytics": "Analytics Data Collection",
+  "@settingsAnalytics": {
+    "description": "Analytics data collection setting"
+  },
+
+  "settingsAnalyticsSubtitle": "Allow collecting usage data to improve the app",
+  "@settingsAnalyticsSubtitle": {
+    "description": "Analytics description"
+  },
+
+  "settingsSaveChatHistory": "Save Chat History",
+  "@settingsSaveChatHistory": {
+    "description": "Save chat history setting"
+  },
+
+  "settingsSaveChatHistorySubtitle": "Save chats locally on your device",
+  "@settingsSaveChatHistorySubtitle": {
+    "description": "Save chat history description"
+  },
+
+  "settingsAllowSharing": "Share Chats",
+  "@settingsAllowSharing": {
+    "description": "Allow sharing setting"
+  },
+
+  "settingsAllowSharingSubtitle": "Allow sharing chats with others",
+  "@settingsAllowSharingSubtitle": {
+    "description": "Allow sharing description"
+  },
+
+  "settingsEnableNotifications": "Enable Notifications",
+  "@settingsEnableNotifications": {
+    "description": "Enable notifications setting"
+  },
+
+  "settingsEnableNotificationsSubtitle": "Receive notifications from the app",
+  "@settingsEnableNotificationsSubtitle": {
+    "description": "Enable notifications description"
+  },
+
+  "settingsUpdateNotifications": "Update Notifications",
+  "@settingsUpdateNotifications": {
+    "description": "Update notifications setting"
+  },
+
+  "settingsUpdateNotificationsSubtitle": "Notifications when new updates are available",
+  "@settingsUpdateNotificationsSubtitle": {
+    "description": "Update notifications description"
+  },
+
+  "settingsFeatureNotifications": "New Features Notifications",
+  "@settingsFeatureNotifications": {
+    "description": "Feature notifications setting"
+  },
+
+  "settingsFeatureNotificationsSubtitle": "Notifications when new features are added",
+  "@settingsFeatureNotificationsSubtitle": {
+    "description": "Feature notifications description"
+  },
+
+  "settingsNotificationSound": "Notification Sound",
+  "@settingsNotificationSound": {
+    "description": "Notification sound setting"
+  },
+
+  "settingsNotificationSoundSubtitle": "Play sound when receiving notifications",
+  "@settingsNotificationSoundSubtitle": {
+    "description": "Notification sound description"
+  },
+
+  "settingsAIModel": "AI Model",
+  "@settingsAIModel": {
+    "description": "AI model setting"
+  },
+
+  "settingsAIModelSubtitle": "Choose the model used for the assistant",
+  "@settingsAIModelSubtitle": {
+    "description": "AI model description"
+  },
+
+  "settingsContextLength": "Saved Context",
+  "@settingsContextLength": {
+    "description": "Context length setting"
+  },
+
+  "settingsContextLengthSubtitle": "Number of messages saved for context",
+  "@settingsContextLengthSubtitle": {
+    "description": "Context length description"
+  },
+
+  "settingsAdaptiveLearning": "Adaptive Learning",
+  "@settingsAdaptiveLearning": {
+    "description": "Adaptive learning setting"
+  },
+
+  "settingsAdaptiveLearningSubtitle": "Improve responses based on your preferences",
+  "@settingsAdaptiveLearningSubtitle": {
+    "description": "Adaptive learning description"
+  },
+
+  "settingsExperimentalAI": "Experimental AI Features",
+  "@settingsExperimentalAI": {
+    "description": "Experimental AI features setting"
+  },
+
+  "settingsExperimentalAISubtitle": "Try new AI features",
+  "@settingsExperimentalAISubtitle": {
+    "description": "Experimental AI features description"
+  },
+
+  "settingsAutoBackup": "Auto Backup",
+  "@settingsAutoBackup": {
+    "description": "Auto backup setting"
+  },
+
+  "settingsAutoBackupSubtitle": "Automatically create backups",
+  "@settingsAutoBackupSubtitle": {
+    "description": "Auto backup description"
+  },
+
+  "settingsBackupFrequency": "Backup Frequency",
+  "@settingsBackupFrequency": {
+    "description": "Backup frequency setting"
+  },
+
+  "settingsBackupFrequencySubtitle": "When backups are created",
+  "@settingsBackupFrequencySubtitle": {
+    "description": "Backup frequency description"
+  },
+
+  "settingsStorageUsed": "Storage Used",
+  "@settingsStorageUsed": {
+    "description": "Storage information"
+  },
+
+  "settingsExportData": "Export Data",
+  "@settingsExportData": {
+    "description": "Export data button"
+  },
+
+  "settingsDeleteAllData": "Delete All Data",
+  "@settingsDeleteAllData": {
+    "description": "Delete all data button"
+  },
+
+  "settingsChats": "Chats",
+  "@settingsChats": {
+    "description": "Number of chats"
+  },
+
+  "settingsMessages": "Messages",
+  "@settingsMessages": {
+    "description": "Number of messages"
+  },
+
+  "settingsLastBackup": "Last Backup",
+  "@settingsLastBackup": {
+    "description": "Last backup date"
+  },
+
+  "settingsNoBackup": "None",
+  "@settingsNoBackup": {
+    "description": "No backup available"
+  },
+
+  "settingsAppVersion": "Version {version}",
+  "@settingsAppVersion": {
+    "description": "App version",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+
+  "settingsAppDescription": "A smart assistant for King Faisal University students, designed to help you with academic and study matters.",
+  "@settingsAppDescription": {
+    "description": "App description"
+  },
+
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "@settingsPrivacyPolicy": {
+    "description": "Privacy policy link"
+  },
+
+  "settingsPrivacyPolicySubtitle": "Read the privacy policy",
+  "@settingsPrivacyPolicySubtitle": {
+    "description": "Privacy policy description"
+  },
+
+  "settingsTermsOfService": "Terms of Service",
+  "@settingsTermsOfService": {
+    "description": "Terms of service link"
+  },
+
+  "settingsTermsOfServiceSubtitle": "Read the terms of service",
+  "@settingsTermsOfServiceSubtitle": {
+    "description": "Terms of service description"
+  },
+
+  "settingsHelpAndSupport": "Help & Support",
+  "@settingsHelpAndSupport": {
+    "description": "Help and support link"
+  },
+
+  "settingsHelpAndSupportSubtitle": "Get help",
+  "@settingsHelpAndSupportSubtitle": {
+    "description": "Help and support description"
+  },
+
+  "settingsSendFeedback": "Send Feedback",
+  "@settingsSendFeedback": {
+    "description": "Send feedback link"
+  },
+
+  "settingsSendFeedbackSubtitle": "Help us improve the app",
+  "@settingsSendFeedbackSubtitle": {
+    "description": "Send feedback description"
+  },
+
+  "settingsDevelopedBy": "Developed by King Faisal University Team",
+  "@settingsDevelopedBy": {
+    "description": "Developer information"
+  },
+
+  "settingsCopyright": "All rights reserved © 2024",
+  "@settingsCopyright": {
+    "description": "Copyright notice"
+  },
+
+  "settingsSave": "Save Settings",
+  "@settingsSave": {
+    "description": "Save settings button"
+  },
+
+  "settingsReset": "Reset",
+  "@settingsReset": {
+    "description": "Reset settings button"
+  },
+
+  "settingsExport": "Export",
+  "@settingsExport": {
+    "description": "Export settings button"
+  },
+
+  "settingsImport": "Import",
+  "@settingsImport": {
+    "description": "Import settings button"
+  },
+
+  "settingsResetDialogTitle": "Reset Settings",
+  "@settingsResetDialogTitle": {
+    "description": "Reset dialog title"
+  },
+
+  "settingsResetDialogContent": "Are you sure you want to reset all settings to default values?",
+  "@settingsResetDialogContent": {
+    "description": "Reset dialog content"
+  },
+
+  "settingsResetSuccess": "Settings have been reset",
+  "@settingsResetSuccess": {
+    "description": "Reset success message"
+  },
+
+  "settingsExportDialogTitle": "Export Settings",
+  "@settingsExportDialogTitle": {
+    "description": "Export dialog title"
+  },
+
+  "settingsExportSuccess": "Settings exported successfully:",
+  "@settingsExportSuccess": {
+    "description": "Export success message"
+  },
+
+  "settingsExportError": "Export error: {error}",
+  "@settingsExportError": {
+    "description": "Export error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "settingsImportFeature": "Import feature is under development",
+  "@settingsImportFeature": {
+    "description": "Import feature message"
+  },
+
+  "settingsDeleteDialogTitle": "Delete All Data",
+  "@settingsDeleteDialogTitle": {
+    "description": "Delete dialog title"
+  },
+
+  "settingsDeleteDialogContent": "Are you sure you want to delete all data? This action cannot be undone.",
+  "@settingsDeleteDialogContent": {
+    "description": "Delete dialog content"
+  },
+
+  "settingsDeleteSuccess": "All data has been deleted",
+  "@settingsDeleteSuccess": {
+    "description": "Delete success message"
+  },
+
+  "settingsDeleteButton": "Delete",
+  "@settingsDeleteButton": {
+    "description": "Delete button"
+  },
+
+  "settingsOK": "OK",
+  "@settingsOK": {
+    "description": "OK button"
+  },
+
+  "settingsMessagesCount": "{count} messages",
+  "@settingsMessagesCount": {
+    "description": "Number of messages",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "settingsContextMessagesCount": "{count} messages",
+  "@settingsContextMessagesCount": {
+    "description": "Number of context messages",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "languageArabic": "العربية",
+  "@languageArabic": {
+    "description": "Arabic language name"
+  },
+
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language name"
+  },
+
+  "timezoneRiyadh": "Riyadh (GMT+3)",
+  "@timezoneRiyadh": {
+    "description": "Riyadh timezone"
+  },
+
+  "timezoneDubai": "Dubai (GMT+4)",
+  "@timezoneDubai": {
+    "description": "Dubai timezone"
+  },
+
+  "timezoneKuwait": "Kuwait (GMT+3)",
+  "@timezoneKuwait": {
+    "description": "Kuwait timezone"
+  },
+
+  "fontSizeSmall": "Small",
+  "@fontSizeSmall": {
+    "description": "Small font size"
+  },
+
+  "fontSizeMedium": "Medium",
+  "@fontSizeMedium": {
+    "description": "Medium font size"
+  },
+
+  "fontSizeLarge": "Large",
+  "@fontSizeLarge": {
+    "description": "Large font size"
+  },
+
+  "fontSizeExtraLarge": "Extra Large",
+  "@fontSizeExtraLarge": {
+    "description": "Extra large font size"
+  },
+
+  "fontSizeSelectorTitle": "Font Size",
+  "@fontSizeSelectorTitle": {
+    "description": "Font size selector title"
+  },
+
+  "fontSizeSelectorSubtitle": "Adjust text size in the app",
+  "@fontSizeSelectorSubtitle": {
+    "description": "Font size selector description"
+  },
+
+  "fontSizeExample": "Sample text",
+  "@fontSizeExample": {
+    "description": "Example text in font size selector"
+  },
+
+  "themeSelectorTitle": "Theme",
+  "@themeSelectorTitle": {
+    "description": "Theme selector title"
+  },
+
+  "themeSelectorSubtitle": "Choose between light or dark theme",
+  "@themeSelectorSubtitle": {
+    "description": "Theme selector description"
+  },
+
+  "responseStyleDetailed": "Detailed and Expanded",
+  "@responseStyleDetailed": {
+    "description": "Detailed response style"
+  },
+
+  "responseStyleConcise": "Concise and Direct",
+  "@responseStyleConcise": {
+    "description": "Concise response style"
+  },
+
+  "responseStyleBalanced": "Balanced",
+  "@responseStyleBalanced": {
+    "description": "Balanced response style"
+  },
+
+  "aiModelGPT4": "GPT-4 (Most Accurate)",
+  "@aiModelGPT4": {
+    "description": "GPT-4 model"
+  },
+
+  "aiModelGPT35": "GPT-3.5 (Balanced)",
+  "@aiModelGPT35": {
+    "description": "GPT-3.5 model"
+  },
+
+  "aiModelClaude": "Claude (Detailed)",
+  "@aiModelClaude": {
+    "description": "Claude model"
+  },
+
+  "backupFrequencyNever": "Never",
+  "@backupFrequencyNever": {
+    "description": "Backup frequency: Never"
+  },
+
+  "backupFrequencyDaily": "Daily",
+  "@backupFrequencyDaily": {
+    "description": "Backup frequency: Daily"
+  },
+
+  "backupFrequencyWeekly": "Weekly",
+  "@backupFrequencyWeekly": {
+    "description": "Backup frequency: Weekly"
+  },
+
+  "backupFrequencyMonthly": "Monthly",
+  "@backupFrequencyMonthly": {
+    "description": "Backup frequency: Monthly"
+  },
+
+  "creativityLevelTitle": "Creativity Level",
+  "@creativityLevelTitle": {
+    "description": "Creativity level title"
+  },
+
+  "creativityLevelSubtitle": "Level of creativity in assistant responses",
+  "@creativityLevelSubtitle": {
+    "description": "Creativity level description"
+  },
+
+  "creativityConservative": "Conservative",
+  "@creativityConservative": {
+    "description": "Conservative style label"
+  },
+
+  "creativityBalanced": "Balanced",
+  "@creativityBalanced": {
+    "description": "Balanced style label"
+  },
+
+  "creativityCreative": "Creative",
+  "@creativityCreative": {
+    "description": "Creative style label"
+  },
+
+  "creativityDescriptionConservative": "Conservative and accurate responses based on confirmed knowledge",
+  "@creativityDescriptionConservative": {
+    "description": "Conservative style description"
+  },
+
+  "creativityDescriptionBalanced": "Balance between accuracy and creativity in responses",
+  "@creativityDescriptionBalanced": {
+    "description": "Balanced style description"
+  },
+
+  "creativityDescriptionCreative": "Creative and innovative responses with flexibility in interpretation",
+  "@creativityDescriptionCreative": {
+    "description": "Creative style description"
   }
 }

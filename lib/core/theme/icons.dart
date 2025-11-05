@@ -227,7 +227,8 @@ enum AppIcon {
   angleRight,
   anglesUp,
   anglesDown,
-
+  upRightAndDownLeftFromCenter, // f424 - expand
+  downLeftAndUpRightToCenter, // f422 - collapse
   // Specific Features
   history,
   lockKeyhole,
@@ -691,6 +692,10 @@ class AppIcons {
         return FontAwesomeIcons.anglesUp;
       case AppIcon.anglesDown:
         return FontAwesomeIcons.anglesDown;
+      case AppIcon.upRightAndDownLeftFromCenter:
+        return FontAwesomeIcons.upRightAndDownLeftFromCenter;
+      case AppIcon.downLeftAndUpRightToCenter:
+        return FontAwesomeIcons.downLeftAndUpRightToCenter;
 
       // Specific Features
       case AppIcon.history:

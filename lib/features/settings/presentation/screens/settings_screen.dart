@@ -77,7 +77,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   /// بناء AppBar مخصص
   AppBar _buildAppBar(ThemeData theme, SettingsUpdateState updateState) {
     return AppBar(
-      title: const Text('الإعدادات'),
+      title: Text(context.l10n.settingsTitle),
       centerTitle: true,
       backgroundColor: theme.colorScheme.surface,
       elevation: 0,
@@ -98,40 +98,40 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                     ),
                   )
                 : const Icon(Icons.save),
-            tooltip: 'حفظ الإعدادات',
+            tooltip: context.l10n.settingsSave,
           ),
 
         // قائمة إضافية
         PopupMenuButton<String>(
           onSelected: _handleMenuAction,
           itemBuilder: (context) => [
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'reset',
               child: Row(
                 children: [
-                  Icon(Icons.refresh),
-                  SizedBox(width: 8),
-                  Text('إعادة تعيين'),
+                  const Icon(Icons.refresh),
+                  const SizedBox(width: 8),
+                  Text(context.l10n.settingsReset),
                 ],
               ),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'export',
               child: Row(
                 children: [
-                  Icon(Icons.file_download),
-                  SizedBox(width: 8),
-                  Text('تصدير'),
+                  const Icon(Icons.file_download),
+                  const SizedBox(width: 8),
+                  Text(context.l10n.settingsExport),
                 ],
               ),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'import',
               child: Row(
                 children: [
-                  Icon(Icons.file_upload),
-                  SizedBox(width: 8),
-                  Text('استيراد'),
+                  const Icon(Icons.file_upload),
+                  const SizedBox(width: 8),
+                  Text(context.l10n.settingsImport),
                 ],
               ),
             ),
@@ -182,26 +182,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
 
   /// بناء نص التاب المحدد
   Widget _buildTabLabel(ThemeData theme) {
-    final tabLabels = [
-      'الإعدادات العامة',
-      'المظهر والتخصيص',
-      'إعدادات المحادثة',
-      'الخصوصية والأمان',
-      'الإشعارات',
-      'الذكاء الاصطناعي',
-      'إدارة البيانات',
-      'حول التطبيق',
-    ];
-
     return AnimatedBuilder(
       animation: _tabController,
       builder: (context, child) {
         final currentIndex = _tabController.index;
+        final tabLabels = [
+          context.l10n.settingsGeneralTitle,
+          context.l10n.settingsAppearanceTitle,
+          context.l10n.settingsChatTitle,
+          context.l10n.settingsPrivacyTitle,
+          context.l10n.settingsNotificationsTitle,
+          context.l10n.settingsAITitle,
+          context.l10n.settingsDataTitle,
+          context.l10n.settingsAboutTitle,
+        ];
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
+            color: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
           ),
           child: Row(
             children: [
@@ -252,48 +251,54 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   /// الإعدادات العامة
   Widget _buildGeneralSettings(AppSettings settings) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
           SettingsCard(
-            title: 'الإعدادات العامة',
-            description: 'تخصيص الإعدادات الأساسية للتطبيق',
+            title: context.l10n.settingsGeneralTitle,
+            description: context.l10n.settingsGeneralDescription,
             icon: Icons.tune,
             children: [
               widgets.SettingsItem(
-                title: 'اللغة الافتراضية',
-                subtitle: 'اختر اللغة التي تريد استخدامها في التطبيق',
+                title: context.l10n.settingsDefaultLanguage,
+                subtitle: context.l10n.settingsDefaultLanguageSubtitle,
                 icon: Icons.language,
                 type: SettingsItemType.dropdown,
                 value: settings.defaultLanguage,
                 options: {
                   'items': [
-                    const DropdownMenuItem(value: 'ar', child: Text('العربية')),
-                    const DropdownMenuItem(value: 'en', child: Text('English')),
+                    DropdownMenuItem(
+                      value: 'ar',
+                      child: Text(context.l10n.languageArabic),
+                    ),
+                    DropdownMenuItem(
+                      value: 'en',
+                      child: Text(context.l10n.languageEnglish),
+                    ),
                   ],
                 },
                 onChanged: (value) => _updateSetting('defaultLanguage', value),
               ),
 
               widgets.SettingsItem(
-                title: 'المنطقة الزمنية',
-                subtitle: 'اختر المنطقة الزمنية الخاصة بك',
+                title: context.l10n.settingsTimezone,
+                subtitle: context.l10n.settingsTimezoneSubtitle,
                 icon: Icons.access_time,
                 type: SettingsItemType.dropdown,
                 value: settings.timezone,
                 options: {
                   'items': [
-                    const DropdownMenuItem(
+                    DropdownMenuItem(
                       value: 'Asia/Riyadh',
-                      child: Text('الرياض (GMT+3)'),
+                      child: Text(context.l10n.timezoneRiyadh),
                     ),
-                    const DropdownMenuItem(
+                    DropdownMenuItem(
                       value: 'Asia/Dubai',
-                      child: Text('دبي (GMT+4)'),
+                      child: Text(context.l10n.timezoneDubai),
                     ),
-                    const DropdownMenuItem(
+                    DropdownMenuItem(
                       value: 'Asia/Kuwait',
-                      child: Text('الكويت (GMT+3)'),
+                      child: Text(context.l10n.timezoneKuwait),
                     ),
                   ],
                 },
@@ -301,8 +306,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'الوضع التجريبي',
-                subtitle: 'الوصول إلى الميزات الجديدة قبل إطلاقها الرسمي',
+                title: context.l10n.settingsBetaMode,
+                subtitle: context.l10n.settingsBetaModeSubtitle,
                 icon: Icons.science,
                 type: SettingsItemType.toggle,
                 value: settings.betaMode,
@@ -310,8 +315,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'التحديث التلقائي',
-                subtitle: 'تحديث التطبيق تلقائياً عند توفر إصدارات جديدة',
+                title: context.l10n.settingsAutoUpdate,
+                subtitle: context.l10n.settingsAutoUpdateSubtitle,
                 icon: Icons.system_update,
                 type: SettingsItemType.toggle,
                 value: settings.autoUpdate,
@@ -327,12 +332,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   /// إعدادات المظهر
   Widget _buildAppearanceSettings(AppSettings settings) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
           SettingsCard(
-            title: 'إعدادات المظهر',
-            description: 'تخصيص مظهر التطبيق حسب تفضيلاتك',
+            title: context.l10n.settingsAppearanceTitle,
+            description: context.l10n.settingsAppearanceDescription,
             icon: Icons.palette,
             accentColor: Colors.purple,
             children: [
@@ -342,7 +347,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                 onChanged: (mode) => _updateSetting('themeMode', mode),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
 
               // محدد حجم الخط
               FontSizeSelector(
@@ -350,11 +355,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                 onChanged: (size) => _updateSetting('fontSize', size),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
 
               widgets.SettingsItem(
-                title: 'الرسوم المتحركة',
-                subtitle: 'إظهار الرسوم المتحركة والانتقالات',
+                title: context.l10n.settingsAnimations,
+                subtitle: context.l10n.settingsAnimationsSubtitle,
                 icon: Icons.animation,
                 type: SettingsItemType.toggle,
                 value: settings.animationsEnabled,
@@ -363,8 +368,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'اللمس الاهتزازي',
-                subtitle: 'اهتزاز خفيف عند التفاعل',
+                title: context.l10n.settingsHapticFeedback,
+                subtitle: context.l10n.settingsHapticFeedbackSubtitle,
                 icon: Icons.vibration,
                 type: SettingsItemType.toggle,
                 value: settings.hapticFeedback,
@@ -380,18 +385,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   /// إعدادات المحادثة
   Widget _buildChatSettings(AppSettings settings) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
           SettingsCard(
-            title: 'إعدادات المحادثة',
-            description: 'تخصيص تجربة المحادثة مع المساعد الذكي',
+            title: context.l10n.settingsChatTitle,
+            description: context.l10n.settingsChatDescription,
             icon: Icons.chat_bubble,
             accentColor: Colors.green,
             children: [
               widgets.SettingsItem(
-                title: 'نمط الرد',
-                subtitle: 'اختر كيفية رد المساعد على أسئلتك',
+                title: context.l10n.settingsResponseStyle,
+                subtitle: context.l10n.settingsResponseStyleSubtitle,
                 icon: Icons.chat,
                 type: SettingsItemType.dropdown,
                 value: settings.responseStyle,
@@ -399,7 +404,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                   'items': ResponseStyle.values.map((style) {
                     return DropdownMenuItem(
                       value: style,
-                      child: Text(style.label),
+                      child: Text(_getResponseStyleLabel(context, style)),
                     );
                   }).toList(),
                 },
@@ -407,8 +412,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'الحد الأقصى للرسائل',
-                subtitle: 'عدد الرسائل المحفوظة في المحادثة الواحدة',
+                title: context.l10n.settingsMaxMessages,
+                subtitle: context.l10n.settingsMaxMessagesSubtitle,
                 icon: Icons.format_list_numbered,
                 type: SettingsItemType.dropdown,
                 value: settings.maxMessages,
@@ -416,7 +421,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                   'items': [50, 100, 200, 500].map((count) {
                     return DropdownMenuItem(
                       value: count,
-                      child: Text('$count رسالة'),
+                      child: Text(context.l10n.settingsMessagesCount(count)),
                     );
                   }).toList(),
                 },
@@ -424,8 +429,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'الرد التلقائي',
-                subtitle: 'السماح للمساعد بالرد تلقائياً على بعض الأسئلة',
+                title: context.l10n.settingsAutoResponse,
+                subtitle: context.l10n.settingsAutoResponseSubtitle,
                 icon: Icons.auto_fix_high,
                 type: SettingsItemType.toggle,
                 value: settings.autoResponse,
@@ -433,8 +438,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'اقتراحات المحادثة',
-                subtitle: 'إظهار اقتراحات للأسئلة التالية',
+                title: context.l10n.settingsShowSuggestions,
+                subtitle: context.l10n.settingsShowSuggestionsSubtitle,
                 icon: Icons.lightbulb_outline,
                 type: SettingsItemType.toggle,
                 value: settings.showSuggestions,
@@ -442,8 +447,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'التصحيح التلقائي',
-                subtitle: 'تصحيح الأخطاء الإملائية تلقائياً',
+                title: context.l10n.settingsAutoCorrect,
+                subtitle: context.l10n.settingsAutoCorrectSubtitle,
                 icon: Icons.spellcheck,
                 type: SettingsItemType.toggle,
                 value: settings.autoCorrect,
@@ -459,18 +464,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   /// إعدادات الخصوصية
   Widget _buildPrivacySettings(AppSettings settings) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
           SettingsCard(
-            title: 'إعدادات الخصوصية',
-            description: 'التحكم في خصوصية بياناتك ومعلوماتك',
+            title: context.l10n.settingsPrivacyTitle,
+            description: context.l10n.settingsPrivacyDescription,
             icon: Icons.shield,
             accentColor: Colors.orange,
             children: [
               widgets.SettingsItem(
-                title: 'جمع البيانات التحليلية',
-                subtitle: 'السماح بجمع بيانات الاستخدام لتحسين التطبيق',
+                title: context.l10n.settingsAnalytics,
+                subtitle: context.l10n.settingsAnalyticsSubtitle,
                 icon: Icons.analytics,
                 type: SettingsItemType.toggle,
                 value: settings.analytics,
@@ -478,8 +483,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'حفظ سجل المحادثات',
-                subtitle: 'حفظ المحادثات محلياً على جهازك',
+                title: context.l10n.settingsSaveChatHistory,
+                subtitle: context.l10n.settingsSaveChatHistorySubtitle,
                 icon: Icons.history,
                 type: SettingsItemType.toggle,
                 value: settings.saveChatHistory,
@@ -487,8 +492,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'مشاركة المحادثات',
-                subtitle: 'السماح بمشاركة المحادثات مع الآخرين',
+                title: context.l10n.settingsAllowSharing,
+                subtitle: context.l10n.settingsAllowSharingSubtitle,
                 icon: Icons.share,
                 type: SettingsItemType.toggle,
                 value: settings.allowSharing,
@@ -504,18 +509,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   /// إعدادات الإشعارات
   Widget _buildNotificationSettings(AppSettings settings) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
           SettingsCard(
-            title: 'إعدادات الإشعارات',
-            description: 'تخصيص الإشعارات والتنبيهات',
+            title: context.l10n.settingsNotificationsTitle,
+            description: context.l10n.settingsNotificationsDescription,
             icon: Icons.notifications,
             accentColor: Colors.blue,
             children: [
               widgets.SettingsItem(
-                title: 'تفعيل الإشعارات',
-                subtitle: 'استلام إشعارات من التطبيق',
+                title: context.l10n.settingsEnableNotifications,
+                subtitle: context.l10n.settingsEnableNotificationsSubtitle,
                 icon: Icons.notifications_active,
                 type: SettingsItemType.toggle,
                 value: settings.enableNotifications,
@@ -524,8 +529,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'إشعارات التحديثات',
-                subtitle: 'إشعارات عند توفر تحديثات جديدة',
+                title: context.l10n.settingsUpdateNotifications,
+                subtitle: context.l10n.settingsUpdateNotificationsSubtitle,
                 icon: Icons.system_update_alt,
                 type: SettingsItemType.toggle,
                 value: settings.updateNotifications,
@@ -534,8 +539,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'إشعارات الميزات الجديدة',
-                subtitle: 'إشعارات عند إضافة ميزات جديدة',
+                title: context.l10n.settingsFeatureNotifications,
+                subtitle: context.l10n.settingsFeatureNotificationsSubtitle,
                 icon: Icons.new_releases,
                 type: SettingsItemType.toggle,
                 value: settings.featureNotifications,
@@ -544,8 +549,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'صوت الإشعارات',
-                subtitle: 'تشغيل صوت عند استلام إشعارات',
+                title: context.l10n.settingsNotificationSound,
+                subtitle: context.l10n.settingsNotificationSoundSubtitle,
                 icon: Icons.volume_up,
                 type: SettingsItemType.toggle,
                 value: settings.notificationSound,
@@ -562,18 +567,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   /// إعدادات الذكاء الاصطناعي
   Widget _buildAISettings(AppSettings settings) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
           SettingsCard(
-            title: 'إعدادات الذكاء الاصطناعي',
-            description: 'تخصيص سلوك المساعد الذكي',
+            title: context.l10n.settingsAITitle,
+            description: context.l10n.settingsAIDescription,
             icon: Icons.psychology,
             accentColor: Colors.deepPurple,
             children: [
               widgets.SettingsItem(
-                title: 'نموذج الذكاء الاصطناعي',
-                subtitle: 'اختر النموذج المستخدم للمساعد',
+                title: context.l10n.settingsAIModel,
+                subtitle: context.l10n.settingsAIModelSubtitle,
                 icon: Icons.memory,
                 type: SettingsItemType.dropdown,
                 value: settings.aiModel,
@@ -581,14 +586,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                   'items': AIModel.values.map((model) {
                     return DropdownMenuItem(
                       value: model,
-                      child: Text(model.label),
+                      child: Text(_getAIModelLabel(context, model)),
                     );
                   }).toList(),
                 },
                 onChanged: (value) => _updateSetting('aiModel', value),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               // شريط الإبداع
               CreativitySlider(
@@ -596,11 +601,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                 onChanged: (value) => _updateSetting('creativityLevel', value),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               widgets.SettingsItem(
-                title: 'السياق المحفوظ',
-                subtitle: 'عدد الرسائل المحفوظة للسياق',
+                title: context.l10n.settingsContextLength,
+                subtitle: context.l10n.settingsContextLengthSubtitle,
                 icon: Icons.history_edu,
                 type: SettingsItemType.dropdown,
                 value: settings.contextLength,
@@ -608,7 +613,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                   'items': [5, 10, 20, 50].map((count) {
                     return DropdownMenuItem(
                       value: count,
-                      child: Text('$count رسائل'),
+                      child: Text(
+                        context.l10n.settingsContextMessagesCount(count),
+                      ),
                     );
                   }).toList(),
                 },
@@ -616,8 +623,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'التعلم التكيفي',
-                subtitle: 'تحسين الردود بناءً على تفضيلاتك',
+                title: context.l10n.settingsAdaptiveLearning,
+                subtitle: context.l10n.settingsAdaptiveLearningSubtitle,
                 icon: Icons.school,
                 type: SettingsItemType.toggle,
                 value: settings.adaptiveLearning,
@@ -625,8 +632,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'الميزات التجريبية للذكاء الاصطناعي',
-                subtitle: 'تجربة ميزات جديدة في الذكاء الاصطناعي',
+                title: context.l10n.settingsExperimentalAI,
+                subtitle: context.l10n.settingsExperimentalAISubtitle,
                 icon: Icons.biotech,
                 type: SettingsItemType.toggle,
                 value: settings.experimentalAI,
@@ -644,18 +651,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     final usageInfoAsync = ref.watch(settingsUsageInfoProvider);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
           SettingsCard(
-            title: 'البيانات والنسخ الاحتياطية',
-            description: 'إدارة البيانات والنسخ الاحتياطية',
+            title: context.l10n.settingsDataTitle,
+            description: context.l10n.settingsDataDescription,
             icon: Icons.storage,
             accentColor: Colors.teal,
             children: [
               widgets.SettingsItem(
-                title: 'النسخ الاحتياطي التلقائي',
-                subtitle: 'إنشاء نسخ احتياطية تلقائياً',
+                title: context.l10n.settingsAutoBackup,
+                subtitle: context.l10n.settingsAutoBackupSubtitle,
                 icon: Icons.backup,
                 type: SettingsItemType.toggle,
                 value: settings.autoBackup,
@@ -663,8 +670,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SettingsItem(
-                title: 'تكرار النسخ الاحتياطي',
-                subtitle: 'متى يتم إنشاء النسخ الاحتياطية',
+                title: context.l10n.settingsBackupFrequency,
+                subtitle: context.l10n.settingsBackupFrequencySubtitle,
                 icon: Icons.schedule,
                 type: SettingsItemType.dropdown,
                 value: settings.backupFrequency,
@@ -672,7 +679,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                   'items': BackupFrequency.values.map((freq) {
                     return DropdownMenuItem(
                       value: freq,
-                      child: Text(freq.label),
+                      child: Text(_getBackupFrequencyLabel(context, freq)),
                     );
                   }).toList(),
                 },
@@ -683,10 +690,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               usageInfoAsync.when(
                 data: (usageInfo) => _buildStorageInfo(usageInfo),
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => Text('خطأ: $error'),
+                error: (error, stack) =>
+                    Text('${context.l10n.commonError}: $error'),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               // أزرار الإجراءات
               Row(
@@ -695,7 +703,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                     child: OutlinedButton.icon(
                       onPressed: _exportSettings,
                       icon: const Icon(Icons.file_download),
-                      label: const Text('تصدير البيانات'),
+                      label: Text(context.l10n.settingsExportData),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -703,7 +711,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                     child: ElevatedButton.icon(
                       onPressed: _showDeleteDialog,
                       icon: const Icon(Icons.delete_forever),
-                      label: const Text('حذف جميع البيانات'),
+                      label: Text(context.l10n.settingsDeleteAllData),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
@@ -724,10 +732,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     final theme = context.theme;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -737,7 +745,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             children: [
               Expanded(
                 child: Text(
-                  'مساحة التخزين المستخدمة',
+                  context.l10n.settingsStorageUsed,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -772,24 +780,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             children: [
               Expanded(
                 child: _buildStorageStat(
-                  'المحادثات',
+                  context.l10n.settingsChats,
                   usageInfo.totalChats.toString(),
                   Icons.chat,
                 ),
               ),
               Expanded(
                 child: _buildStorageStat(
-                  'الرسائل',
+                  context.l10n.settingsMessages,
                   usageInfo.totalMessages.toString(),
                   Icons.message,
                 ),
               ),
               Expanded(
                 child: _buildStorageStat(
-                  'آخر نسخة',
+                  context.l10n.settingsLastBackup,
                   usageInfo.lastBackup != null
                       ? '${usageInfo.lastBackup!.day}/${usageInfo.lastBackup!.month}'
-                      : 'لا توجد',
+                      : context.l10n.settingsNoBackup,
                   Icons.backup,
                 ),
               ),
@@ -821,12 +829,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   /// إعدادات حول التطبيق
   Widget _buildAboutSettings(AppSettings settings) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
           SettingsCard(
-            title: 'حول التطبيق',
-            description: 'معلومات عن التطبيق والإصدار',
+            title: context.l10n.settingsAboutTitle,
+            description: context.l10n.settingsAboutDescription,
             icon: Icons.info,
             children: [
               // شعار التطبيق
@@ -844,20 +852,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'مساعد كفو',
+                      context.l10n.appName,
                       style: context.theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      'الإصدار ${settings.version}',
+                      context.l10n.settingsAppVersion(settings.version),
                       style: context.theme.textTheme.bodyMedium?.copyWith(
                         color: context.theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'مساعد ذكي لطلبة جامعة الملك فيصل، مصمم لمساعدتك في الشؤون الأكاديمية والدراسية.',
+                      context.l10n.settingsAppDescription,
                       textAlign: TextAlign.center,
                       style: context.theme.textTheme.bodyMedium,
                     ),
@@ -865,11 +873,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
 
               widgets.SimpleSettingsItem(
-                title: 'سياسة الخصوصية',
-                subtitle: 'اقرأ سياسة الخصوصية',
+                title: context.l10n.settingsPrivacyPolicy,
+                subtitle: context.l10n.settingsPrivacyPolicySubtitle,
                 icon: Icons.policy,
                 trailing: const Icon(Icons.open_in_new),
                 onTap: () {
@@ -878,8 +886,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SimpleSettingsItem(
-                title: 'شروط الاستخدام',
-                subtitle: 'اقرأ شروط الاستخدام',
+                title: context.l10n.settingsTermsOfService,
+                subtitle: context.l10n.settingsTermsOfServiceSubtitle,
                 icon: Icons.description,
                 trailing: const Icon(Icons.open_in_new),
                 onTap: () {
@@ -888,8 +896,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SimpleSettingsItem(
-                title: 'المساعدة والدعم',
-                subtitle: 'احصل على المساعدة',
+                title: context.l10n.settingsHelpAndSupport,
+                subtitle: context.l10n.settingsHelpAndSupportSubtitle,
                 icon: Icons.help_outline,
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
@@ -898,8 +906,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
 
               widgets.SimpleSettingsItem(
-                title: 'إرسال ملاحظات',
-                subtitle: 'ساعدنا في تحسين التطبيق',
+                title: context.l10n.settingsSendFeedback,
+                subtitle: context.l10n.settingsSendFeedbackSubtitle,
                 icon: Icons.feedback,
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
@@ -919,12 +927,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                 child: Column(
                   children: [
                     Text(
-                      'تم التطوير بواسطة فريق جامعة الملك فيصل',
+                      context.l10n.settingsDevelopedBy,
                       style: context.theme.textTheme.bodySmall,
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      'جميع الحقوق محفوظة © 2024',
+                      context.l10n.settingsCopyright,
                       style: context.theme.textTheme.bodySmall?.copyWith(
                         color: context.theme.colorScheme.onSurfaceVariant,
                       ),
@@ -985,14 +993,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('إعادة تعيين الإعدادات'),
-        content: const Text(
-          'هل أنت متأكد من إعادة تعيين جميع الإعدادات إلى القيم الافتراضية؟',
-        ),
+        title: Text(context.l10n.settingsResetDialogTitle),
+        content: Text(context.l10n.settingsResetDialogContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+            child: Text(context.l10n.commonCancel),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -1000,12 +1006,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               await ref.read(settingsProvider.notifier).resetToDefaults();
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('تم إعادة تعيين الإعدادات')),
+                  SnackBar(content: Text(context.l10n.settingsResetSuccess)),
                 );
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('إعادة تعيين'),
+            child: Text(context.l10n.settingsReset),
           ),
         ],
       ),
@@ -1023,11 +1029,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('تصدير الإعدادات'),
+            title: Text(context.l10n.settingsExportDialogTitle),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('تم تصدير الإعدادات بنجاح:'),
+                Text(context.l10n.settingsExportSuccess),
                 const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.all(8),
@@ -1047,7 +1053,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('موافق'),
+                child: Text(context.l10n.settingsOK),
               ),
             ],
           ),
@@ -1057,7 +1063,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('خطأ في التصدير: $e'),
+            content: Text(context.l10n.settingsExportError(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -1070,7 +1076,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     // TODO: تطبيق استيراد الإعدادات من ملف
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('ميزة الاستيراد قيد التطوير')));
+    ).showSnackBar(SnackBar(content: Text(context.l10n.settingsImportFeature)));
   }
 
   /// عرض حوار حذف البيانات
@@ -1078,29 +1084,65 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('حذف جميع البيانات'),
-        content: const Text(
-          'هل أنت متأكد من حذف جميع البيانات؟ هذا الإجراء لا يمكن التراجع عنه.',
-        ),
+        title: Text(context.l10n.settingsDeleteDialogTitle),
+        content: Text(context.l10n.settingsDeleteDialogContent),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+            child: Text(context.l10n.commonCancel),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               // TODO: تطبيق حذف البيانات
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('تم حذف جميع البيانات')),
+                SnackBar(content: Text(context.l10n.settingsDeleteSuccess)),
               );
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('حذف'),
+            child: Text(context.l10n.settingsDeleteButton),
           ),
         ],
       ),
     );
+  }
+
+  /// الحصول على تسمية نمط الرد من الترجمة
+  String _getResponseStyleLabel(BuildContext context, ResponseStyle style) {
+    switch (style) {
+      case ResponseStyle.detailed:
+        return context.l10n.responseStyleDetailed;
+      case ResponseStyle.concise:
+        return context.l10n.responseStyleConcise;
+      case ResponseStyle.balanced:
+        return context.l10n.responseStyleBalanced;
+    }
+  }
+
+  /// الحصول على تسمية نموذج الذكاء الاصطناعي من الترجمة
+  String _getAIModelLabel(BuildContext context, AIModel model) {
+    switch (model) {
+      case AIModel.gpt4:
+        return context.l10n.aiModelGPT4;
+      case AIModel.gpt35:
+        return context.l10n.aiModelGPT35;
+      case AIModel.claude:
+        return context.l10n.aiModelClaude;
+    }
+  }
+
+  /// الحصول على تسمية تكرار النسخ الاحتياطي من الترجمة
+  String _getBackupFrequencyLabel(BuildContext context, BackupFrequency freq) {
+    switch (freq) {
+      case BackupFrequency.never:
+        return context.l10n.backupFrequencyNever;
+      case BackupFrequency.daily:
+        return context.l10n.backupFrequencyDaily;
+      case BackupFrequency.weekly:
+        return context.l10n.backupFrequencyWeekly;
+      case BackupFrequency.monthly:
+        return context.l10n.backupFrequencyMonthly;
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/localization/l10n.dart';
 import '../../domain/models/app_settings.dart';
 
 /// محدد حجم الخط
@@ -31,14 +32,14 @@ class FontSizeSelector extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'حجم الخط',
+              context.l10n.fontSizeSelectorTitle,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: theme.colorScheme.onSurface,
               ),
             ),
             Text(
-              selectedSize.label,
+              _getFontSizeLabel(context, selectedSize),
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.primary,
                 fontWeight: FontWeight.w500,
@@ -47,16 +48,16 @@ class FontSizeSelector extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
 
         Text(
-          'تعديل حجم النص في التطبيق',
-          style: theme.textTheme.bodyMedium?.copyWith(
+          context.l10n.fontSizeSelectorSubtitle,
+          style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
 
         // أزرار التحكم
         Row(
@@ -87,7 +88,7 @@ class FontSizeSelector extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        'مثال على النص',
+                        context.l10n.fontSizeExample,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontSize:
                               (theme.textTheme.bodyMedium?.fontSize ?? 14) *
@@ -141,7 +142,7 @@ class FontSizeSelector extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? theme.colorScheme.primary
-                      : theme.colorScheme.outline.withOpacity(0.3),
+                      : theme.colorScheme.outline.withAlpha(76),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -183,6 +184,20 @@ class FontSizeSelector extends StatelessWidget {
     final currentIndex = FontSizeLevel.values.indexOf(selectedSize);
     return currentIndex / (FontSizeLevel.values.length - 1);
   }
+
+  /// الحصول على تسمية حجم الخط من الترجمة
+  String _getFontSizeLabel(BuildContext context, FontSizeLevel size) {
+    switch (size) {
+      case FontSizeLevel.small:
+        return context.l10n.fontSizeSmall;
+      case FontSizeLevel.medium:
+        return context.l10n.fontSizeMedium;
+      case FontSizeLevel.large:
+        return context.l10n.fontSizeLarge;
+      case FontSizeLevel.extraLarge:
+        return context.l10n.fontSizeExtraLarge;
+    }
+  }
 }
 
 /// محدد حجم الخط المبسط
@@ -203,7 +218,10 @@ class SimpleFontSizeSelector extends StatelessWidget {
     return DropdownButton<FontSizeLevel>(
       value: selectedSize,
       items: FontSizeLevel.values.map((size) {
-        return DropdownMenuItem(value: size, child: Text(size.label));
+        return DropdownMenuItem(
+          value: size,
+          child: Text(_getFontSizeLabel(context, size)),
+        );
       }).toList(),
       onChanged: (newSize) {
         if (newSize != null) {
@@ -214,5 +232,19 @@ class SimpleFontSizeSelector extends StatelessWidget {
       style: theme.textTheme.bodyMedium,
       dropdownColor: theme.colorScheme.surface,
     );
+  }
+
+  /// الحصول على تسمية حجم الخط من الترجمة
+  String _getFontSizeLabel(BuildContext context, FontSizeLevel size) {
+    switch (size) {
+      case FontSizeLevel.small:
+        return context.l10n.fontSizeSmall;
+      case FontSizeLevel.medium:
+        return context.l10n.fontSizeMedium;
+      case FontSizeLevel.large:
+        return context.l10n.fontSizeLarge;
+      case FontSizeLevel.extraLarge:
+        return context.l10n.fontSizeExtraLarge;
+    }
   }
 }

@@ -6,14 +6,19 @@ import '../../features/help/presentation/screens/help_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart'
     as settings;
 import '../../features/chat/presentation/providers/chat_provider.dart';
+import '../../features/chat/presentation/providers/chat_sessions_provider.dart';
 import '../../features/chat/presentation/widgets/recent_chats_widget.dart';
+import '../../features/chat_history/presentation/screens/chat_history_screen.dart';
 import '../theme/icons.dart';
 import '../extensions/context_extensions.dart';
+import '../providers/sidebar_provider.dart';
 import '../../app/app.dart';
 
 /// القائمة الجانبية الرئيسية للتطبيق
 class AppDrawer extends ConsumerWidget {
-  const AppDrawer({super.key});
+  final bool isSidebar;
+
+  const AppDrawer({super.key, this.isSidebar = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,47 +27,59 @@ class AppDrawer extends ConsumerWidget {
     final userName = authState.loginResponse?.profile?['fullName'] ?? 'مستخدم';
     final userId = authState.userId ?? '';
 
+    final content = SafeArea(
+      child: Column(
+        children: [
+          // رأس القائمة مع الشعار
+          _buildHeader(context, theme, ref),
+
+          // معلومات المستخدم
+          _buildUserInfo(context, theme, userName, userId, ref),
+
+          // أزرار البحث والمحادثة الجديدة
+          _buildActionButtons(context, theme, ref),
+
+          // المحتوى القابل للتمرير
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // قسم المجلدات
+                  _buildFoldersSection(context, theme),
+
+                  // قسم المحادثات الأخيرة
+                  _buildRecentChatsSection(context, theme, ref),
+                ],
+              ),
+            ),
+          ),
+
+          // تذييل القائمة الجانبية
+          _buildFooter(context, theme),
+        ],
+      ),
+    );
+
+    // إذا كان sidebar، نعيده كـ Container عادي
+    if (isSidebar) {
+      return Container(
+        width: 320,
+        color: theme.colorScheme.surface,
+        child: content,
+      );
+    }
+
+    // وإلا نعيده كـ Drawer عادي
     return Drawer(
       backgroundColor: theme.colorScheme.surface,
       width: 320,
-      child: SafeArea(
-        child: Column(
-          children: [
-            // رأس القائمة مع الشعار
-            _buildHeader(theme),
-
-            // معلومات المستخدم
-            _buildUserInfo(context, theme, userName, userId, ref),
-
-            // أزرار البحث والمحادثة الجديدة
-            _buildActionButtons(context, theme, ref),
-
-            // المحتوى القابل للتمرير
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // قسم المجلدات
-                    _buildFoldersSection(context, theme),
-
-                    // قسم المحادثات الأخيرة
-                    _buildRecentChatsSection(context, theme, ref),
-                  ],
-                ),
-              ),
-            ),
-
-            // تذييل القائمة الجانبية
-            _buildFooter(context, theme),
-          ],
-        ),
-      ),
+      child: content,
     );
   }
 
   /// رأس القائمة مع الشعار
-  Widget _buildHeader(ThemeData theme) {
+  Widget _buildHeader(BuildContext context, ThemeData theme, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -95,6 +112,19 @@ class AppDrawer extends ConsumerWidget {
               ),
             ),
           ),
+          // زر إغلاق في وضع sidebar
+          if (isSidebar)
+            IconButton(
+              onPressed: () {
+                ref.read(sidebarProvider.notifier).close();
+              },
+              icon: Icon(
+                AppIcons.getIcon(AppIcon.close),
+                size: 20,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              tooltip: 'إغلاق القائمة',
+            ),
         ],
       ),
     );
@@ -187,7 +217,9 @@ class AppDrawer extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () {
-                Navigator.pop(context);
+                if (!isSidebar) {
+                  Navigator.pop(context);
+                }
                 ref.read(chatProvider.notifier).createNewChat();
               },
               icon: Icon(AppIcons.getIcon(AppIcon.plus), size: 16),
@@ -209,7 +241,9 @@ class AppDrawer extends ConsumerWidget {
             width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: () {
-                Navigator.pop(context);
+                if (!isSidebar) {
+                  Navigator.pop(context);
+                }
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const SearchScreen()),
@@ -307,36 +341,56 @@ class AppDrawer extends ConsumerWidget {
                 ),
               ),
             ),
-            child: Row(
-              children: [
-                Icon(
-                  AppIcons.getIcon(AppIcon.chat),
-                  size: 14,
-                  color: theme.colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'المحادثات الأخيرة',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurfaceVariant,
+            child: InkWell(
+              onTap: () {
+                if (!isSidebar) {
+                  Navigator.pop(context);
+                }
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ChatHistoryScreen(),
                   ),
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    // TODO: تحديث المحادثات
-                  },
-                  icon: Icon(
-                    AppIcons.getIcon(AppIcon.refresh),
+                );
+              },
+              borderRadius: BorderRadius.circular(8),
+              child: Row(
+                children: [
+                  Icon(
+                    AppIcons.getIcon(AppIcon.chat),
                     size: 14,
                     color: theme.colorScheme.primary,
                   ),
-                  constraints: const BoxConstraints(),
-                  padding: EdgeInsets.zero,
-                  tooltip: 'تحديث',
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'المحادثات الأخيرة',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    AppIcons.getIcon(AppIcon.arrowLeft),
+                    size: 12,
+                    color: theme.colorScheme.onSurfaceVariant.withAlpha(153),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    onPressed: () {
+                      ref.read(chatSessionsProvider.notifier).loadRecentChats();
+                    },
+                    icon: Icon(
+                      AppIcons.getIcon(AppIcon.refresh),
+                      size: 14,
+                      color: theme.colorScheme.primary,
+                    ),
+                    constraints: const BoxConstraints(),
+                    padding: EdgeInsets.zero,
+                    tooltip: 'تحديث',
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 4),
@@ -366,7 +420,9 @@ class AppDrawer extends ConsumerWidget {
             icon: AppIcons.getIcon(AppIcon.settings),
             title: 'الإعدادات',
             onTap: () {
-              Navigator.pop(context);
+              if (!isSidebar) {
+                Navigator.pop(context);
+              }
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const settings.SettingsScreen(),
@@ -380,7 +436,9 @@ class AppDrawer extends ConsumerWidget {
             icon: AppIcons.getIcon(AppIcon.help),
             title: 'المساعدة',
             onTap: () {
-              Navigator.pop(context);
+              if (!isSidebar) {
+                Navigator.pop(context);
+              }
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const HelpScreen()),
               );
@@ -475,7 +533,9 @@ class AppDrawer extends ConsumerWidget {
             ),
           ),
           onTap: () {
-            Navigator.pop(context);
+            if (!isSidebar) {
+              Navigator.pop(context);
+            }
             // TODO: اختيار المجلد
           },
         );
@@ -491,7 +551,9 @@ class AppDrawer extends ConsumerWidget {
         selectedSessionId: null, // لا يوجد محادثة محددة في القائمة الجانبية
         onSessionSelected: (sessionId) {
           print('🔥🔥🔥 تم اختيار المحادثة من AppDrawer: $sessionId 🔥🔥🔥');
-          Navigator.pop(context);
+          if (!isSidebar) {
+            Navigator.pop(context);
+          }
           // تحميل المحادثة المحددة
           ref.read(chatProvider.notifier).loadChat(sessionId);
           print('✅ تم استدعاء loadChat للمحادثة: $sessionId');

@@ -6,6 +6,7 @@ import '../../domain/models/message.dart';
 import '../../domain/models/message_attachment.dart';
 import '../../../../core/theme/icons.dart';
 import '../../../../core/utils/html_utils.dart';
+import '../../../../core/localization/l10n.dart';
 
 /// مكون فقاعة الرسالة
 ///
@@ -253,115 +254,207 @@ class MessageBubble extends ConsumerWidget {
     bool isUser,
     bool isAssistant,
   ) {
-    return Row(
-      mainAxisAlignment: isUser
-          ? MainAxisAlignment.end
-          : MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        if (!isUser) ...[
-          _buildAvatar(theme, isAssistant),
-          const SizedBox(width: 8),
-        ],
-        Flexible(
-          child: Container(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.75,
-            ),
-            child: Column(
-              crossAxisAlignment: isUser
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
-              children: [
-                if (showSenderInfo && !isUser) ...[
-                  Text(
-                    message.senderName ?? 'مساعد كفو',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                ],
-                GestureDetector(
-                  onTap: onTap,
-                  onLongPress: onLongPress,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isUser
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(18),
-                        topRight: const Radius.circular(18),
-                        bottomLeft: Radius.circular(isUser ? 18 : 4),
-                        bottomRight: Radius.circular(isUser ? 4 : 18),
+    // رسالة المستخدم: أيقونة على اليسار، فقاعة على اليمين
+    // رسالة المساعد: أيقونة على اليمين، فقاعة على اليسار
+    if (isUser) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.75,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: onTap,
+                    onLongPress: onLongPress,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
                       ),
-                      border: isSelected
-                          ? Border.all(
-                              color: theme.colorScheme.primary,
-                              width: 2,
-                            )
-                          : null,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // عرض المحتوى (HTML أو نص عادي)
-                        _buildMessageText(
-                          theme,
-                          isUser,
-                          isAssistant,
-                          message.content,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.onSurfaceVariant.withAlpha(
+                          128,
                         ),
-                        if (message.hasAttachments) ...[
-                          const SizedBox(height: 8),
-                          _buildAttachments(theme),
-                        ],
-                      ],
-                    ),
-                  ),
-                ),
-                if (showTimestamp) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    message.formattedTime,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-                if (message.state.isFailed) ...[
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        AppIcons.getIcon(AppIcon.exclamation),
-                        size: 12,
-                        color: theme.colorScheme.error,
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(4),
+                          topRight: const Radius.circular(18),
+                          bottomLeft: const Radius.circular(18),
+                          bottomRight: const Radius.circular(18),
+                        ),
+                        border: isSelected
+                            ? Border.all(
+                                color: theme.colorScheme.primary,
+                                width: 2,
+                              )
+                            : null,
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        'فشل الإرسال',
-                        style: theme.textTheme.labelSmall?.copyWith(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // عرض المحتوى (HTML أو نص عادي)
+                          _buildMessageText(
+                            theme,
+                            isUser,
+                            isAssistant,
+                            message.content,
+                          ),
+                          if (message.hasAttachments) ...[
+                            const SizedBox(height: 8),
+                            _buildAttachments(theme),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (showTimestamp) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      message.formattedTime,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                  if (message.state.isFailed) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          AppIcons.getIcon(AppIcon.exclamation),
+                          size: 12,
                           color: theme.colorScheme.error,
                         ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'فشل الإرسال',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.error,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
-        ),
-        if (isUser) ...[const SizedBox(width: 8), _buildAvatar(theme, isUser)],
-      ],
-    );
+          const SizedBox(width: 8),
+          // أيقونة المستخدم على اليسار
+          _buildAvatar(theme, isUser),
+        ],
+      );
+    } else {
+      // رسالة المساعد
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // أيقونة المساعد على اليمين
+          _buildAvatar(theme, isUser),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.75,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (showSenderInfo && !isUser) ...[
+                    Text(
+                      // تجاهل أي اسم قادم من الـ API وعرض الاسم المترجم دائماً
+                      context.l10n.appNameShort,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                  GestureDetector(
+                    onTap: onTap,
+                    onLongPress: onLongPress,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white, // أبيض
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(18),
+                          topRight: const Radius.circular(18),
+                          bottomLeft: const Radius.circular(4),
+                          bottomRight: const Radius.circular(18),
+                        ),
+                        border: isSelected
+                            ? Border.all(
+                                color: theme.colorScheme.primary,
+                                width: 2,
+                              )
+                            : null,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // عرض المحتوى (HTML أو نص عادي)
+                          _buildMessageText(
+                            theme,
+                            isUser,
+                            isAssistant,
+                            message.content,
+                          ),
+                          if (message.hasAttachments) ...[
+                            const SizedBox(height: 8),
+                            _buildAttachments(theme),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (showTimestamp) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      message.formattedTime,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                  if (message.state.isFailed) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          AppIcons.getIcon(AppIcon.exclamation),
+                          size: 12,
+                          color: theme.colorScheme.error,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'فشل الإرسال',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.error,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   /// بناء محتوى الرسالة (HTML أو نص عادي)
@@ -392,12 +485,14 @@ class MessageBubble extends ConsumerWidget {
                 margin: Margins.zero,
                 padding: HtmlPaddings.zero,
                 fontSize: FontSize(14),
-                color: theme.colorScheme.onSurfaceVariant,
+                color: Colors.black, // نص أسود
                 lineHeight: const LineHeight(1.4),
+                textAlign: TextAlign.right, // محاذاة لليمين
               ),
               'p': Style(
                 margin: Margins.only(bottom: 8),
                 padding: HtmlPaddings.zero,
+                textAlign: TextAlign.right, // محاذاة لليمين
               ),
               'strong': Style(fontWeight: FontWeight.bold),
             },
@@ -419,11 +514,10 @@ class MessageBubble extends ConsumerWidget {
     return Text(
       displayText,
       style: theme.textTheme.bodyMedium?.copyWith(
-        color: isUser
-            ? theme.colorScheme.onPrimary
-            : theme.colorScheme.onSurfaceVariant,
+        color: Colors.black, // نص أسود في كلا الحالتين
         height: 1.4,
       ),
+      textAlign: TextAlign.right, // محاذاة لليمين
     );
   }
 
@@ -529,21 +623,33 @@ class MessageBubble extends ConsumerWidget {
 
   /// بناء صورة شخصية المرسل
   Widget _buildAvatar(ThemeData theme, bool isUser) {
-    return Container(
-      width: 32,
-      height: 32,
-      decoration: BoxDecoration(
-        color: isUser ? theme.colorScheme.primary : theme.colorScheme.secondary,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Icon(
-        isUser
-            ? AppIcons.getIcon(AppIcon.user)
-            : AppIcons.getIcon(AppIcon.user),
-        size: 18,
-        color: isUser
-            ? theme.colorScheme.onPrimary
-            : theme.colorScheme.onSecondary,
+    if (isUser) {
+      return Container(
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.primary,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Icon(
+          AppIcons.getIcon(AppIcon.user),
+          size: 18,
+          color: theme.colorScheme.onPrimary,
+        ),
+      );
+    }
+
+    // أيقونة المساعد بصورة التطبيق
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: 32,
+        height: 32,
+        color: theme.colorScheme.secondary,
+        child: Image.asset(
+          'assets/images/mosa3ed_kfu_icon_app.jpg',
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

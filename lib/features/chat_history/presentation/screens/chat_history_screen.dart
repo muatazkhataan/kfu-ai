@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/localization/l10n.dart';
+import '../providers/chat_history_provider.dart';
+import '../../../chat/domain/models/chat.dart';
+import '../../../chat/presentation/providers/chat_provider.dart';
 
 /// Chat history screen widget
 class ChatHistoryScreen extends ConsumerStatefulWidget {
@@ -16,6 +19,15 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
   String _searchQuery = '';
 
   @override
+  void initState() {
+    super.initState();
+    // تحميل المحادثات عند بدء الشاشة
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(chatHistoryProvider.notifier).loadChatHistory();
+    });
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -26,6 +38,12 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('المحادثات الأخيرة'),
+        backgroundColor: theme.colorScheme.surface,
+        foregroundColor: theme.colorScheme.onSurface,
+        elevation: 0,
+      ),
       body: Column(
         children: [
           // Search and filter bar
@@ -98,14 +116,23 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
           // Filter and sort buttons
           Row(
             children: [
-              Expanded(child: _buildFilterDropdown(theme)),
-              const SizedBox(width: 12),
-              Expanded(child: _buildSortDropdown(theme)),
-              const SizedBox(width: 12),
-              IconButton(
-                onPressed: _refreshChatHistory,
-                icon: Icon(Icons.refresh, color: theme.colorScheme.onSurface),
-                tooltip: context.l10n.chatHistoryRefresh,
+              Expanded(flex: 2, child: _buildFilterDropdown(theme)),
+              const SizedBox(width: 8),
+              Expanded(flex: 2, child: _buildSortDropdown(theme)),
+              const SizedBox(width: 8),
+              Container(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest.withOpacity(
+                    0.3,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: IconButton(
+                  onPressed: _refreshChatHistory,
+                  icon: Icon(Icons.refresh, size: 20),
+                  color: theme.colorScheme.onSurface,
+                  tooltip: context.l10n.chatHistoryRefresh,
+                ),
               ),
             ],
           ),
@@ -118,32 +145,36 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
   Widget _buildFilterDropdown(ThemeData theme) {
     return DropdownButtonFormField<String>(
       value: 'all',
+      isExpanded: true,
       decoration: InputDecoration(
         labelText: 'تصفية',
         prefixIcon: Icon(
           Icons.filter_list,
+          size: 18,
           color: theme.colorScheme.onSurfaceVariant,
         ),
         filled: true,
-        fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+        fillColor: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        labelStyle: theme.textTheme.bodySmall,
       ),
+      style: theme.textTheme.bodySmall,
       items: [
         DropdownMenuItem(
           value: 'all',
-          child: Text(context.l10n.chatHistoryFilterAll),
+          child: Text('الكل', style: theme.textTheme.bodySmall),
         ),
         DropdownMenuItem(
           value: 'recent',
-          child: Text(context.l10n.chatHistoryFilterRecent),
+          child: Text('الأخيرة', style: theme.textTheme.bodySmall),
         ),
         DropdownMenuItem(
           value: 'archived',
-          child: Text(context.l10n.chatHistoryFilterArchived),
+          child: Text('المؤرشفة', style: theme.textTheme.bodySmall),
         ),
       ],
       onChanged: (value) {
@@ -156,33 +187,40 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
   Widget _buildSortDropdown(ThemeData theme) {
     return DropdownButtonFormField<String>(
       value: 'date_desc',
+      isExpanded: true,
       decoration: InputDecoration(
         labelText: 'ترتيب',
-        prefixIcon: Icon(Icons.sort, color: theme.colorScheme.onSurfaceVariant),
+        prefixIcon: Icon(
+          Icons.sort,
+          size: 18,
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
         filled: true,
-        fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+        fillColor: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        labelStyle: theme.textTheme.bodySmall,
       ),
+      style: theme.textTheme.bodySmall,
       items: [
         DropdownMenuItem(
           value: 'date_desc',
-          child: Text(context.l10n.chatHistorySortDateDesc),
+          child: Text('الأحدث', style: theme.textTheme.bodySmall),
         ),
         DropdownMenuItem(
           value: 'date_asc',
-          child: Text(context.l10n.chatHistorySortDateAsc),
+          child: Text('الأقدم', style: theme.textTheme.bodySmall),
         ),
         DropdownMenuItem(
           value: 'title',
-          child: Text(context.l10n.chatHistorySortTitle),
+          child: Text('العنوان', style: theme.textTheme.bodySmall),
         ),
         DropdownMenuItem(
           value: 'messages',
-          child: Text(context.l10n.chatHistorySortMessages),
+          child: Text('الرسائل', style: theme.textTheme.bodySmall),
         ),
       ],
       onChanged: (value) {
@@ -193,34 +231,109 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
 
   /// Build chat history list
   Widget _buildChatHistoryList(ThemeData theme) {
-    // TODO: Replace with actual data from provider
-    final mockChats = _getMockChats();
+    final chatHistoryState = ref.watch(chatHistoryProvider);
+
+    // حالة التحميل
+    if (chatHistoryState.isLoadingChats && !chatHistoryState.hasLoadedInitial) {
+      return _buildLoadingState(theme);
+    }
+
+    // فلترة المحادثات حسب البحث
+    final allChats = chatHistoryState.allChats;
     final filteredChats = _searchQuery.isEmpty
-        ? mockChats
-        : mockChats
+        ? allChats
+        : allChats
               .where(
                 (chat) =>
-                    chat['title'].toLowerCase().contains(_searchQuery) ||
-                    chat['preview'].toLowerCase().contains(_searchQuery),
+                    chat.title.toLowerCase().contains(
+                      _searchQuery.toLowerCase(),
+                    ) ||
+                    (chat.lastMessagePreview?.toLowerCase().contains(
+                          _searchQuery.toLowerCase(),
+                        ) ??
+                        false) ||
+                    (chat.description?.toLowerCase().contains(
+                          _searchQuery.toLowerCase(),
+                        ) ??
+                        false),
               )
               .toList();
 
     if (filteredChats.isEmpty) {
-      return _buildEmptyState(theme);
+      return _buildEmptyState(theme, chatHistoryState.error);
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: filteredChats.length,
-      itemBuilder: (context, index) {
-        final chat = filteredChats[index];
-        return _buildChatItem(theme, chat);
-      },
+    return Column(
+      children: [
+        // عرض رسالة خطأ إذا وجدت
+        if (chatHistoryState.error != null)
+          Container(
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.errorContainer.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: theme.colorScheme.error.withAlpha(76)),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: theme.colorScheme.error,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    chatHistoryState.error!,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        // قائمة المحادثات
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () => ref.read(chatHistoryProvider.notifier).refresh(),
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              itemCount: filteredChats.length,
+              itemBuilder: (context, index) {
+                final chat = filteredChats[index];
+                return _buildChatItem(theme, chat);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Build loading state
+  Widget _buildLoadingState(ThemeData theme) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(color: theme.colorScheme.primary),
+          const SizedBox(height: 16),
+          Text(
+            'جاري تحميل المحادثات...',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   /// Build individual chat item
-  Widget _buildChatItem(ThemeData theme, Map<String, dynamic> chat) {
+  Widget _buildChatItem(ThemeData theme, Chat chat) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Card(
@@ -242,7 +355,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                 // Header row
                 Row(
                   children: [
-                    if (chat['isPinned']) ...[
+                    if (chat.isPinned) ...[
                       Icon(
                         Icons.push_pin,
                         size: 16,
@@ -250,7 +363,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                       ),
                       const SizedBox(width: 8),
                     ],
-                    if (chat['isFavorite']) ...[
+                    if (chat.isFavorite) ...[
                       Icon(
                         Icons.favorite,
                         size: 16,
@@ -260,7 +373,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                     ],
                     Expanded(
                       child: Text(
-                        chat['title'],
+                        chat.title,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: theme.colorScheme.onSurface,
@@ -269,7 +382,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (chat['folder'] != null)
+                    if (chat.folderId != null && chat.folderId!.isNotEmpty)
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
@@ -280,7 +393,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          chat['folder'],
+                          _getFolderDisplayName(chat.folderId!),
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: theme.colorScheme.onPrimaryContainer,
                             fontWeight: FontWeight.w500,
@@ -294,7 +407,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
 
                 // Preview
                 Text(
-                  chat['preview'],
+                  chat.lastMessagePreview ?? 'لا توجد رسائل بعد',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -314,7 +427,8 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      chat['lastActivity'],
+                      chat.metadata?['lastActivityText'] ??
+                          _formatLastActivity(chat.lastActivityAt),
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -330,7 +444,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        '${chat['messageCount']} رسالة',
+                        '${chat.messageCount} ${chat.messageCount == 1 ? 'رسالة' : 'رسالة'}',
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                           fontWeight: FontWeight.w500,
@@ -347,8 +461,45 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
     );
   }
 
+  /// Get folder display name
+  String _getFolderDisplayName(String folderId) {
+    // يمكن تحسين هذا بجلب أسماء المجلدات من API
+    switch (folderId.toLowerCase()) {
+      case 'programming':
+        return 'البرمجة';
+      case 'academic':
+        return 'أكاديمي';
+      case 'databases':
+        return 'قواعد البيانات';
+      case 'algorithms':
+        return 'خوارزميات';
+      default:
+        return folderId;
+    }
+  }
+
+  /// Format last activity time
+  String _formatLastActivity(DateTime? lastActivity) {
+    if (lastActivity == null) return 'غير معروف';
+
+    final now = DateTime.now();
+    final diff = now.difference(lastActivity);
+
+    if (diff.inMinutes < 1) {
+      return 'الآن';
+    } else if (diff.inHours < 1) {
+      return 'منذ ${diff.inMinutes} دقيقة';
+    } else if (diff.inDays < 1) {
+      return 'منذ ${diff.inHours} ساعة';
+    } else if (diff.inDays < 7) {
+      return 'منذ ${diff.inDays} يوم';
+    } else {
+      return 'منذ ${(diff.inDays / 7).floor()} أسبوع';
+    }
+  }
+
   /// Build empty state
-  Widget _buildEmptyState(ThemeData theme) {
+  Widget _buildEmptyState(ThemeData theme, String? error) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -361,8 +512,10 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
           const SizedBox(height: 16),
           Text(
             _searchQuery.isEmpty
-                ? context.l10n.chatHistoryEmptyState
-                : context.l10n.commonNoResults,
+                ? (error != null
+                      ? 'تعذر تحميل المحادثات'
+                      : 'لا توجد محادثات بعد')
+                : 'لا توجد نتائج للبحث',
             style: theme.textTheme.titleMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -373,7 +526,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                 ? 'ابدأ محادثة جديدة لإنشاء سجل المحادثات'
                 : 'جرب البحث بكلمات مختلفة',
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+              color: theme.colorScheme.onSurfaceVariant.withAlpha(153),
             ),
             textAlign: TextAlign.center,
           ),
@@ -394,62 +547,18 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
     );
   }
 
-  /// Get mock chat data
-  List<Map<String, dynamic>> _getMockChats() {
-    return [
-      {
-        'id': '1',
-        'title': 'مساعدة في الرياضيات',
-        'preview': 'كيف يمكنني حل المعادلة التربيعية؟',
-        'lastActivity': 'منذ ساعتين',
-        'messageCount': 15,
-        'folder': 'الرياضيات',
-        'isPinned': true,
-        'isFavorite': false,
-      },
-      {
-        'id': '2',
-        'title': 'أسئلة البرمجة',
-        'preview': 'ما الفرق بين Array و List في Python؟',
-        'lastActivity': 'منذ 5 ساعات',
-        'messageCount': 8,
-        'folder': 'البرمجة',
-        'isPinned': false,
-        'isFavorite': true,
-      },
-      {
-        'id': '3',
-        'title': 'مشروع التخرج',
-        'preview': 'أحتاج مساعدة في اختيار موضوع مشروع التخرج',
-        'lastActivity': 'منذ يوم',
-        'messageCount': 23,
-        'folder': null,
-        'isPinned': false,
-        'isFavorite': false,
-      },
-      {
-        'id': '4',
-        'title': 'الفيزياء',
-        'preview': 'شرح قانون نيوتن الثاني',
-        'lastActivity': 'منذ يومين',
-        'messageCount': 12,
-        'folder': 'العلوم',
-        'isPinned': false,
-        'isFavorite': false,
-      },
-    ];
-  }
-
   /// Open chat
-  void _openChat(Map<String, dynamic> chat) {
-    // TODO: Navigate to chat screen with specific chat
+  void _openChat(Chat chat) {
+    Navigator.pop(context);
+    // تحميل المحادثة المحددة
+    ref.read(chatProvider.notifier).loadChat(chat.id);
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text('فتح المحادثة: ${chat['title']}')));
+    ).showSnackBar(SnackBar(content: Text('جاري فتح المحادثة: ${chat.title}')));
   }
 
   /// Show chat menu
-  void _showChatMenu(ThemeData theme, Map<String, dynamic> chat) {
+  void _showChatMenu(ThemeData theme, Chat chat) {
     showModalBottomSheet(
       context: context,
       builder: (context) => Container(
@@ -459,11 +568,11 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
           children: [
             ListTile(
               leading: Icon(
-                chat['isFavorite'] ? Icons.favorite : Icons.favorite_border,
+                chat.isFavorite ? Icons.favorite : Icons.favorite_border,
                 color: theme.colorScheme.error,
               ),
               title: Text(
-                chat['isFavorite'] ? 'إزالة من المفضلة' : 'إضافة للمفضلة',
+                chat.isFavorite ? 'إزالة من المفضلة' : 'إضافة للمفضلة',
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -472,10 +581,10 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
             ),
             ListTile(
               leading: Icon(
-                chat['isPinned'] ? Icons.push_pin : Icons.push_pin_outlined,
+                chat.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
                 color: theme.colorScheme.primary,
               ),
-              title: Text(chat['isPinned'] ? 'إلغاء التثبيت' : 'تثبيت'),
+              title: Text(chat.isPinned ? 'إلغاء التثبيت' : 'تثبيت'),
               onTap: () {
                 Navigator.pop(context);
                 // TODO: Toggle pin status
@@ -524,7 +633,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
   }
 
   /// Show delete confirmation
-  void _showDeleteConfirmation(ThemeData theme, Map<String, dynamic> chat) {
+  void _showDeleteConfirmation(ThemeData theme, Chat chat) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -538,9 +647,10 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              // TODO: Delete chat
+              // حذف المحادثة
+              ref.read(chatHistoryProvider.notifier).deleteChat(chat.id);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('تم حذف المحادثة: ${chat['title']}')),
+                SnackBar(content: Text('تم حذف المحادثة: ${chat.title}')),
               );
             },
             style: TextButton.styleFrom(
@@ -555,7 +665,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
 
   /// Refresh chat history
   void _refreshChatHistory() {
-    // TODO: Implement refresh logic
+    ref.read(chatHistoryProvider.notifier).refresh();
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text('تم تحديث سجل المحادثات')));

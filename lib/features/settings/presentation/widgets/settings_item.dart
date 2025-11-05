@@ -52,57 +52,78 @@ class SettingsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.theme;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: isEnabled ? (onTap ?? _handleTap) : null,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Row(
-              children: [
-                // الأيقونة
-                if (icon != null) ...[
-                  _buildIcon(theme),
-                  const SizedBox(width: 16),
-                ],
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: isEnabled ? (onTap ?? _handleTap) : null,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  // الأيقونة
+                  if (icon != null) ...[
+                    _buildIcon(theme),
+                    const SizedBox(width: 8),
+                  ],
 
-                // النص
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: isEnabled
-                              ? theme.colorScheme.onSurface
-                              : theme.colorScheme.onSurface.withOpacity(0.5),
-                        ),
-                      ),
-                      if (subtitle != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          subtitle!,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: isEnabled
-                                ? theme.colorScheme.onSurfaceVariant
-                                : theme.colorScheme.onSurfaceVariant
-                                      .withOpacity(0.5),
+                  // العنوان والتحكم
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: isEnabled
+                                  ? theme.colorScheme.onSurface
+                                  : theme.colorScheme.onSurface.withAlpha(128),
+                            ),
                           ),
                         ),
+                        // التحكم (Switch فقط، dropdown له أيقونة منفصلة)
+                        if (type != SettingsItemType.dropdown)
+                          _buildControl(context, theme),
                       ],
+                    ),
+                  ),
+                ],
+              ),
+
+              // الوصف
+              if (subtitle != null) ...[
+                Padding(
+                  padding: EdgeInsets.only(left: icon != null ? 44 : 0, top: 4),
+                  child: Text(
+                    subtitle!,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: isEnabled
+                          ? theme.colorScheme.onSurfaceVariant
+                          : theme.colorScheme.onSurfaceVariant.withAlpha(128),
+                    ),
+                  ),
+                ),
+              ],
+
+              // القيمة المختارة للـ dropdown
+              if (type == SettingsItemType.dropdown) ...[
+                Padding(
+                  padding: EdgeInsets.only(left: icon != null ? 44 : 0, top: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: _buildDropdownValue(theme)),
+                      _buildControl(context, theme),
                     ],
                   ),
                 ),
-
-                // التحكم
-                _buildControl(theme),
               ],
-            ),
+            ],
           ),
         ),
       ),
@@ -111,25 +132,50 @@ class SettingsItem extends StatelessWidget {
 
   /// بناء الأيقونة
   Widget _buildIcon(ThemeData theme) {
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        color: (accentColor ?? theme.colorScheme.primary).withOpacity(0.1),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Icon(
-        icon,
-        size: 18,
-        color: isEnabled
-            ? (accentColor ?? theme.colorScheme.primary)
-            : (accentColor ?? theme.colorScheme.primary).withOpacity(0.5),
+    return Icon(
+      icon,
+      size: 20,
+      color: isEnabled
+          ? theme.colorScheme.onSurface
+          : theme.colorScheme.onSurface.withAlpha(128),
+    );
+  }
+
+  /// بناء قيمة الـ dropdown المختارة
+  Widget _buildDropdownValue(ThemeData theme) {
+    final items = options?['items'] as List<DropdownMenuItem<dynamic>>? ?? [];
+    if (items.isEmpty) return const SizedBox.shrink();
+
+    DropdownMenuItem<dynamic>? selectedItem;
+    try {
+      selectedItem = items.firstWhere((item) => item.value == value);
+    } catch (e) {
+      selectedItem = items.isNotEmpty ? items.first : null;
+    }
+
+    if (selectedItem == null) return const SizedBox.shrink();
+
+    String displayText = '';
+    if (selectedItem.child is Text) {
+      displayText = (selectedItem.child as Text).data ?? '';
+    } else if (selectedItem.child is Builder) {
+      // في حالة Builder، نحاول استخراج النص
+      displayText = value?.toString() ?? '';
+    } else {
+      displayText = value?.toString() ?? '';
+    }
+
+    return Text(
+      displayText,
+      style: theme.textTheme.bodySmall?.copyWith(
+        color: theme.colorScheme.primary,
+        fontWeight: FontWeight.w500,
       ),
     );
   }
 
   /// بناء عنصر التحكم
-  Widget _buildControl(ThemeData theme) {
+  Widget _buildControl(BuildContext context, ThemeData theme) {
     switch (type) {
       case SettingsItemType.toggle:
         return Switch(
@@ -139,7 +185,7 @@ class SettingsItem extends StatelessWidget {
         );
 
       case SettingsItemType.dropdown:
-        return _buildDropdown(theme);
+        return _buildDropdown(context, theme);
 
       case SettingsItemType.slider:
         return SizedBox(
@@ -178,17 +224,42 @@ class SettingsItem extends StatelessWidget {
     }
   }
 
-  /// بناء القائمة المنسدلة
-  Widget _buildDropdown(ThemeData theme) {
+  /// بناء القائمة المنسدلة (أيقونة القائمة)
+  Widget _buildDropdown(BuildContext context, ThemeData theme) {
     final items = options?['items'] as List<DropdownMenuItem<dynamic>>? ?? [];
 
-    return DropdownButton<dynamic>(
-      value: value,
-      items: items,
-      onChanged: isEnabled ? (newValue) => onChanged?.call(newValue) : null,
-      underline: const SizedBox.shrink(),
-      style: theme.textTheme.bodyMedium,
-      dropdownColor: theme.colorScheme.surface,
+    return PopupMenuButton<dynamic>(
+      enabled: isEnabled,
+      icon: Icon(
+        Icons.more_vert,
+        color: isEnabled
+            ? theme.colorScheme.onSurfaceVariant
+            : theme.colorScheme.onSurfaceVariant.withAlpha(128),
+      ),
+      itemBuilder: (context) => items.map((item) {
+        String itemText = '';
+        if (item.child is Text) {
+          itemText = (item.child as Text).data ?? '';
+        } else {
+          itemText = item.value?.toString() ?? '';
+        }
+
+        return PopupMenuItem<dynamic>(
+          value: item.value,
+          child: Text(
+            itemText,
+            style: TextStyle(
+              color: item.value == value
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurface,
+              fontWeight: item.value == value
+                  ? FontWeight.w600
+                  : FontWeight.normal,
+            ),
+          ),
+        );
+      }).toList(),
+      onSelected: isEnabled ? (newValue) => onChanged?.call(newValue) : null,
     );
   }
 
@@ -246,37 +317,64 @@ class SimpleSettingsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.theme;
 
-    return ListTile(
-      leading: icon != null
-          ? Icon(
-              icon,
-              color: isEnabled
-                  ? (accentColor ?? theme.colorScheme.primary)
-                  : theme.colorScheme.onSurface.withOpacity(0.5),
-            )
-          : null,
-      title: Text(
-        title,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: isEnabled
-              ? theme.colorScheme.onSurface
-              : theme.colorScheme.onSurface.withOpacity(0.5),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: isEnabled ? onTap : null,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+          child: Row(
+            children: [
+              // الأيقونة
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: 20,
+                  color: isEnabled
+                      ? theme.colorScheme.onSurface
+                      : theme.colorScheme.onSurface.withAlpha(128),
+                ),
+                const SizedBox(width: 8),
+              ],
+
+              // النص
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: isEnabled
+                            ? theme.colorScheme.onSurface
+                            : theme.colorScheme.onSurface.withAlpha(128),
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle!,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: isEnabled
+                              ? theme.colorScheme.onSurfaceVariant
+                              : theme.colorScheme.onSurfaceVariant.withAlpha(
+                                  128,
+                                ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+
+              // Trailing widget
+              if (trailing != null) ...[const SizedBox(width: 8), trailing!],
+            ],
+          ),
         ),
       ),
-      subtitle: subtitle != null
-          ? Text(
-              subtitle!,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: isEnabled
-                    ? theme.colorScheme.onSurfaceVariant
-                    : theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
-              ),
-            )
-          : null,
-      trailing: trailing,
-      onTap: isEnabled ? onTap : null,
-      enabled: isEnabled,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     );
   }
 }

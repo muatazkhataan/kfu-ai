@@ -275,7 +275,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
         prefixIcon: Icon(icon),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         filled: true,
-        fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+        fillColor: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
       ),
     );
   }
@@ -297,7 +297,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
         prefixIcon: Icon(icon),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         filled: true,
-        fillColor: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+        fillColor: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
       ),
       items: items,
     );
@@ -342,7 +342,7 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: theme.colorScheme.outline.withOpacity(0.3),
+                        color: theme.colorScheme.outline.withAlpha(76),
                       ),
                     ),
                     child: ClipRRect(
