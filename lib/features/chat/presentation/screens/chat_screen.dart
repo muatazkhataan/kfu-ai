@@ -141,11 +141,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         final canUseSidebar = isWideScreen || constraints.maxWidth >= 600;
 
         if (canUseSidebar) {
+          // في الشاشات العريضة، نضع القائمة الجانبية والـ AppBar في نفس الـ Row
           return Scaffold(
-            appBar: _buildAppBar(theme, chatState, isRTL, isWideScreen: true),
             body: Row(
               children: [
-                // Sidebar في الشاشات العريضة
+                // Sidebar في الشاشات العريضة - يأخذ كامل الارتفاع (top: 0, bottom: 0)
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
@@ -154,17 +154,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                       ? const AppDrawer(isSidebar: true)
                       : const SizedBox.shrink(),
                 ),
-                // المحتوى الرئيسي
+                // المحتوى الرئيسي مع AppBar
                 Expanded(
-                  child: Stack(
+                  child: Column(
                     children: [
-                      // خلفية التأثير البصري
-                      NeuralNetworkEffect(
-                        animation: _particleAnimation,
-                        primaryColor: theme.colorScheme.primary,
+                      // AppBar يدوي - يتحرك مع القائمة الجانبية
+                      _buildAppBarContent(
+                        theme,
+                        chatState,
+                        isRTL,
+                        isWideScreen: true,
                       ),
-                      // المحادثة الرئيسية
-                      _buildMainChatArea(theme, chatState),
+                      // المحتوى الرئيسي
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            // خلفية التأثير البصري
+                            NeuralNetworkEffect(
+                              animation: _particleAnimation,
+                              primaryColor: theme.colorScheme.primary,
+                            ),
+                            // المحادثة الرئيسية
+                            _buildMainChatArea(theme, chatState),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -193,7 +207,125 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     );
   }
 
-  /// بناء AppBar مخصص بالكامل
+  /// بناء محتوى AppBar (Widget عادي)
+  Widget _buildAppBarContent(
+    ThemeData theme,
+    dynamic chatState,
+    bool isRTL, {
+    bool isWideScreen = false,
+  }) {
+    return Container(
+      height: kToolbarHeight,
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withAlpha(128),
+        border: Border(
+          bottom: BorderSide(
+            color: theme.colorScheme.outline.withAlpha(50),
+            width: 1,
+          ),
+        ),
+      ),
+      child: SafeArea(
+        child: Builder(
+          builder: (builderContext) {
+            return Row(
+              children: [
+                // أيقونة القائمة - من اليمين في RTL
+                Consumer(
+                  builder: (context, ref, _) {
+                    final sidebarOpen = ref.watch(sidebarProvider);
+                    return IconButton(
+                      icon: Icon(
+                        AppIcons.getIcon(AppIcon.menu),
+                        color: theme.colorScheme.primary,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        if (isWideScreen) {
+                          // في الشاشات العريضة، نستخدم toggle
+                          ref.read(sidebarProvider.notifier).toggle();
+                        } else {
+                          // في الشاشات الصغيرة، نستخدم drawer عادي
+                          // ignore: avoid_print
+                          print('[Menu Button] 🔘 تم الضغط على زر القائمة');
+                          // ignore: avoid_print
+                          print('[Menu Button] 🌍 isRTL: $isRTL');
+                          // ignore: avoid_print
+                          print(
+                            '[Menu Button] 🗂️ سيتم فتح: drawer (من اليمين في RTL)',
+                          );
+
+                          builderContext.openAdaptiveDrawer();
+                        }
+                      },
+                      tooltip: isWideScreen
+                          ? (sidebarOpen ? 'إغلاق القائمة' : 'فتح القائمة')
+                          : 'القائمة',
+                    );
+                  },
+                ),
+
+                // المسافة
+                const SizedBox(width: 8),
+
+                // العنوان في المنتصف
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _getChatTitle(chatState),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (_getChatSubtitle(chatState).isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          _getChatSubtitle(chatState),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+
+                // المسافة
+                const SizedBox(width: 8),
+
+                // أيقونة الإعدادات - من اليسار في RTL
+                IconButton(
+                  icon: Icon(
+                    AppIcons.getIcon(AppIcon.settings),
+                    color: theme.colorScheme.primary,
+                    size: 24,
+                  ),
+                  onPressed: () {
+                    Navigator.of(builderContext).push(
+                      MaterialPageRoute(
+                        builder: (context) => const settings.SettingsScreen(),
+                      ),
+                    );
+                  },
+                  tooltip: 'الإعدادات',
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// بناء AppBar مخصص بالكامل (PreferredSizeWidget للاستخدام في appBar)
   PreferredSizeWidget _buildAppBar(
     ThemeData theme,
     dynamic chatState,
@@ -202,113 +334,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   }) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainerHighest.withAlpha(128),
-          border: Border(
-            bottom: BorderSide(
-              color: theme.colorScheme.outline.withAlpha(50),
-              width: 1,
-            ),
-          ),
-        ),
-        child: SafeArea(
-          child: Builder(
-            builder: (builderContext) {
-              return Row(
-                children: [
-                  // أيقونة القائمة - من اليمين في RTL
-                  Consumer(
-                    builder: (context, ref, _) {
-                      final sidebarOpen = ref.watch(sidebarProvider);
-                      return IconButton(
-                        icon: Icon(
-                          AppIcons.getIcon(AppIcon.menu),
-                          color: theme.colorScheme.primary,
-                          size: 24,
-                        ),
-                        onPressed: () {
-                          if (isWideScreen) {
-                            // في الشاشات العريضة، نستخدم toggle
-                            ref.read(sidebarProvider.notifier).toggle();
-                          } else {
-                            // في الشاشات الصغيرة، نستخدم drawer عادي
-                            // ignore: avoid_print
-                            print('[Menu Button] 🔘 تم الضغط على زر القائمة');
-                            // ignore: avoid_print
-                            print('[Menu Button] 🌍 isRTL: $isRTL');
-                            // ignore: avoid_print
-                            print(
-                              '[Menu Button] 🗂️ سيتم فتح: drawer (من اليمين في RTL)',
-                            );
-
-                            builderContext.openAdaptiveDrawer();
-                          }
-                        },
-                        tooltip: isWideScreen
-                            ? (sidebarOpen ? 'إغلاق القائمة' : 'فتح القائمة')
-                            : 'القائمة',
-                      );
-                    },
-                  ),
-
-                  // المسافة
-                  const SizedBox(width: 8),
-
-                  // العنوان في المنتصف
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          _getChatTitle(chatState),
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (_getChatSubtitle(chatState).isNotEmpty) ...[
-                          const SizedBox(height: 2),
-                          Text(
-                            _getChatSubtitle(chatState),
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-
-                  // المسافة
-                  const SizedBox(width: 8),
-
-                  // أيقونة الإعدادات - من اليسار في RTL
-                  IconButton(
-                    icon: Icon(
-                      AppIcons.getIcon(AppIcon.settings),
-                      color: theme.colorScheme.primary,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const settings.SettingsScreen(),
-                        ),
-                      );
-                    },
-                    tooltip: 'الإعدادات',
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
+      child: _buildAppBarContent(
+        theme,
+        chatState,
+        isRTL,
+        isWideScreen: isWideScreen,
       ),
     );
   }

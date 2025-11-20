@@ -186,3 +186,92 @@ ConstrainedBox(
 - إعادة بناء التطبيق: `flutter clean && flutter build windows`
 - التحقق من دقة الشاشة
 - تثبيت خطوط العربية من Microsoft
+
+## مشكلة CMake و Visual Studio
+
+### المشكلة
+عند محاولة بناء التطبيق، قد تواجه الخطأ التالي:
+```
+CMake Error: Error: generator : Visual Studio 16 2019
+Does not match the generator used previously: Visual Studio 17 2022
+```
+
+أو:
+```
+CMake Error: Generator Visual Studio 16 2019 could not find any instance of Visual Studio.
+```
+
+### الأسباب
+1. **تعارض في مولدات CMake**: تم استخدام مولد مختلف في بناء سابق
+2. **Visual Studio غير مثبت**: Flutter لـ Windows يتطلب Visual Studio مع مكونات C++ Desktop Development
+3. **إصدار Visual Studio غير متطابق**: النظام يحتوي على Visual Studio 2022 بينما CMake يحاول استخدام 2019
+
+### الحلول
+
+#### الحل 1: تنظيف ملفات CMake القديمة
+```powershell
+# تنظيف المشروع بالكامل
+flutter clean
+
+# حذف ملفات CMake المتبقية يدوياً (إن وجدت)
+Get-ChildItem -Path "windows" -Recurse -Include "CMakeCache.txt","CMakeFiles" -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
+```
+
+#### الحل 2: تثبيت Visual Studio 2022 (مطلوب)
+Flutter لـ Windows **يتطلب** Visual Studio مع مكونات تطوير C++:
+
+1. **تحميل Visual Studio 2022 Community** (مجاني):
+   - من الموقع الرسمي: https://visualstudio.microsoft.com/downloads/
+
+2. **تثبيت المكونات المطلوبة**:
+   - ✅ **Desktop development with C++** (تطوير سطح المكتب باستخدام C++)
+   - ✅ **Windows 10/11 SDK** (أحدث إصدار)
+   - ✅ **CMake tools for Windows**
+
+3. **إعادة تشغيل الجهاز** بعد التثبيت
+
+4. **التحقق من التثبيت**:
+   ```powershell
+   # التحقق من وجود Visual Studio
+   Get-ChildItem "C:\Program Files\Microsoft Visual Studio" -ErrorAction SilentlyContinue
+   
+   # التحقق من CMake
+   cmake --version
+   ```
+
+5. **إعادة بناء المشروع**:
+   ```powershell
+   flutter clean
+   flutter build windows --release
+   ```
+
+#### الحل 3: استخدام متغيرات البيئة (تجريبي)
+```powershell
+# تحديد مولد CMake (قد لا يعمل مع Flutter)
+$env:CMAKE_GENERATOR="Visual Studio 17 2022"
+$env:CMAKE_GENERATOR_PLATFORM="x64"
+flutter build windows --release
+```
+
+**ملاحظة**: Flutter قد يتجاهل متغيرات البيئة هذه، لذا الحل الأفضل هو تثبيت Visual Studio 2022.
+
+### متطلبات النظام
+- ✅ Windows 10/11 (64-bit)
+- ✅ Visual Studio 2022 Community أو أحدث
+- ✅ مكونات C++ Desktop Development
+- ✅ Windows SDK (أحدث إصدار)
+- ✅ CMake 3.14 أو أحدث
+
+### التحقق من الإعداد
+```powershell
+# التحقق من Flutter
+flutter doctor -v
+
+# التحقق من CMake
+cmake --version
+
+# التحقق من Visual Studio
+where.exe devenv
+```
+
+إذا كان `flutter doctor` يظهر تحذيرات بخصوص Visual Studio، قم بتثبيت المكونات المطلوبة من Visual Studio Installer.

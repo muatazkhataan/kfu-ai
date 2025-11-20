@@ -299,6 +299,7 @@ class MessageBubble extends ConsumerWidget {
                         children: [
                           // عرض المحتوى (HTML أو نص عادي)
                           _buildMessageText(
+                            context,
                             theme,
                             isUser,
                             isAssistant,
@@ -406,6 +407,7 @@ class MessageBubble extends ConsumerWidget {
                         children: [
                           // عرض المحتوى (HTML أو نص عادي)
                           _buildMessageText(
+                            context,
                             theme,
                             isUser,
                             isAssistant,
@@ -459,6 +461,7 @@ class MessageBubble extends ConsumerWidget {
 
   /// بناء محتوى الرسالة (HTML أو نص عادي)
   Widget _buildMessageText(
+    BuildContext context,
     ThemeData theme,
     bool isUser,
     bool isAssistant,
@@ -500,7 +503,7 @@ class MessageBubble extends ConsumerWidget {
           // عرض المصادر إن وجدت
           if (sources.isNotEmpty) ...[
             const SizedBox(height: 12),
-            _buildSources(theme, sources),
+            _buildSources(context, theme, sources),
           ],
         ],
       );
@@ -521,52 +524,292 @@ class MessageBubble extends ConsumerWidget {
     );
   }
 
-  /// بناء قسم المصادر
-  Widget _buildSources(ThemeData theme, List<SourceInfo> sources) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withAlpha(128),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: theme.colorScheme.outline.withAlpha(75),
-          width: 1,
-        ),
+  /// بناء قسم المصادر - في صف واحد مع العنوان
+  Widget _buildSources(
+    BuildContext context,
+    ThemeData theme,
+    List<SourceInfo> sources,
+  ) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width * 0.85,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                FontAwesomeIcons.bookOpen,
-                size: 14,
-                color: theme.colorScheme.primary,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'المصادر',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.primary,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // حساب العرض المتاح (نطرح البادينج الأفقي: 12 * 2 = 24)
+          final availableWidth = constraints.maxWidth - 24;
+
+          // حساب عرض العناصر الثابتة (الأيقونة + النص + المسافات)
+          final iconWidth = 14.0 + 4.0; // حجم الأيقونة + المسافة
+          final textWidth = _measureTextWidth(
+            'المصادر',
+            theme.textTheme.labelMedium?.copyWith(
                   fontWeight: FontWeight.bold,
-                ),
+                ) ??
+                const TextStyle(),
+          );
+          final fixedElementsWidth =
+              iconWidth + textWidth + 8.0; // 8 للمسافات الإضافية
+
+          // حساب عدد الأيقونات التي يمكن عرضها
+          // كل أيقونة تأخذ حوالي 20 بكسل (14 للأيقونة + 4 للبادينج + 2 للمسافة)
+          final iconSize = 20.0;
+          final maxIcons = ((availableWidth - fixedElementsWidth) / iconSize)
+              .floor()
+              .clamp(0, sources.length);
+          final visibleSources = sources.take(maxIcons).toList();
+
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest.withAlpha(128),
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(
+                color: theme.colorScheme.outline.withAlpha(75),
+                width: 1,
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: sources
-                .map((source) => _buildSourceChip(theme, source))
-                .toList(),
-          ),
-        ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  FontAwesomeIcons.bookOpen,
+                  size: 14,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 4),
+                GestureDetector(
+                  onTap: () => _showSourcesDrawer(context, theme, sources),
+                  child: Text(
+                    'المصادر',
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                      decorationColor: theme.colorScheme.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                ...visibleSources.asMap().entries.expand((entry) {
+                  final index = entry.key;
+                  final source = entry.value;
+                  if (index == visibleSources.length - 1) {
+                    return [_buildSourceChip(theme, source)];
+                  }
+                  return [
+                    _buildSourceChip(theme, source),
+                    const SizedBox(width: 2),
+                  ];
+                }),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
-  /// بناء chip للمصدر
+  /// حساب عرض النص
+  double _measureTextWidth(String text, TextStyle style) {
+    final textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: TextDirection.rtl,
+      maxLines: 1,
+      textScaleFactor: 1.0,
+    );
+    textPainter.layout(maxWidth: double.infinity);
+    return textPainter.size.width;
+  }
+
+  /// عرض قائمة المصادر الجانبية من اليسار
+  void _showSourcesDrawer(
+    BuildContext context,
+    ThemeData theme,
+    List<SourceInfo> sources,
+  ) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'إغلاق',
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return _buildSourcesDrawer(context, theme, sources);
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return SlideTransition(
+          position:
+              Tween<Offset>(
+                begin: const Offset(-1.0, 0.0),
+                end: Offset.zero,
+              ).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+              ),
+          child: child,
+        );
+      },
+    );
+  }
+
+  /// بناء قائمة المصادر الجانبية
+  Widget _buildSourcesDrawer(
+    BuildContext context,
+    ThemeData theme,
+    List<SourceInfo> sources,
+  ) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.85,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                // العنوان
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.bookOpen,
+                        size: 20,
+                        color: theme.colorScheme.primary,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'المصادر',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: Icon(
+                          AppIcons.getIcon(AppIcon.close),
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                // قائمة المصادر
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: sources.length,
+                    itemBuilder: (context, index) {
+                      final source = sources[index];
+                      return _buildSourceListItem(context, theme, source);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// بناء عنصر في قائمة المصادر - تصميم بسيط
+  Widget _buildSourceListItem(
+    BuildContext context,
+    ThemeData theme,
+    SourceInfo source,
+  ) {
+    // تحديد الأيقونة واللون حسب نوع الملف
+    IconData icon;
+    Color iconColor;
+
+    switch (source.fileType) {
+      case 'ppt':
+        icon = FontAwesomeIcons.filePowerpoint;
+        iconColor = Colors.deepOrange;
+        break;
+      case 'pdf':
+        icon = FontAwesomeIcons.filePdf;
+        iconColor = Colors.red;
+        break;
+      case 'word':
+        icon = FontAwesomeIcons.fileWord;
+        iconColor = Colors.blue;
+        break;
+      case 'excel':
+        icon = FontAwesomeIcons.fileExcel;
+        iconColor = Colors.green;
+        break;
+      default:
+        icon = FontAwesomeIcons.file;
+        iconColor = theme.colorScheme.primary;
+    }
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          // يمكن إضافة إجراء عند الضغط هنا لاحقاً
+        },
+        borderRadius: BorderRadius.circular(8),
+        hoverColor: theme.colorScheme.surfaceContainerHighest.withAlpha(100),
+        splashColor: theme.colorScheme.primary.withAlpha(50),
+        highlightColor: theme.colorScheme.primary.withAlpha(30),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // الأيقونة صغيرة في الأعلى
+              FaIcon(icon, size: 16, color: iconColor),
+              const SizedBox(height: 8),
+              // عنوان المصدر
+              Text(
+                source.title,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: theme.colorScheme.onSurface,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              // نوع الملف
+              if (source.fileType.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  source.fileType.toUpperCase(),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// بناء chip للمصدر - أيقونة بسيطة وملتصقة مع tooltip
   Widget _buildSourceChip(ThemeData theme, SourceInfo source) {
     // تحديد الأيقونة واللون حسب نوع الملف
     IconData icon;
@@ -594,29 +837,20 @@ class MessageBubble extends ConsumerWidget {
         iconColor = theme.colorScheme.primary;
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: iconColor.withAlpha(100), width: 1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FaIcon(icon, size: 12, color: iconColor),
-          const SizedBox(width: 6),
-          Flexible(
-            child: Text(
-              source.title,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurface,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+    return Tooltip(
+      message: source.title,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            // يمكن إضافة إجراء عند الضغط هنا لاحقاً
+          },
+          borderRadius: BorderRadius.circular(4),
+          child: Padding(
+            padding: const EdgeInsets.all(2),
+            child: FaIcon(icon, size: 14, color: iconColor),
           ),
-        ],
+        ),
       ),
     );
   }
