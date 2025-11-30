@@ -144,7 +144,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
   /// Build filter dropdown
   Widget _buildFilterDropdown(ThemeData theme) {
     return DropdownButtonFormField<String>(
-      value: 'all',
+      initialValue: 'all',
       isExpanded: true,
       decoration: InputDecoration(
         labelText: 'تصفية',
@@ -186,7 +186,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
   /// Build sort dropdown
   Widget _buildSortDropdown(ThemeData theme) {
     return DropdownButtonFormField<String>(
-      value: 'date_desc',
+      initialValue: 'date_desc',
       isExpanded: true,
       decoration: InputDecoration(
         labelText: 'ترتيب',

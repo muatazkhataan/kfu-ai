@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../services/api/api_manager.dart';
 import '../../../../services/api/auth/models/login_request.dart';
 import '../../../../services/api/auth/models/login_response.dart';
+import '../../../../services/credential_manager_service.dart';
 
 /// حالة المصادقة
 class AuthState {
@@ -121,6 +122,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
           loginResponse: response.data,
           error: null,
         );
+
+        // حفظ بيانات الدخول في نظام التشغيل (Credential Manager)
+        if (rememberMe) {
+          try {
+            final credentialService = CredentialManagerService();
+            await credentialService.saveCredentials(
+              studentNumber: studentNumber,
+              password: password,
+              userId: response.data!.userId,
+            );
+            // ignore: avoid_print
+            print('[AuthProvider] ✅ تم حفظ بيانات الدخول في Credential Manager');
+          } catch (e) {
+            // ignore: avoid_print
+            print('[AuthProvider] ⚠️ خطأ في حفظ بيانات الدخول في Credential Manager: $e');
+            // لا نوقف عملية تسجيل الدخول إذا فشل حفظ البيانات
+          }
+        }
+
         return true;
       } else {
         // ignore: avoid_print
@@ -170,6 +190,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       // تسجيل الخروج من API
       await _apiManager.logout();
+
+      // حذف بيانات الدخول من Credential Manager (اختياري - يمكن الاحتفاظ بها)
+      // إذا أردت حذفها عند تسجيل الخروج، قم بإلغاء التعليق من السطور التالية:
+      // try {
+      //   final credentialService = CredentialManagerService();
+      //   await credentialService.deleteCredentials();
+      //   // ignore: avoid_print
+      //   print('[AuthProvider] ✅ تم حذف بيانات الدخول من Credential Manager');
+      // } catch (e) {
+      //   // ignore: avoid_print
+      //   print('[AuthProvider] ⚠️ خطأ في حذف بيانات الدخول: $e');
+      // }
 
       // ignore: avoid_print
       print('[AuthProvider] ✅ تم تسجيل الخروج وحذف الجلسة المحفوظة');

@@ -49,6 +49,14 @@ class FolderSidebar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final folderState = ref.watch(folderProvider);
+    
+    // تحميل المجلدات عند أول بناء
+    if (!folderState.hasLoadedInitial && !folderState.isLoadingFolders) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(folderProvider.notifier).loadFolders();
+      });
+    }
+    
     final folders = _getOrderedFolders(folderState);
 
     return Container(

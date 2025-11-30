@@ -15,6 +15,7 @@ import '../state/app_state.dart';
 import '../features/chat/presentation/screens/chat_screen.dart';
 import '../features/auth/presentation/providers/auth_provider.dart';
 import '../features/chat/presentation/providers/chat_sessions_provider.dart';
+import '../services/credential_manager_service.dart';
 
 /// Main application widget
 class KfuAiApp extends ConsumerWidget {
@@ -436,6 +437,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   void initState() {
     super.initState();
     _setupAnimations();
+    _loadSavedCredentials();
+  }
+
+  /// استرجاع بيانات الدخول المحفوظة من نظام التشغيل
+  Future<void> _loadSavedCredentials() async {
+    try {
+      final credentialService = CredentialManagerService();
+      final credentials = await credentialService.getCredentials();
+      
+      if (credentials != null && mounted) {
+        setState(() {
+          _academicIdTextController.text = credentials['studentNumber'] ?? '';
+          _passwordTextController.text = credentials['password'] ?? '';
+        });
+        
+        // ignore: avoid_print
+        print('[LoginScreen] ✅ تم استرجاع بيانات الدخول المحفوظة');
+      }
+    } catch (e) {
+      // ignore: avoid_print
+      print('[LoginScreen] ❌ خطأ في استرجاع بيانات الدخول: $e');
+    }
   }
 
   void _setupAnimations() {
@@ -685,54 +708,79 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           ? 400
                           : double.infinity,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        // Main logo with light rays
-                        SplashImageLogo(
-                          animationController: _academicIdAnimation,
-                          imagePath: 'assets/images/mosa3ed_kfu_icon_app.jpg',
-                          logoSize: 75,
-                          logoColor: Theme.of(context).colorScheme.primary,
-                        ),
-                        const SizedBox(height: 16),
-                        // Login Title
-                        Text(
-                          context.l10n.authLoginTitle,
-                          style: Theme.of(context).textTheme.headlineMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        const SizedBox(height: 20),
-                        // Academic ID input (first step)
-                        if (!_isPasswordStep)
-                          FloatingInputField(
-                            animation: _academicIdAnimation,
-                            label: context.l10n.authAcademicId,
-                            hint: context.l10n.authAcademicIdHint,
-                            controller: _academicIdTextController,
-                            icon: FontAwesomeIcons.user,
-                            onNext: _onNextPressed,
-                            nextButtonText: context.l10n.authNext,
-                            isRTL:
-                                Localizations.localeOf(context).languageCode ==
-                                'ar',
+                    child: AutofillGroup(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          // Main logo with light rays
+                          SplashImageLogo(
+                            animationController: _academicIdAnimation,
+                            imagePath: 'assets/images/mosa3ed_kfu_icon_app.jpg',
+                            logoSize: 75,
+                            logoColor: Theme.of(context).colorScheme.primary,
                           ),
-                        // Password input (second step)
-                        if (_isPasswordStep)
-                          FloatingInputField(
-                            animation: _passwordAnimation,
-                            label: context.l10n.authPassword,
-                            hint: context.l10n.authPasswordHint,
-                            controller: _passwordTextController,
-                            icon: FontAwesomeIcons.lock,
-                            isPassword: true,
-                            showNextButton: false,
-                            isRTL:
-                                Localizations.localeOf(context).languageCode ==
-                                'ar',
+                          const SizedBox(height: 16),
+                          // Login Title
+                          Text(
+                            context.l10n.authLoginTitle,
+                            style: Theme.of(context).textTheme.headlineMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          const SizedBox(height: 20),
+                          // Academic ID input (first step)
+                          // نضيف الحقلين معاً ليعمل Autofill بشكل صحيح
+                          // Autofill يحتاج إلى رؤية الحقول معاً في نفس الوقت
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // حقل الرقم الجامعي
+                              SizedBox(
+                                height: _isPasswordStep ? 0 : null,
+                                child: Opacity(
+                                  opacity: _isPasswordStep ? 0.0 : 1.0,
+                                  child: IgnorePointer(
+                                    ignoring: _isPasswordStep,
+                                    child: FloatingInputField(
+                                      animation: _academicIdAnimation,
+                                      label: context.l10n.authAcademicId,
+                                      hint: context.l10n.authAcademicIdHint,
+                                      controller: _academicIdTextController,
+                                      icon: FontAwesomeIcons.user,
+                                      onNext: _onNextPressed,
+                                      nextButtonText: context.l10n.authNext,
+                                      isRTL:
+                                          Localizations.localeOf(context).languageCode ==
+                                          'ar',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // حقل كلمة المرور
+                              SizedBox(
+                                height: _isPasswordStep ? null : 0,
+                                child: Opacity(
+                                  opacity: _isPasswordStep ? 1.0 : 0.0,
+                                  child: IgnorePointer(
+                                    ignoring: !_isPasswordStep,
+                                    child: FloatingInputField(
+                                      animation: _passwordAnimation,
+                                      label: context.l10n.authPassword,
+                                      hint: context.l10n.authPasswordHint,
+                                      controller: _passwordTextController,
+                                      icon: FontAwesomeIcons.lock,
+                                      isPassword: true,
+                                      showNextButton: false,
+                                      isRTL:
+                                          Localizations.localeOf(context).languageCode ==
+                                          'ar',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         // Password related elements (only in password step)
                         if (_isPasswordStep)
@@ -751,7 +799,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                 'ar',
                             isLoading: _isLoading,
                           ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

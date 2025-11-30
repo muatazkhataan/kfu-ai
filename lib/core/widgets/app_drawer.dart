@@ -9,6 +9,11 @@ import '../../features/chat/presentation/providers/chat_provider.dart';
 import '../../features/chat/presentation/providers/chat_sessions_provider.dart';
 import '../../features/chat/presentation/widgets/recent_chats_widget.dart';
 import '../../features/chat_history/presentation/screens/chat_history_screen.dart';
+import '../../features/folders/presentation/providers/folder_provider.dart';
+import '../../features/folders/presentation/screens/folder_list_screen.dart';
+import '../../features/folders/presentation/screens/create_folder_screen.dart';
+import '../../features/folders/presentation/screens/folder_content_screen.dart';
+import '../../features/folders/domain/models/folder.dart';
 import '../theme/icons.dart';
 import '../extensions/context_extensions.dart';
 import '../providers/sidebar_provider.dart';
@@ -24,8 +29,30 @@ class AppDrawer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = context.theme;
     final authState = ref.watch(authProvider);
-    final userName = authState.loginResponse?.profile?['fullName'] ?? 'مستخدم';
-    final userId = authState.userId ?? '';
+    
+    // الحصول على اسم المستخدم من loginResponse
+    String userName = 'مستخدم';
+    if (authState.loginResponse != null) {
+      final loginResponse = authState.loginResponse!;
+      
+      // محاولة الحصول من profile
+      if (loginResponse.profile != null) {
+        final profile = loginResponse.profile!;
+        userName = profile['fullName'] ?? 
+                   profile['FullName'] ?? 
+                   profile['full_name'] ??
+                   'مستخدم';
+      }
+      
+      // إذا لم يكن في profile، نستخدم userId كبديل مؤقت
+      if (userName == 'مستخدم') {
+        userName = loginResponse.userId.isNotEmpty 
+            ? 'مستخدم ${loginResponse.userId.substring(0, 8)}...'
+            : 'مستخدم';
+      }
+    }
+    
+    final userId = authState.userId ?? authState.loginResponse?.userId ?? '';
 
     final content = SafeArea(
       child: Column(
@@ -45,8 +72,8 @@ class AppDrawer extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // قسم المجلدات
-                  _buildFoldersSection(context, theme),
+          // قسم المجلدات
+          _buildFoldersSection(context, theme, ref),
 
                   // قسم المحادثات الأخيرة
                   _buildRecentChatsSection(context, theme, ref),
@@ -183,9 +210,9 @@ class AppDrawer extends ConsumerWidget {
               Navigator.pop(context);
               await ref.read(authProvider.notifier).logout();
               if (context.mounted) {
-                // العودة إلى SplashScreen بعد تسجيل الخروج
+                // الانتقال مباشرة إلى شاشة تسجيل الدخول
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const SplashScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                   (route) => false,
                 );
               }
@@ -268,7 +295,11 @@ class AppDrawer extends ConsumerWidget {
   }
 
   /// قسم المجلدات
-  Widget _buildFoldersSection(BuildContext context, ThemeData theme) {
+  Widget _buildFoldersSection(
+    BuildContext context,
+    ThemeData theme,
+    WidgetRef ref,
+  ) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Column(
@@ -288,17 +319,65 @@ class AppDrawer extends ConsumerWidget {
                   color: theme.colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  'المجلدات',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurfaceVariant,
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      if (!isSidebar) {
+                        Navigator.pop(context);
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FolderListScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'المجلدات',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                   ),
                 ),
-                const Spacer(),
+                // زر فتح شاشة المجلدات
                 IconButton(
                   onPressed: () {
-                    // TODO: إضافة مجلد جديد
+                    if (!isSidebar) {
+                      Navigator.pop(context);
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FolderListScreen(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    AppIcons.getIcon(AppIcon.folder),
+                    size: 14,
+                    color: theme.colorScheme.primary,
+                  ),
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  tooltip: 'فتح شاشة المجلدات',
+                ),
+                // زر إضافة مجلد جديد
+                IconButton(
+                  onPressed: () {
+                    if (!isSidebar) {
+                      Navigator.pop(context);
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CreateFolderScreen(),
+                      ),
+                    ).then((_) {
+                      // تحديث المجلدات بعد إنشاء مجلد جديد
+                      ref.read(folderProvider.notifier).refresh();
+                    });
                   },
                   icon: Icon(
                     AppIcons.getIcon(AppIcon.plus),
@@ -307,12 +386,13 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
+                  tooltip: 'إنشاء مجلد جديد',
                 ),
               ],
             ),
           ),
           const SizedBox(height: 4),
-          _buildFolderList(context, theme),
+          _buildFolderList(context, theme, ref),
         ],
       ),
     );
@@ -478,17 +558,80 @@ class AppDrawer extends ConsumerWidget {
   }
 
   /// قائمة المجلدات
-  Widget _buildFolderList(BuildContext context, ThemeData theme) {
-    final folders = [
-      {'name': 'جميع المحادثات', 'icon': AppIcon.inbox, 'count': '4'},
-      {'name': 'البرمجة', 'icon': AppIcon.code, 'count': '1'},
-      {'name': 'هياكل البيانات', 'icon': AppIcon.sitemap, 'count': '1'},
-      {
-        'name': 'الشؤون الأكاديمية',
-        'icon': AppIcon.graduationCap,
-        'count': '2',
-      },
-    ];
+  Widget _buildFolderList(
+    BuildContext context,
+    ThemeData theme,
+    WidgetRef ref,
+  ) {
+    final folderState = ref.watch(folderProvider);
+
+    // تحميل المجلدات عند أول بناء
+    if (!folderState.hasLoadedInitial && !folderState.isLoadingFolders) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(folderProvider.notifier).loadFolders();
+      });
+    }
+
+    if (folderState.isLoadingFolders) {
+      return const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (folderState.error != null) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Icon(
+              AppIcons.getIcon(AppIcon.exclamationTriangle),
+              color: theme.colorScheme.error,
+              size: 24,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              folderState.error!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.error,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () {
+                ref.read(folderProvider.notifier).refresh();
+              },
+              child: const Text('إعادة المحاولة'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final folders = folderState.visibleFolders;
+
+    if (folders.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Icon(
+              AppIcons.getIcon(AppIcon.folder),
+              size: 32,
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'لا توجد مجلدات',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     return Column(
       children: folders.map((folder) {
@@ -502,44 +645,208 @@ class AppDrawer extends ConsumerWidget {
             width: 28,
             height: 28,
             decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer,
+              color: _getFolderColor(folder, theme),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(
-              AppIcons.getIcon(folder['icon'] as AppIcon),
+              folder.icon.iconData,
               size: 14,
-              color: theme.colorScheme.onPrimaryContainer,
+              color: Colors.white,
             ),
           ),
           title: Text(
-            folder['name'] as String,
+            folder.name,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          trailing: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              folder['count'] as String,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.bold,
-                fontSize: 11,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (folder.hasChats)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    folder.chatCount.toString(),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+              const SizedBox(width: 4),
+              PopupMenuButton<String>(
+                icon: Icon(
+                  AppIcons.getIcon(AppIcon.menu),
+                  size: 16,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                onSelected: (value) => _handleFolderMenuAction(
+                  context,
+                  ref,
+                  folder,
+                  value,
+                ),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 'edit',
+                    child: Row(
+                      children: [
+                        Icon(
+                          AppIcons.getIcon(AppIcon.edit),
+                          size: 16,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text('تعديل'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        Icon(
+                          AppIcons.getIcon(AppIcon.delete),
+                          size: 16,
+                          color: theme.colorScheme.error,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'حذف',
+                          style: TextStyle(color: theme.colorScheme.error),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ),
+            ],
           ),
           onTap: () {
             if (!isSidebar) {
               Navigator.pop(context);
             }
-            // TODO: اختيار المجلد
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FolderContentScreen(folder: folder),
+              ),
+            );
           },
         );
       }).toList(),
+    );
+  }
+
+  Color _getFolderColor(Folder folder, ThemeData theme) {
+    if (folder.color != null) {
+      try {
+        return Color(int.parse(folder.color!.replaceAll('#', '0xFF')));
+      } catch (e) {
+        return theme.colorScheme.primary;
+      }
+    }
+    return theme.colorScheme.primary;
+  }
+
+  /// معالجة إجراءات قائمة المجلد
+  void _handleFolderMenuAction(
+    BuildContext context,
+    WidgetRef ref,
+    Folder folder,
+    String action,
+  ) {
+    if (action == 'edit') {
+      if (!isSidebar) {
+        Navigator.pop(context);
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateFolderScreen(folderToEdit: folder),
+        ),
+      ).then((_) {
+        // تحديث المجلدات بعد التعديل
+        ref.read(folderProvider.notifier).refresh();
+      });
+    } else if (action == 'delete') {
+      _showDeleteConfirmationDialog(context, ref, folder);
+    }
+  }
+
+  /// عرض حوار تأكيد الحذف
+  void _showDeleteConfirmationDialog(
+    BuildContext context,
+    WidgetRef ref,
+    Folder folder,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('حذف المجلد'),
+        content: Text('هل أنت متأكد من حذف المجلد "${folder.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('إلغاء'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              try {
+                await ref.read(folderProvider.notifier).deleteFolder(folder.id);
+                final folderState = ref.read(folderProvider);
+                if (folderState.deleteError == null && context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Row(
+                        children: [
+                          Icon(Icons.check_circle, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text('تم حذف المجلد بنجاح'),
+                        ],
+                      ),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                } else if (folderState.deleteError != null && context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(folderState.deleteError!),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('خطأ: ${e.toString()}'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.error,
+            ),
+            child: const Text('حذف'),
+          ),
+        ],
+      ),
     );
   }
 

@@ -151,8 +151,9 @@ class FolderApiService {
   /// تحديث أيقونة المجلد
   Future<ApiResponse<void>> updateFolderIcon(
     String folderId,
-    String icon,
-  ) async {
+    String icon, {
+    String? color,
+  }) async {
     try {
       if (folderId.isEmpty || icon.isEmpty) {
         return ApiResponse.error(
@@ -162,9 +163,19 @@ class FolderApiService {
         );
       }
 
+      final body = <String, dynamic>{
+        'folderId': folderId,
+        'Icon': icon,
+      };
+      
+      // إضافة color إذا كان موجوداً
+      if (color != null) {
+        body['Color'] = color;
+      }
+
       final response = await _apiClient.post<void>(
         endpoint: ApiEndpoints.updateFolderIcon,
-        body: {'folderId': folderId, 'Icon': icon},
+        body: body,
       );
       return response;
     } catch (e) {

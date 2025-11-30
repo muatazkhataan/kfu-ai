@@ -776,11 +776,34 @@ class AppIcons {
   static double get defaultIconSize => AppTokens.iconSizeM;
 
   /// Convert FontAwesome class string to AppIcon enum
-  /// Supports web format like "fa-duotone fa-light fa-palette"
+  /// Supports web format like "fa-duotone fa-light fa-palette" or "fas fa-graduation-cap"
   static AppIcon? fromFontAwesomeClass(String fontAwesomeClass) {
+    if (fontAwesomeClass.isEmpty) return null;
+    
     // Extract the main icon class from web format
-    final cleanClass = fontAwesomeClass.split(' ').last.replaceAll('fa-', '');
-
+    // Handles formats like:
+    // - "fas fa-graduation-cap"
+    // - "fa-duotone fa-light fa-inbox"
+    // - "fa-solid fa-archive"
+    final parts = fontAwesomeClass.split(' ');
+    String? cleanClass;
+    
+    // البحث عن الجزء الذي يبدأ بـ "fa-" (الأيقونة الفعلية)
+    for (final part in parts.reversed) {
+      if (part.startsWith('fa-') && part != 'fa-duotone' && part != 'fa-light' && 
+          part != 'fa-solid' && part != 'fa-regular' && part != 'fa-brands') {
+        cleanClass = part.replaceAll('fa-', '');
+        break;
+      }
+    }
+    
+    // إذا لم نجد، جرب آخر جزء
+    if (cleanClass == null && parts.isNotEmpty) {
+      cleanClass = parts.last.replaceAll('fa-', '');
+    }
+    
+    if (cleanClass == null || cleanClass.isEmpty) return null;
+    
     return _fontAwesomeToAppIconMap[cleanClass];
   }
 

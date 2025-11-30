@@ -57,7 +57,8 @@ if (Test-Path $vsPath1) {
                 $cmakeGenerator = $vsVersionMap["2022"]
             } elseif ($versionNum -eq 18) {
                 $vsVersion = "2026"
-                $cmakeGenerator = $vsVersionMap["2026"]
+                # Visual Studio 2026 متوافق مع مولد Visual Studio 17 2022
+                $cmakeGenerator = "Visual Studio 17 2022"
             }
             
             if ($vsVersion) {
@@ -83,7 +84,8 @@ if (-not $vsInstalled -and (Test-Path $vsPath2)) {
                 $cmakeGenerator = $vsVersionMap["2022"]
             } elseif ($versionNum -eq 18) {
                 $vsVersion = "2026"
-                $cmakeGenerator = $vsVersionMap["2026"]
+                # Visual Studio 2026 متوافق مع مولد Visual Studio 17 2022
+                $cmakeGenerator = "Visual Studio 17 2022"
             }
             
             if ($vsVersion) {
@@ -111,7 +113,8 @@ if (-not $vsInstalled) {
             $cmakeGenerator = $vsVersionMap["2022"]
         } elseif ($detectedYear -eq "2026") {
             $vsVersion = "2026"
-            $cmakeGenerator = $vsVersionMap["2026"]
+            # Visual Studio 2026 متوافق مع مولد Visual Studio 17 2022
+            $cmakeGenerator = "Visual Studio 17 2022"
         }
         
         if ($vsVersion) {
@@ -180,44 +183,14 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
 # تحديد مولد CMake بناءً على الإصدار المكتشف
-# ملاحظة: Visual Studio 2026 يتطلب CMake 3.29+ أو استخدام Visual Studio 17 2022 generator
+# ملاحظة: Visual Studio 2026 متوافق مع مولد Visual Studio 17 2022 في CMake
 if ($vsVersion -eq "2026") {
-    Write-Host "⚠ Visual Studio 2026 تم اكتشافه" -ForegroundColor Yellow
-    Write-Host "⚠ Visual Studio 2026 detected" -ForegroundColor Yellow
+    Write-Host "✓ Visual Studio 2026 تم اكتشافه" -ForegroundColor Green
+    Write-Host "✓ Visual Studio 2026 detected" -ForegroundColor Green
     Write-Host ""
-    
-    # التحقق من إصدار CMake
-    $cmakeVersionOutput = cmake --version 2>&1 | Select-Object -First 1
-    if ($cmakeVersionOutput -match "version (\d+)\.(\d+)") {
-        $cmakeMajor = [int]$matches[1]
-        $cmakeMinor = [int]$matches[2]
-        
-        if ($cmakeMajor -gt 3 -or ($cmakeMajor -eq 3 -and $cmakeMinor -ge 29)) {
-            Write-Host "✓ CMake $cmakeMajor.$cmakeMinor يدعم Visual Studio 2026" -ForegroundColor Green
-            Write-Host "✓ CMake $cmakeMajor.$cmakeMinor supports Visual Studio 2026" -ForegroundColor Green
-            $cmakeGenerator = "Visual Studio 18 2026"
-        } else {
-            Write-Host "✗ CMake $cmakeMajor.$cmakeMinor لا يدعم Visual Studio 2026" -ForegroundColor Red
-            Write-Host "✗ CMake $cmakeMajor.$cmakeMinor does not support Visual Studio 2026" -ForegroundColor Red
-            Write-Host ""
-            Write-Host "يجب تحديث CMake إلى إصدار 3.29 أو أحدث لدعم Visual Studio 2026" -ForegroundColor Yellow
-            Write-Host "You need to update CMake to version 3.29 or later to support Visual Studio 2026" -ForegroundColor Yellow
-            Write-Host ""
-            Write-Host "التحميل من: https://cmake.org/download/" -ForegroundColor Cyan
-            Write-Host "Download from: https://cmake.org/download/" -ForegroundColor Cyan
-            Write-Host ""
-            Write-Host "أو تثبيت Visual Studio 2022 بجانب Visual Studio 2026" -ForegroundColor Yellow
-            Write-Host "Or install Visual Studio 2022 alongside Visual Studio 2026" -ForegroundColor Yellow
-            Write-Host ""
-            Write-Host "محاولة استخدام Visual Studio 17 2022 generator (قد لا يعمل)" -ForegroundColor Yellow
-            Write-Host "Trying to use Visual Studio 17 2022 generator (may not work)" -ForegroundColor Yellow
-            $cmakeGenerator = "Visual Studio 17 2022"
-        }
-    } else {
-        Write-Host "⚠ لم يتم تحديد إصدار CMake، استخدام Visual Studio 17 2022 كافتراضي" -ForegroundColor Yellow
-        Write-Host "⚠ Could not determine CMake version, using Visual Studio 17 2022 as default" -ForegroundColor Yellow
-        $cmakeGenerator = "Visual Studio 17 2022"
-    }
+    Write-Host "استخدام مولد Visual Studio 17 2022 (متوافق مع Visual Studio 2026)" -ForegroundColor Cyan
+    Write-Host "Using Visual Studio 17 2022 generator (compatible with Visual Studio 2026)" -ForegroundColor Cyan
+    $cmakeGenerator = "Visual Studio 17 2022"
 }
 
 Write-Host "استخدام مولد CMake: $cmakeGenerator" -ForegroundColor Cyan

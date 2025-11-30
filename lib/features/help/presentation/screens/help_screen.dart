@@ -12,87 +12,32 @@ class HelpScreen extends ConsumerStatefulWidget {
 }
 
 class _HelpScreenState extends ConsumerState<HelpScreen> {
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: Column(
-        children: [
-          // Search bar
-          _buildSearchBar(theme),
-
-          // Help content
-          Expanded(
-            child: _searchQuery.isEmpty
-                ? _buildHelpSections(theme)
-                : _buildSearchResults(theme),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: theme.colorScheme.onSurface,
           ),
-        ],
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          context.l10n.helpTitle,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: theme.colorScheme.surface,
       ),
+      body: _buildHelpSections(theme),
     );
   }
 
-  /// Build search bar
-  Widget _buildSearchBar(ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        border: Border(
-          bottom: BorderSide(color: theme.colorScheme.outline.withOpacity(0.2)),
-        ),
-      ),
-      child: TextField(
-        controller: _searchController,
-        onChanged: (value) {
-          setState(() {
-            _searchQuery = value.toLowerCase();
-          });
-        },
-        decoration: InputDecoration(
-          hintText: 'البحث في المساعدة...',
-          prefixIcon: Icon(
-            Icons.search,
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-          suffixIcon: _searchQuery.isNotEmpty
-              ? IconButton(
-                  onPressed: () {
-                    _searchController.clear();
-                    setState(() {
-                      _searchQuery = '';
-                    });
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                )
-              : null,
-          filled: true,
-          fillColor: theme.colorScheme.surfaceContainerHighest.withAlpha(76),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
-        ),
-      ),
-    );
-  }
 
   /// Build help sections
   Widget _buildHelpSections(ThemeData theme) {
@@ -271,36 +216,6 @@ class _HelpScreenState extends ConsumerState<HelpScreen> {
     );
   }
 
-  /// Build search results
-  Widget _buildSearchResults(ThemeData theme) {
-    // TODO: Implement actual search functionality
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.search,
-            size: 64,
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'نتائج البحث: "$_searchQuery"',
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'سيتم تنفيذ البحث قريباً',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   /// Build help section
   Widget _buildHelpSection({

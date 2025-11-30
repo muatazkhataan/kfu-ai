@@ -13,6 +13,11 @@ import '../../../../core/theme/icons.dart';
 // import '../../domain/models/chat.dart';
 // import '../../domain/models/message.dart';
 import '../../../../features/folders/domain/models/folder.dart';
+import '../../../../features/folders/presentation/providers/folder_provider.dart';
+import '../../../../features/folders/presentation/screens/create_folder_screen.dart';
+import '../../../../features/folders/presentation/screens/folder_list_screen.dart';
+import '../../../../features/folders/presentation/screens/change_icon_screen.dart';
+import '../../../../features/folders/presentation/screens/folder_content_screen.dart';
 import '../../../../features/help/presentation/screens/help_screen.dart';
 import '../../../../features/settings/presentation/screens/settings_screen.dart'
     as settings;
@@ -214,8 +219,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     bool isRTL, {
     bool isWideScreen = false,
   }) {
+    const double appBarHeight = 80.0;
+
     return Container(
-      height: kToolbarHeight,
+      height: appBarHeight,
+      constraints: const BoxConstraints(
+        minHeight: appBarHeight,
+        maxHeight: appBarHeight,
+      ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withAlpha(128),
         border: Border(
@@ -226,96 +237,126 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         ),
       ),
       child: SafeArea(
+        bottom: false,
         child: Builder(
           builder: (builderContext) {
             return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // أيقونة القائمة - من اليمين في RTL
                 Consumer(
                   builder: (context, ref, _) {
                     final sidebarOpen = ref.watch(sidebarProvider);
-                    return IconButton(
-                      icon: Icon(
-                        AppIcons.getIcon(AppIcon.menu),
-                        color: theme.colorScheme.primary,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        if (isWideScreen) {
-                          // في الشاشات العريضة، نستخدم toggle
-                          ref.read(sidebarProvider.notifier).toggle();
-                        } else {
-                          // في الشاشات الصغيرة، نستخدم drawer عادي
-                          // ignore: avoid_print
-                          print('[Menu Button] 🔘 تم الضغط على زر القائمة');
-                          // ignore: avoid_print
-                          print('[Menu Button] 🌍 isRTL: $isRTL');
-                          // ignore: avoid_print
-                          print(
-                            '[Menu Button] 🗂️ سيتم فتح: drawer (من اليمين في RTL)',
-                          );
+                    return SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: IconButton(
+                        icon: Icon(
+                          AppIcons.getIcon(AppIcon.menu),
+                          color: theme.colorScheme.primary,
+                          size: 24,
+                        ),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(
+                          minWidth: 48,
+                          minHeight: 48,
+                        ),
+                        onPressed: () {
+                          if (isWideScreen) {
+                            // في الشاشات العريضة، نستخدم toggle
+                            ref.read(sidebarProvider.notifier).toggle();
+                          } else {
+                            // في الشاشات الصغيرة، نستخدم drawer عادي
+                            // ignore: avoid_print
+                            print('[Menu Button] 🔘 تم الضغط على زر القائمة');
+                            // ignore: avoid_print
+                            print('[Menu Button] 🌍 isRTL: $isRTL');
+                            // ignore: avoid_print
+                            print(
+                              '[Menu Button] 🗂️ سيتم فتح: drawer (من اليمين في RTL)',
+                            );
 
-                          builderContext.openAdaptiveDrawer();
-                        }
-                      },
-                      tooltip: isWideScreen
-                          ? (sidebarOpen ? 'إغلاق القائمة' : 'فتح القائمة')
-                          : 'القائمة',
+                            builderContext.openAdaptiveDrawer();
+                          }
+                        },
+                        tooltip: isWideScreen
+                            ? (sidebarOpen ? 'إغلاق القائمة' : 'فتح القائمة')
+                            : 'القائمة',
+                      ),
                     );
                   },
                 ),
 
                 // المسافة
-                const SizedBox(width: 8),
+                const SizedBox(width: 4),
 
                 // العنوان في المنتصف
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        _getChatTitle(chatState),
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (_getChatSubtitle(chatState).isNotEmpty) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          _getChatSubtitle(chatState),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
+                  child: SizedBox(
+                    height: 50.0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            _getChatTitle(chatState),
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
+                              fontSize: 16,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
+                        if (_getChatSubtitle(chatState).isNotEmpty) ...[
+                          const SizedBox(height: 1),
+                          Flexible(
+                            child: Text(
+                              _getChatSubtitle(chatState),
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                                fontSize: 12,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
 
                 // المسافة
-                const SizedBox(width: 8),
+                const SizedBox(width: 4),
 
                 // أيقونة الإعدادات - من اليسار في RTL
-                IconButton(
-                  icon: Icon(
-                    AppIcons.getIcon(AppIcon.settings),
-                    color: theme.colorScheme.primary,
-                    size: 24,
+                SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: IconButton(
+                    icon: Icon(
+                      AppIcons.getIcon(AppIcon.settings),
+                      color: theme.colorScheme.primary,
+                      size: 24,
+                    ),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 48,
+                      minHeight: 48,
+                    ),
+                    onPressed: () {
+                      Navigator.of(builderContext).push(
+                        MaterialPageRoute(
+                          builder: (context) => const settings.SettingsScreen(),
+                        ),
+                      );
+                    },
+                    tooltip: 'الإعدادات',
                   ),
-                  onPressed: () {
-                    Navigator.of(builderContext).push(
-                      MaterialPageRoute(
-                        builder: (context) => const settings.SettingsScreen(),
-                      ),
-                    );
-                  },
-                  tooltip: 'الإعدادات',
                 ),
               ],
             );
@@ -332,13 +373,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     bool isRTL, {
     bool isWideScreen = false,
   }) {
+    const double appBarHeight = 50.0;
+
     return PreferredSize(
-      preferredSize: const Size.fromHeight(kToolbarHeight),
-      child: _buildAppBarContent(
-        theme,
-        chatState,
-        isRTL,
-        isWideScreen: isWideScreen,
+      preferredSize: const Size.fromHeight(appBarHeight),
+      child: Container(
+        constraints: const BoxConstraints(
+          minHeight: appBarHeight,
+          maxHeight: appBarHeight,
+        ),
+        child: _buildAppBarContent(
+          theme,
+          chatState,
+          isRTL,
+          isWideScreen: isWideScreen,
+        ),
       ),
     );
   }
@@ -985,10 +1034,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                       Navigator.pop(context);
                       await ref.read(authProvider.notifier).logout();
                       if (context.mounted) {
-                        // العودة إلى SplashScreen بعد تسجيل الخروج
+                        // الانتقال مباشرة إلى شاشة تسجيل الدخول
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                            builder: (context) => const SplashScreen(),
+                            builder: (context) => const LoginScreen(),
                           ),
                           (route) => false,
                         );
@@ -1111,9 +1160,39 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   ),
                 ),
                 const Spacer(),
+                // زر فتح شاشة المجلدات
                 IconButton(
                   onPressed: () {
-                    // TODO: إضافة مجلد جديد
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FolderListScreen(),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    AppIcons.getIcon(AppIcon.folder),
+                    size: 14,
+                    color: theme.colorScheme.primary,
+                  ),
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  tooltip: 'فتح شاشة المجلدات',
+                ),
+                // زر إضافة مجلد جديد
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CreateFolderScreen(),
+                      ),
+                    ).then((_) {
+                      // تحديث المجلدات بعد إنشاء مجلد جديد
+                      ref.read(folderProvider.notifier).refresh();
+                    });
                   },
                   icon: Icon(
                     AppIcons.getIcon(AppIcon.plus),
@@ -1122,6 +1201,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   ),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
+                  tooltip: 'إنشاء مجلد جديد',
                 ),
               ],
             ),
@@ -1129,7 +1209,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           const SizedBox(height: 4),
 
           // قائمة المجلدات
-          _buildFolderList(theme),
+          _buildFolderList(theme, ref),
         ],
       ),
     );
@@ -1339,11 +1419,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   }
 
   void _onCreateFolder() {
-    // TODO: عرض نافذة إنشاء مجلد جديد
-    showDialog(
-      context: context,
-      builder: (context) => _buildCreateFolderDialog(),
-    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CreateFolderScreen()),
+    ).then((_) {
+      // تحديث المجلدات بعد إنشاء مجلد جديد
+      ref.read(folderProvider.notifier).refresh();
+    });
   }
 
   void _onEditFolder(Folder folder) {
@@ -1367,9 +1449,28 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             child: const Text('إلغاء'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              // ref.read(folderProvider.notifier).deleteFolder(folder.id);
+              try {
+                await ref.read(folderProvider.notifier).deleteFolder(folder.id);
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('تم حذف المجلد بنجاح'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('خطأ: ${e.toString()}'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
             },
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,
@@ -1528,17 +1629,76 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   }
 
   /// بناء قائمة المجلدات المبسطة
-  Widget _buildFolderList(ThemeData theme) {
-    final folders = [
-      {'name': 'جميع المحادثات', 'icon': AppIcon.inbox, 'count': '4'},
-      {'name': 'البرمجة', 'icon': AppIcon.code, 'count': '1'},
-      {'name': 'هياكل البيانات', 'icon': AppIcon.sitemap, 'count': '1'},
-      {
-        'name': 'الشؤون الأكاديمية',
-        'icon': AppIcon.graduationCap,
-        'count': '2',
-      },
-    ];
+  Widget _buildFolderList(ThemeData theme, WidgetRef ref) {
+    final folderState = ref.watch(folderProvider);
+
+    // تحميل المجلدات عند أول بناء
+    if (!folderState.hasLoadedInitial && !folderState.isLoadingFolders) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(folderProvider.notifier).loadFolders();
+      });
+    }
+
+    if (folderState.isLoadingFolders) {
+      return const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (folderState.error != null) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Icon(
+              AppIcons.getIcon(AppIcon.exclamationTriangle),
+              color: theme.colorScheme.error,
+              size: 24,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              folderState.error!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.error,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () {
+                ref.read(folderProvider.notifier).refresh();
+              },
+              child: const Text('إعادة المحاولة'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final folders = folderState.visibleFolders;
+
+    if (folders.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Icon(
+              AppIcons.getIcon(AppIcon.folder),
+              size: 32,
+              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'لا توجد مجلدات',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     return Column(
       children: folders.map((folder) {
@@ -1552,42 +1712,126 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             width: 28,
             height: 28,
             decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer,
+              color: _getFolderColor(folder, theme),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: Icon(
-              AppIcons.getIcon(folder['icon'] as AppIcon),
-              size: 14,
-              color: theme.colorScheme.onPrimaryContainer,
-            ),
+            child: Icon(folder.icon.iconData, size: 14, color: Colors.white),
           ),
           title: Text(
-            folder['name'] as String,
+            folder.name,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          trailing: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              folder['count'] as String,
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.bold,
-                fontSize: 11,
-              ),
-            ),
-          ),
+          trailing: folder.hasChats
+              ? Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    folder.chatCount.toString(),
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11,
+                    ),
+                  ),
+                )
+              : null,
           onTap: () {
             Navigator.pop(context);
-            // _onFolderSelected(folder['name'] as String);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FolderContentScreen(folder: folder),
+              ),
+            );
           },
+          onLongPress: folder.isEditable
+              ? () {
+                  _showFolderContextMenu(context, folder, theme);
+                }
+              : null,
         );
       }).toList(),
+    );
+  }
+
+  Color _getFolderColor(Folder folder, ThemeData theme) {
+    if (folder.color != null) {
+      try {
+        return Color(int.parse(folder.color!.replaceAll('#', '0xFF')));
+      } catch (e) {
+        return theme.colorScheme.primary;
+      }
+    }
+    return theme.colorScheme.primary;
+  }
+
+  void _showFolderContextMenu(
+    BuildContext context,
+    Folder folder,
+    ThemeData theme,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(
+                AppIcons.getIcon(AppIcon.edit),
+                color: theme.colorScheme.primary,
+              ),
+              title: const Text('تحرير'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                // TODO: فتح شاشة التحرير
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                AppIcons.getIcon(AppIcon.palette),
+                color: theme.colorScheme.primary,
+              ),
+              title: const Text('تغيير الأيقونة'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (context) => ChangeIconScreen(folder: folder),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                AppIcons.getIcon(AppIcon.trash),
+                color: theme.colorScheme.error,
+              ),
+              title: Text(
+                'حذف',
+                style: TextStyle(color: theme.colorScheme.error),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                _onDeleteFolder(folder);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 

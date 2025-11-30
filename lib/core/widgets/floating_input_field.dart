@@ -109,6 +109,18 @@ class _FloatingInputFieldState extends State<FloatingInputField>
                         controller: widget.controller,
                         focusNode: _focusNode,
                         obscureText: widget.isPassword && _obscurePassword,
+                        autofillHints: widget.isPassword
+                            ? const [AutofillHints.password]
+                            : const [AutofillHints.username],
+                        keyboardType: widget.isPassword
+                            ? TextInputType.visiblePassword
+                            : TextInputType.text,
+                        textInputAction: widget.isPassword
+                            ? TextInputAction.done
+                            : TextInputAction.next,
+                        enableSuggestions: !widget.isPassword,
+                        enableInteractiveSelection: true,
+                        enableIMEPersonalizedLearning: true,
                         decoration: InputDecoration(
                           hintText: widget.hint,
                           prefixIcon: Icon(

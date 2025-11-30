@@ -2,24 +2,48 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/folder.dart';
 import '../../domain/models/folder_icon.dart';
 import '../../domain/models/folder_type.dart';
+import '../../domain/usecases/load_folders_usecase.dart';
+import '../../domain/usecases/create_folder_usecase.dart';
+import '../../domain/usecases/update_folder_icon_usecase.dart';
+import '../../domain/usecases/update_folder_name_usecase.dart';
+import '../../domain/usecases/delete_folder_usecase.dart';
+import '../../domain/usecases/update_folder_order_usecase.dart';
+import '../../data/providers/folder_repository_provider.dart';
 import '../../../../state/folder_state.dart';
+import '../../../../core/theme/icons.dart';
 
 /// مزود حالة المجلدات
 ///
 /// يدير حالة جميع المجلدات في التطبيق مع العمليات المرتبطة بها
 class FolderNotifier extends StateNotifier<FolderState> {
-  FolderNotifier() : super(FolderState.initial);
+  final LoadFoldersUseCase _loadFoldersUseCase;
+  final CreateFolderUseCase _createFolderUseCase;
+  final UpdateFolderIconUseCase _updateFolderIconUseCase;
+  final UpdateFolderNameUseCase _updateFolderNameUseCase;
+  final DeleteFolderUseCase _deleteFolderUseCase;
+  final UpdateFolderOrderUseCase _updateFolderOrderUseCase;
+
+  FolderNotifier({
+    required LoadFoldersUseCase loadFoldersUseCase,
+    required CreateFolderUseCase createFolderUseCase,
+    required UpdateFolderIconUseCase updateFolderIconUseCase,
+    required UpdateFolderNameUseCase updateFolderNameUseCase,
+    required DeleteFolderUseCase deleteFolderUseCase,
+    required UpdateFolderOrderUseCase updateFolderOrderUseCase,
+  }) : _loadFoldersUseCase = loadFoldersUseCase,
+       _createFolderUseCase = createFolderUseCase,
+       _updateFolderIconUseCase = updateFolderIconUseCase,
+       _updateFolderNameUseCase = updateFolderNameUseCase,
+       _deleteFolderUseCase = deleteFolderUseCase,
+       _updateFolderOrderUseCase = updateFolderOrderUseCase,
+       super(FolderState.initial);
 
   /// تحميل المجلدات
   Future<void> loadFolders() async {
     try {
       state = state.copyWith(isLoadingFolders: true, error: null);
 
-      // TODO: تحميل المجلدات من قاعدة البيانات
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      // إنشاء المجلدات الافتراضية
-      final folders = Folder.createDefaultFolders();
+      final folders = await _loadFoldersUseCase();
 
       state = state.copyWith(
         folders: folders,
@@ -44,35 +68,98 @@ class FolderNotifier extends StateNotifier<FolderState> {
     try {
       state = state.copyWith(isCreatingFolder: true, createError: null);
 
-      // TODO: التحقق من صحة البيانات
-      if (name.trim().isEmpty) {
-        throw Exception('اسم المجلد مطلوب');
-      }
-
-      // التحقق من عدم تكرار الاسم
-      final existingFolder = state.getFolderById(name.trim());
+      // التحقق من عدم تكرار الاسم محلياً
+      final existingFolder = state.folders
+          .where((f) => f.name.toLowerCase() == name.trim().toLowerCase())
+          .firstOrNull;
       if (existingFolder != null) {
         throw Exception('يوجد مجلد بهذا الاسم بالفعل');
       }
 
-      // إنشاء المجلد الجديد
-      final newFolder = Folder.create(
-        name: name.trim(),
-        description: description?.trim(),
-        userId: 'user_123', // TODO: الحصول من مصدر المستخدم الحالي
-        icon: icon ?? FolderIconManager.getIconById('folder_general')!,
+      // تحويل FolderIcon إلى FontAwesome string
+      final selectedIcon =
+          icon ?? FolderIconManager.getIconById('folder_general')!;
+      final iconString = AppIcons.toFontAwesomeClass(
+        selectedIcon.icon,
+        style: 'fas',
+      );
+
+      // استخدام Use Case لإنشاء المجلد
+      final newFolder = await _createFolderUseCase(
+        name: name,
+        icon: iconString,
+        description: description,
         color: color,
       );
 
       // إضافة المجلد للحالة
       final updatedFolders = [...state.folders, newFolder];
       state = state.copyWith(folders: updatedFolders, isCreatingFolder: false);
-
-      // TODO: حفظ المجلد في قاعدة البيانات
     } catch (e) {
       state = state.copyWith(
         isCreatingFolder: false,
         createError: 'فشل في إنشاء المجلد: ${e.toString()}',
+      );
+    }
+  }
+
+  /// تحديث أيقونة المجلد
+  Future<void> updateFolderIcon(
+    String folderId,
+    String iconId, {
+    String? color,
+  }) async {
+    try {
+      state = state.copyWith(isUpdatingFolder: true, updateError: null);
+
+      final folder = state.getFolderById(folderId);
+      if (folder == null) {
+        throw Exception('المجلد غير موجود');
+      }
+
+      if (!folder.isIconChangeable) {
+        throw Exception('لا يمكن تغيير أيقونة هذا المجلد');
+      }
+
+      // الحصول على FolderIcon وتحويله إلى FontAwesome string
+      final selectedFolderIcon =
+          FolderIconManager.getIconById(iconId) ??
+          FolderIconManager.getIconById('folder_general')!;
+      final iconString = AppIcons.toFontAwesomeClass(
+        selectedFolderIcon.icon,
+        style: 'fas',
+      );
+
+      // استخدام Use Case لتحديث الأيقونة (سيقوم برمي Exception إذا فشل)
+      await _updateFolderIconUseCase(
+        folderId: folderId,
+        icon: iconString,
+        color: color,
+      );
+
+      // إعادة تحميل المجلدات من API للحصول على البيانات المحدثة
+      final reloadedFolders = await _loadFoldersUseCase();
+
+      // تحديث الحالة بالبيانات المحدثة من API
+      state = state.copyWith(folders: reloadedFolders, isUpdatingFolder: false);
+
+      // تحديث المجلد المحدد إذا كان هو نفسه
+      final updatedFolder = reloadedFolders.firstWhere(
+        (f) => f.id == folderId,
+        orElse: () => folder.copyWith(
+          icon: selectedFolderIcon,
+          color: color ?? folder.color,
+          updatedAt: DateTime.now(),
+        ),
+      );
+
+      if (state.selectedFolder?.id == folderId) {
+        state = state.copyWith(selectedFolder: updatedFolder);
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isUpdatingFolder: false,
+        updateError: 'فشل في تحديث أيقونة المجلد: ${e.toString()}',
       );
     }
   }
@@ -114,19 +201,36 @@ class FolderNotifier extends StateNotifier<FolderState> {
         updatedAt: DateTime.now(),
       );
 
-      // تحديث الحالة
-      final updatedFolders = state.folders.map((f) {
-        return f.id == folderId ? updatedFolder : f;
-      }).toList();
-
-      state = state.copyWith(folders: updatedFolders, isUpdatingFolder: false);
-
-      // تحديث المجلد المحدد إذا كان هو نفسه
-      if (state.selectedFolder?.id == folderId) {
-        state = state.copyWith(selectedFolder: updatedFolder);
+      // تحديث الاسم في API إذا تغير
+      if (name != null && name.trim() != folder.name) {
+        await _updateFolderNameUseCase(folderId, name.trim());
       }
 
-      // TODO: حفظ التحديث في قاعدة البيانات
+      // تحديث الأيقونة في API إذا تغيرت
+      if (icon != null && icon.id != folder.icon.id) {
+        final iconString = AppIcons.toFontAwesomeClass(icon.icon, style: 'fas');
+        await _updateFolderIconUseCase(
+          folderId: folderId,
+          icon: iconString,
+          color: color,
+        );
+      }
+
+      // إعادة تحميل المجلدات من API للحصول على البيانات المحدثة
+      final reloadedFolders = await _loadFoldersUseCase();
+
+      // تحديث الحالة بالبيانات المحدثة من API
+      state = state.copyWith(folders: reloadedFolders, isUpdatingFolder: false);
+
+      // تحديث المجلد المحدد إذا كان هو نفسه
+      final finalUpdatedFolder = reloadedFolders.firstWhere(
+        (f) => f.id == folderId,
+        orElse: () => updatedFolder,
+      );
+
+      if (state.selectedFolder?.id == folderId) {
+        state = state.copyWith(selectedFolder: finalUpdatedFolder);
+      }
     } catch (e) {
       state = state.copyWith(
         isUpdatingFolder: false,
@@ -154,6 +258,9 @@ class FolderNotifier extends StateNotifier<FolderState> {
         throw Exception('لا يمكن حذف مجلد يحتوي على محادثات');
       }
 
+      // استخدام Use Case لحذف المجلد
+      await _deleteFolderUseCase(folderId);
+
       // حذف المجلد من الحالة
       final updatedFolders = state.folders
           .where((f) => f.id != folderId)
@@ -165,12 +272,51 @@ class FolderNotifier extends StateNotifier<FolderState> {
       if (state.selectedFolder?.id == folderId) {
         state = state.copyWith(selectedFolder: null);
       }
-
-      // TODO: حذف المجلد من قاعدة البيانات
     } catch (e) {
       state = state.copyWith(
         isDeletingFolder: false,
         deleteError: 'فشل في حذف المجلد: ${e.toString()}',
+      );
+    }
+  }
+
+  /// تحديث اسم المجلد
+  Future<void> updateFolderName(String folderId, String newName) async {
+    try {
+      state = state.copyWith(isUpdatingFolder: true, updateError: null);
+
+      final folder = state.getFolderById(folderId);
+      if (folder == null) {
+        throw Exception('المجلد غير موجود');
+      }
+
+      if (!folder.isEditable) {
+        throw Exception('لا يمكن تعديل هذا المجلد');
+      }
+
+      // استخدام Use Case لتحديث الاسم
+      await _updateFolderNameUseCase(folderId, newName.trim());
+
+      // تحديث الحالة
+      final updatedFolder = folder.copyWith(
+        name: newName.trim(),
+        updatedAt: DateTime.now(),
+      );
+
+      final updatedFolders = state.folders.map((f) {
+        return f.id == folderId ? updatedFolder : f;
+      }).toList();
+
+      state = state.copyWith(folders: updatedFolders, isUpdatingFolder: false);
+
+      // تحديث المجلد المحدد إذا كان هو نفسه
+      if (state.selectedFolder?.id == folderId) {
+        state = state.copyWith(selectedFolder: updatedFolder);
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isUpdatingFolder: false,
+        updateError: 'فشل في تحديث اسم المجلد: ${e.toString()}',
       );
     }
   }
@@ -322,10 +468,22 @@ class FolderNotifier extends StateNotifier<FolderState> {
   /// إعادة ترتيب المجلدات
   Future<void> reorderFolders(List<Folder> reorderedFolders) async {
     try {
-      state = state.copyWith(folders: reorderedFolders);
-      // TODO: حفظ الترتيب الجديد في قاعدة البيانات
+      state = state.copyWith(isUpdatingFolder: true, updateError: null);
+
+      // استخراج معرفات المجلدات بالترتيب الجديد
+      final folderIds = reorderedFolders.map((f) => f.id).toList();
+
+      // استخدام Use Case لتحديث الترتيب
+      await _updateFolderOrderUseCase(folderIds);
+
+      // تحديث الحالة
+      state = state.copyWith(
+        folders: reorderedFolders,
+        isUpdatingFolder: false,
+      );
     } catch (e) {
       state = state.copyWith(
+        isUpdatingFolder: false,
         updateError: 'فشل في إعادة ترتيب المجلدات: ${e.toString()}',
       );
     }
@@ -352,11 +510,49 @@ class FolderNotifier extends StateNotifier<FolderState> {
   }
 }
 
+/// Providers للـ Use Cases
+final loadFoldersUseCaseProvider = Provider<LoadFoldersUseCase>((ref) {
+  return LoadFoldersUseCase(ref.watch(folderRepositoryProvider));
+});
+
+final createFolderUseCaseProvider = Provider<CreateFolderUseCase>((ref) {
+  return CreateFolderUseCase(ref.watch(folderRepositoryProvider));
+});
+
+final updateFolderIconUseCaseProvider = Provider<UpdateFolderIconUseCase>((
+  ref,
+) {
+  return UpdateFolderIconUseCase(ref.watch(folderRepositoryProvider));
+});
+
+final updateFolderNameUseCaseProvider = Provider<UpdateFolderNameUseCase>((
+  ref,
+) {
+  return UpdateFolderNameUseCase(ref.watch(folderRepositoryProvider));
+});
+
+final deleteFolderUseCaseProvider = Provider<DeleteFolderUseCase>((ref) {
+  return DeleteFolderUseCase(ref.watch(folderRepositoryProvider));
+});
+
+final updateFolderOrderUseCaseProvider = Provider<UpdateFolderOrderUseCase>((
+  ref,
+) {
+  return UpdateFolderOrderUseCase(ref.watch(folderRepositoryProvider));
+});
+
 /// مزود حالة المجلدات
 final folderProvider = StateNotifierProvider<FolderNotifier, FolderState>((
   ref,
 ) {
-  return FolderNotifier();
+  return FolderNotifier(
+    loadFoldersUseCase: ref.watch(loadFoldersUseCaseProvider),
+    createFolderUseCase: ref.watch(createFolderUseCaseProvider),
+    updateFolderIconUseCase: ref.watch(updateFolderIconUseCaseProvider),
+    updateFolderNameUseCase: ref.watch(updateFolderNameUseCaseProvider),
+    deleteFolderUseCase: ref.watch(deleteFolderUseCaseProvider),
+    updateFolderOrderUseCase: ref.watch(updateFolderOrderUseCaseProvider),
+  );
 });
 
 /// مزود قائمة المجلدات

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../generated/l10n/app_localizations.dart';
+import 'package:kfu_ai/core/localization/l10n.dart';
 
 /// Animated input field that slides in from left and out to right
 class AnimatedInputField extends StatelessWidget {
@@ -105,7 +105,7 @@ class AnimatedInputField extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      nextButtonText ?? AppLocalizations.of(context)!.authNext,
+                      nextButtonText ?? AppLocalization.of(context)!.authNext,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
