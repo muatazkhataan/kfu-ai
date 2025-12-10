@@ -59,7 +59,7 @@ class _RememberMeCheckboxState extends State<RememberMeCheckbox> {
               });
               widget.onChanged?.call(_isChecked);
             },
-            activeColor: theme.colorScheme.primary,
+            activeThumbColor: theme.colorScheme.primary,
           ),
         ],
       ),

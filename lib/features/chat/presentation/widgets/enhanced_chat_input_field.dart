@@ -53,7 +53,7 @@ class _EnhancedChatInputFieldState extends ConsumerState<EnhancedChatInputField>
 
   bool _isExpanded = false;
   bool _hasText = false;
-  GlobalKey _inputFieldKey = GlobalKey();
+  final GlobalKey _inputFieldKey = GlobalKey();
 
   @override
   void initState() {

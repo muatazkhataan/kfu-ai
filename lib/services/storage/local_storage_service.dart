@@ -1,10 +1,11 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'hive_box_manager.dart';
 
 /// خدمة التخزين المحلي باستخدام Hive
 class LocalStorageService {
   static const String _searchHistoryBoxName = 'search_history';
-  static const String _settingsBoxName = 'app_settings';
   static const String _authBoxName = 'auth_storage';
+  // تم إزالة app_settings لتجنب التعارض مع SettingsStorageService
 
   /// Singleton instance
   static final LocalStorageService _instance = LocalStorageService._internal();
@@ -13,23 +14,31 @@ class LocalStorageService {
 
   LocalStorageService._internal();
 
+  /// مدير Boxes
+  final HiveBoxManager _boxManager = HiveBoxManager();
+
   /// تهيئة Hive
   static Future<void> init() async {
     print('[LocalStorageService] 🔧 بدء تهيئة Hive...');
-    await Hive.initFlutter();
+    
+    // استخدام HiveBoxManager للتهيئة
+    final boxManager = HiveBoxManager();
+    await boxManager.initialize();
+    
     print('[LocalStorageService] ✅ تم تهيئة Hive بنجاح');
 
-    // فتح الـ boxes المطلوبة
+    // فتح الـ boxes المطلوبة باستخدام HiveBoxManager
+    final instance = LocalStorageService();
+    
     print('[LocalStorageService] 📦 فتح search history box...');
-    await Hive.openBox<Map>(_searchHistoryBoxName);
+    await instance._boxManager.openBox<Map>(_searchHistoryBoxName);
     print('[LocalStorageService] ✅ تم فتح search history box');
 
-    print('[LocalStorageService] 📦 فتح settings box...');
-    await Hive.openBox<Map>(_settingsBoxName);
-    print('[LocalStorageService] ✅ تم فتح settings box');
+    // تم إزالة فتح app_settings box لتجنب التعارض
+    // الإعدادات تُحفظ الآن في settings_storage box منفصل
 
     print('[LocalStorageService] 📦 فتح auth box...');
-    await Hive.openBox<dynamic>(_authBoxName);
+    await instance._boxManager.openBox<dynamic>(_authBoxName);
     print('[LocalStorageService] ✅ تم فتح auth box');
 
     print('[LocalStorageService] 🎉 تم تهيئة LocalStorageService بالكامل');
@@ -37,10 +46,7 @@ class LocalStorageService {
 
   /// فتح box للتخزين
   Future<Box<T>> _openBox<T>(String boxName) async {
-    if (!Hive.isBoxOpen(boxName)) {
-      return await Hive.openBox<T>(boxName);
-    }
-    return Hive.box<T>(boxName);
+    return await _boxManager.openBox<T>(boxName);
   }
 
   // ==================== تاريخ البحث ====================
@@ -83,54 +89,8 @@ class LocalStorageService {
   }
 
   // ==================== الإعدادات العامة ====================
-
-  /// حفظ قيمة نصية
-  Future<void> setString(String key, String value) async {
-    final box = await _openBox<dynamic>(_settingsBoxName);
-    await box.put(key, value);
-  }
-
-  /// الحصول على قيمة نصية
-  Future<String?> getString(String key) async {
-    final box = await _openBox<dynamic>(_settingsBoxName);
-    return box.get(key) as String?;
-  }
-
-  /// حفظ قيمة منطقية
-  Future<void> setBool(String key, bool value) async {
-    final box = await _openBox<dynamic>(_settingsBoxName);
-    await box.put(key, value);
-  }
-
-  /// الحصول على قيمة منطقية
-  Future<bool?> getBool(String key) async {
-    final box = await _openBox<dynamic>(_settingsBoxName);
-    return box.get(key) as bool?;
-  }
-
-  /// حفظ قيمة عددية
-  Future<void> setInt(String key, int value) async {
-    final box = await _openBox<dynamic>(_settingsBoxName);
-    await box.put(key, value);
-  }
-
-  /// الحصول على قيمة عددية
-  Future<int?> getInt(String key) async {
-    final box = await _openBox<dynamic>(_settingsBoxName);
-    return box.get(key) as int?;
-  }
-
-  /// حذف قيمة
-  Future<void> remove(String key) async {
-    final box = await _openBox<dynamic>(_settingsBoxName);
-    await box.delete(key);
-  }
-
-  /// مسح جميع البيانات
-  Future<void> clear() async {
-    final box = await _openBox<dynamic>(_settingsBoxName);
-    await box.clear();
-  }
+  // تم إزالة هذه الطرق لأن الإعدادات تُحفظ الآن في SettingsStorageService
+  // إذا كنت تحتاج لتخزين بيانات عامة أخرى، استخدم Box منفصل
 
   // ==================== تخزين التوثيق (سطح المكتب) ====================
 

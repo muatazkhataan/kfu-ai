@@ -105,7 +105,7 @@ class AnimatedInputField extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      nextButtonText ?? AppLocalization.of(context)!.authNext,
+                      nextButtonText ?? AppLocalization.of(context).authNext,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

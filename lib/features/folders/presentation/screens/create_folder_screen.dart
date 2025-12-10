@@ -6,6 +6,7 @@ import '../providers/folder_provider.dart';
 import '../widgets/folder_icon_picker_widget.dart';
 import '../widgets/folder_color_picker_widget.dart';
 import '../widgets/folder_preview_widget.dart';
+import '../../../../core/localization/l10n.dart';
 
 /// شاشة إنشاء مجلد جديد
 class CreateFolderScreen extends ConsumerStatefulWidget {
@@ -20,7 +21,6 @@ class CreateFolderScreen extends ConsumerStatefulWidget {
 class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
 
   late FolderIcon _selectedIcon;
   String? _selectedColor;
@@ -33,7 +33,6 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
     if (_isEditMode) {
       final folder = widget.folderToEdit!;
       _nameController.text = folder.name;
-      _descriptionController.text = folder.description ?? '';
       _selectedIcon = folder.icon;
       _selectedColor = folder.color;
       _selectedCategory = folder.icon.category;
@@ -46,7 +45,6 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -61,7 +59,9 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _isEditMode ? 'تعديل المجلد' : 'إنشاء مجلد جديد',
+          _isEditMode
+              ? context.l10n.chatEditFolderTitle
+              : context.l10n.chatCreateFolderTitle,
           style: TextStyle(fontSize: isSmallScreen ? 16 : null),
         ),
       ),
@@ -75,7 +75,7 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
               // معاينة المجلد
               FolderPreviewWidget(
                 name: _nameController.text.isEmpty
-                    ? 'اسم المجلد'
+                    ? context.l10n.folderNamePlaceholder
                     : _nameController.text,
                 icon: _selectedIcon,
                 color: _selectedColor,
@@ -94,98 +94,92 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
               // اسم المجلد
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'اسم المجلد *',
-                  hintText: 'أدخل اسم المجلد',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l10n.folderNameLabel,
+                  hintText: context.l10n.folderNameHint,
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'اسم المجلد مطلوب';
+                    return context.l10n.folderNameRequired;
                   }
                   if (value.trim().length < 2) {
-                    return 'اسم المجلد يجب أن يكون على الأقل حرفين';
+                    return context.l10n.folderNameMinLength;
                   }
                   if (value.trim().length > 50) {
-                    return 'اسم المجلد يجب ألا يتجاوز 50 حرفاً';
+                    return context.l10n.folderNameMaxLength;
                   }
                   return null;
                 },
                 onChanged: (_) => setState(() {}),
               ),
-              const SizedBox(height: 16),
-
-              // وصف المجلد (اختياري)
-              TextFormField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'وصف المجلد (اختياري)',
-                  hintText: 'أدخل وصفاً للمجلد',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
-              ),
               const SizedBox(height: 24),
 
               // اختيار الأيقونة
               Text(
-                'اختر الأيقونة',
+                context.l10n.folderSelectIcon,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontSize: isSmallScreen ? 14 : null,
                 ),
               ),
               const SizedBox(height: 12),
-              SizedBox(
-                height: isSmallScreen ? 250 : 300,
-                child: FolderIconPickerWidget(
-                  selectedIcon: _selectedIcon,
-                  initialCategory: _selectedCategory,
-                  onIconSelected: (icon) {
-                    setState(() {
-                      _selectedIcon = icon;
-                      _selectedCategory = icon.category;
-                    });
-                  },
-                ),
+              // شبكة الأيقونات - تتمدد إلى أسفل بدون سكرول
+              FolderIconPickerWidget(
+                selectedIcon: _selectedIcon,
+                initialCategory: _selectedCategory,
+                onIconSelected: (icon) {
+                  setState(() {
+                    _selectedIcon = icon;
+                    _selectedCategory = icon.category;
+                  });
+                },
               ),
               const SizedBox(height: 32),
 
-              // أزرار الإجراءات
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('إلغاء'),
+              // أزرار الإجراءات - عرض ثابت 100 بكسل في وسط الشاشة
+              Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(context.l10n.commonCancel),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    flex: 2,
-                    child: ElevatedButton(
-                      onPressed:
-                          (_isEditMode
-                              ? folderState.isUpdatingFolder
-                              : folderState.isCreatingFolder)
-                          ? null
-                          : _isEditMode
-                          ? _handleUpdate
-                          : _handleCreate,
-                      child:
-                          (_isEditMode
-                              ? folderState.isUpdatingFolder
-                              : folderState.isCreatingFolder)
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : Text(
-                              _isEditMode ? 'حفظ التعديلات' : 'إنشاء المجلد',
-                            ),
+                    const SizedBox(width: 16),
+                    SizedBox(
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed:
+                            (_isEditMode
+                                ? folderState.isUpdatingFolder
+                                : folderState.isCreatingFolder)
+                            ? null
+                            : _isEditMode
+                            ? _handleUpdate
+                            : _handleCreate,
+                        child:
+                            (_isEditMode
+                                ? folderState.isUpdatingFolder
+                                : folderState.isCreatingFolder)
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                _isEditMode
+                                    ? context.l10n.folderSaveChanges
+                                    : context.l10n.folderCreate,
+                              ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
               // عرض الأخطاء
@@ -235,9 +229,7 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
             .read(folderProvider.notifier)
             .createFolder(
               name: _nameController.text.trim(),
-              description: _descriptionController.text.trim().isEmpty
-                  ? null
-                  : _descriptionController.text.trim(),
+              description: null,
               icon: _selectedIcon,
               color: _selectedColor,
             );
@@ -248,11 +240,11 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Row(
+              content: Row(
                 children: [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text('تم إنشاء المجلد بنجاح'),
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  const SizedBox(width: 8),
+                  Text(context.l10n.folderCreatedSuccess),
                 ],
               ),
               backgroundColor: Colors.green,
@@ -266,7 +258,7 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('خطأ: ${e.toString()}'),
+              content: Text(context.l10n.chatError(e.toString())),
               backgroundColor: Colors.red,
             ),
           );
@@ -299,28 +291,17 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
           );
         }
 
-        // تحديث الوصف إذا تغير
-        final newDescription = _descriptionController.text.trim().isEmpty
-            ? null
-            : _descriptionController.text.trim();
-        if (newDescription != folder.description) {
-          await folderNotifier.updateFolder(
-            folder.id,
-            description: newDescription,
-          );
-        }
-
         // التحقق من عدم وجود أخطاء
         final folderState = ref.read(folderProvider);
         if (folderState.updateError == null && mounted) {
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Row(
+              content: Row(
                 children: [
-                  Icon(Icons.check_circle, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text('تم تحديث المجلد بنجاح'),
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  const SizedBox(width: 8),
+                  Text(context.l10n.folderUpdatedSuccess),
                 ],
               ),
               backgroundColor: Colors.green,
@@ -333,7 +314,7 @@ class _CreateFolderScreenState extends ConsumerState<CreateFolderScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('خطأ: ${e.toString()}'),
+              content: Text(context.l10n.chatError(e.toString())),
               backgroundColor: Colors.red,
             ),
           );

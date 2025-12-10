@@ -48,8 +48,23 @@ class SessionDto {
     // معالجة التواريخ - يدعم ISO String و Timestamp
     DateTime parseDate(dynamic value) {
       if (value == null) return DateTime.now();
-      if (value is String) return DateTime.parse(value);
-      if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+      
+      if (value is String) {
+        try {
+          // تحليل التاريخ من String وتحويله إلى local time
+          final parsed = DateTime.parse(value);
+          return parsed.isUtc ? parsed.toLocal() : parsed;
+        } catch (e) {
+          return DateTime.now();
+        }
+      }
+      
+      if (value is int) {
+        // التاريخ يأتي كـ milliseconds من API
+        // نتأكد أنه local time
+        return DateTime.fromMillisecondsSinceEpoch(value, isUtc: false);
+      }
+      
       return DateTime.now();
     }
 
@@ -72,10 +87,12 @@ class SessionDto {
                 .toList()
           : null,
       messageCount: json['MessageCount'] ?? json['messageCount'],
-      metadata:
-          json['Metadata'] ??
-          json['metadata'] ??
-          {'firstMessage': json['FirstMessage'] ?? json['firstMessage']},
+      metadata: json['Metadata'] ?? json['metadata'] ?? {
+          'firstMessage': json['FirstMessage'] ?? 
+                         json['firstMessage'] ?? 
+                         json['Preview'] ?? 
+                         json['preview'],
+        },
     );
   }
 

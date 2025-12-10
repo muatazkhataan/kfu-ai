@@ -181,7 +181,7 @@ class SettingsItem extends StatelessWidget {
         return Switch(
           value: value as bool? ?? false,
           onChanged: isEnabled ? (newValue) => onChanged?.call(newValue) : null,
-          activeColor: accentColor ?? theme.colorScheme.primary,
+          activeThumbColor: accentColor ?? theme.colorScheme.primary,
         );
 
       case SettingsItemType.dropdown:

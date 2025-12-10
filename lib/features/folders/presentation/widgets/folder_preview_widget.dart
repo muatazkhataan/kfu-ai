@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../domain/models/folder_icon.dart';
+import '../../../../core/localization/l10n.dart';
 
 /// مكون معاينة المجلد
 ///
@@ -34,7 +35,7 @@ class FolderPreviewWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'معاينة المجلد',
+            context.l10n.folderPreview,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -89,7 +90,7 @@ class FolderPreviewWidget extends StatelessWidget {
           const SizedBox(height: 16),
           // اسم المجلد
           Text(
-            name.isEmpty ? 'اسم المجلد' : name,
+            name.isEmpty ? context.l10n.folderNamePlaceholder : name,
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -129,4 +130,3 @@ class FolderPreviewWidget extends StatelessWidget {
     }
   }
 }
-

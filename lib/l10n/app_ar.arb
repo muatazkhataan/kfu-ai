@@ -1207,5 +1207,2120 @@
   "creativityDescriptionCreative": "ردود إبداعية ومبتكرة مع المرونة في التفسير",
   "@creativityDescriptionCreative": {
     "description": "وصف النمط الإبداعي"
+  },
+
+  "sidebarClose": "إغلاق القائمة",
+  "@sidebarClose": {
+    "description": "زر إغلاق القائمة الجانبية"
+  },
+
+  "sidebarUserDefault": "مستخدم",
+  "@sidebarUserDefault": {
+    "description": "اسم المستخدم الافتراضي"
+  },
+
+  "sidebarUserIdDisplay": "ID: {id}...",
+  "@sidebarUserIdDisplay": {
+    "description": "عرض معرف المستخدم",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+
+  "sidebarSignOut": "تسجيل الخروج",
+  "@sidebarSignOut": {
+    "description": "زر تسجيل الخروج"
+  },
+
+  "sidebarSearchInChats": "بحث في المحادثات",
+  "@sidebarSearchInChats": {
+    "description": "زر البحث في المحادثات"
+  },
+
+  "sidebarOpenFoldersScreen": "فتح شاشة المجلدات",
+  "@sidebarOpenFoldersScreen": {
+    "description": "تلميح زر فتح شاشة المجلدات"
+  },
+
+  "sidebarNoFolders": "لا توجد مجلدات",
+  "@sidebarNoFolders": {
+    "description": "رسالة عدم وجود مجلدات"
+  },
+
+  "sidebarFixedFolderTooltip": "مجلد ثابت لا يمكن تعديله",
+  "@sidebarFixedFolderTooltip": {
+    "description": "تلميح المجلد الثابت"
+  },
+
+  "sidebarSystemFolderTooltip": "مجلد نظامي لا يمكن تعديله",
+  "@sidebarSystemFolderTooltip": {
+    "description": "تلميح المجلد النظامي"
+  },
+
+  "sidebarProtectedFolderTooltip": "هذا المجلد غير قابل للتعديل",
+  "@sidebarProtectedFolderTooltip": {
+    "description": "تلميح المجلد المحمي"
+  },
+
+  "sidebarDeleteFolderTitle": "حذف المجلد",
+  "@sidebarDeleteFolderTitle": {
+    "description": "عنوان حوار حذف المجلد"
+  },
+
+  "sidebarDeleteFolderMessage": "هل أنت متأكد من حذف المجلد \"{name}\"?\n\nهذا الإجراء لا يمكن التراجع عنه.",
+  "@sidebarDeleteFolderMessage": {
+    "description": "رسالة تأكيد حذف المجلد",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "sidebarFolderDeletedSuccess": "تم حذف المجلد بنجاح",
+  "@sidebarFolderDeletedSuccess": {
+    "description": "رسالة نجاح حذف المجلد"
+  },
+
+  "chatSources": "المصادر",
+  "@chatSources": {
+    "description": "عنوان قسم المصادر في المحادثة"
+  },
+
+  "navbarOpenMenu": "فتح القائمة",
+  "@navbarOpenMenu": {
+    "description": "تلميح زر فتح القائمة في navbar"
+  },
+
+  "navbarCloseMenu": "إغلاق القائمة",
+  "@navbarCloseMenu": {
+    "description": "تلميح زر إغلاق القائمة في navbar"
+  },
+
+  "navbarMenu": "القائمة",
+  "@navbarMenu": {
+    "description": "تلميح زر القائمة في navbar"
+  },
+
+  "navbarSettings": "الإعدادات",
+  "@navbarSettings": {
+    "description": "تلميح زر الإعدادات في navbar"
+  },
+
+  "chatReply": "الرد",
+  "@chatReply": {
+    "description": "زر الرد على الرسالة"
+  },
+
+  "chatCopy": "نسخ",
+  "@chatCopy": {
+    "description": "زر نسخ الرسالة"
+  },
+
+  "chatShare": "مشاركة",
+  "@chatShare": {
+    "description": "زر مشاركة الرسالة"
+  },
+
+  "chatEdit": "تحرير",
+  "@chatEdit": {
+    "description": "زر تحرير الرسالة"
+  },
+
+  "chatMore": "المزيد",
+  "@chatMore": {
+    "description": "زر المزيد من الخيارات"
+  },
+
+  "chatMoveToArchive": "نقل إلى الأرشيف",
+  "@chatMoveToArchive": {
+    "description": "خيار نقل المحادثة إلى الأرشيف"
+  },
+
+  "chatMoveToFolder": "نقل إلى مجلد",
+  "@chatMoveToFolder": {
+    "description": "خيار نقل المحادثة إلى مجلد"
+  },
+
+  "chatDeleteChatTitle": "حذف المحادثة",
+  "@chatDeleteChatTitle": {
+    "description": "عنوان حوار حذف المحادثة"
+  },
+
+  "chatDeleteChatMessage": "هل أنت متأكد من حذف المحادثة \"{title}\"?",
+  "@chatDeleteChatMessage": {
+    "description": "رسالة تأكيد حذف المحادثة",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatMoveToFolderTitle": "نقل إلى مجلد",
+  "@chatMoveToFolderTitle": {
+    "description": "عنوان حوار نقل المحادثة إلى مجلد"
+  },
+
+  "chatNoFoldersAvailable": "لا توجد مجلدات متاحة",
+  "@chatNoFoldersAvailable": {
+    "description": "رسالة عدم وجود مجلدات متاحة"
+  },
+
+  "chatNoFolder": "بدون مجلد",
+  "@chatNoFolder": {
+    "description": "خيار عدم وجود مجلد"
+  },
+
+  "chatOpeningChat": "جاري فتح المحادثة: {title}",
+  "@chatOpeningChat": {
+    "description": "رسالة فتح المحادثة",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatDeleted": "تم حذف المحادثة: {title}",
+  "@chatDeleted": {
+    "description": "رسالة حذف المحادثة",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatHistoryUpdated": "تم تحديث سجل المحادثات",
+  "@chatHistoryUpdated": {
+    "description": "رسالة تحديث سجل المحادثات"
+  },
+
+  "chatDeleteFolderTitle": "حذف المجلد",
+  "@chatDeleteFolderTitle": {
+    "description": "عنوان حوار حذف المجلد"
+  },
+
+  "chatDeleteFolderMessage": "هل أنت متأكد من حذف مجلد \"{name}\"?",
+  "@chatDeleteFolderMessage": {
+    "description": "رسالة تأكيد حذف المجلد",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatFolderDeletedSuccess": "تم حذف المجلد بنجاح",
+  "@chatFolderDeletedSuccess": {
+    "description": "رسالة نجاح حذف المجلد"
+  },
+
+  "chatError": "خطأ: {error}",
+  "@chatError": {
+    "description": "رسالة خطأ",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatAttachmentSelected": "تم تحديد {type}",
+  "@chatAttachmentSelected": {
+    "description": "رسالة تحديد المرفق",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatSettings": "إعدادات المحادثة",
+  "@chatSettings": {
+    "description": "عنوان إعدادات المحادثة"
+  },
+
+  "chatCreateFolderTitle": "إنشاء مجلد جديد",
+  "@chatCreateFolderTitle": {
+    "description": "عنوان حوار إنشاء مجلد جديد"
+  },
+
+  "chatCreate": "إنشاء",
+  "@chatCreate": {
+    "description": "زر الإنشاء"
+  },
+
+  "chatEditFolderTitle": "تعديل المجلد",
+  "@chatEditFolderTitle": {
+    "description": "عنوان حوار تعديل المجلد"
+  },
+
+  "chatChangeIcon": "تغيير الأيقونة",
+  "@chatChangeIcon": {
+    "description": "عنوان تغيير الأيقونة"
+  },
+
+  "chatAddToFavorites": "إضافة للمفضلة",
+  "@chatAddToFavorites": {
+    "description": "إضافة المحادثة للمفضلة"
+  },
+
+  "chatRemoveFromFavorites": "إزالة من المفضلة",
+  "@chatRemoveFromFavorites": {
+    "description": "إزالة المحادثة من المفضلة"
+  },
+
+  "chatPin": "تثبيت",
+  "@chatPin": {
+    "description": "تثبيت المحادثة"
+  },
+
+  "chatUnpin": "إلغاء التثبيت",
+  "@chatUnpin": {
+    "description": "إلغاء تثبيت المحادثة"
+  },
+
+  "chatMoveToFolderSuccess": "تم نقل المحادثة إلى \"{folder}\" بنجاح",
+  "@chatMoveToFolderSuccess": {
+    "description": "رسالة نجاح نقل المحادثة إلى مجلد",
+    "placeholders": {
+      "folder": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatMoveToFolderFailed": "فشل نقل المحادثة",
+  "@chatMoveToFolderFailed": {
+    "description": "رسالة فشل نقل المحادثة"
+  },
+
+  "chatArchiveSuccess": "تم نقل المحادثة إلى الأرشيف بنجاح",
+  "@chatArchiveSuccess": {
+    "description": "رسالة نجاح نقل المحادثة إلى الأرشيف"
+  },
+
+  "chatArchiveFailed": "فشل نقل المحادثة إلى الأرشيف",
+  "@chatArchiveFailed": {
+    "description": "رسالة فشل نقل المحادثة إلى الأرشيف"
+  },
+
+  "chatDeleteSuccess": "تم حذف المحادثة بنجاح",
+  "@chatDeleteSuccess": {
+    "description": "رسالة نجاح حذف المحادثة"
+  },
+
+  "chatDeleteFailed": "فشل حذف المحادثة",
+  "@chatDeleteFailed": {
+    "description": "رسالة فشل حذف المحادثة"
+  },
+
+  "folderChangeIconTitle": "تغيير أيقونة المجلد",
+  "@folderChangeIconTitle": {
+    "description": "عنوان شاشة تغيير أيقونة المجلد"
+  },
+
+  "folderSelectIcon": "اختر الأيقونة",
+  "@folderSelectIcon": {
+    "description": "عنوان قسم اختيار الأيقونة"
+  },
+
+  "folderSelectColor": "اختر اللون",
+  "@folderSelectColor": {
+    "description": "عنوان قسم اختيار اللون"
+  },
+
+  "folderSelectedColor": "اللون المختار: {name}",
+  "@folderSelectedColor": {
+    "description": "رسالة اللون المختار",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "folderColorUndefined": "غير محدد",
+  "@folderColorUndefined": {
+    "description": "اللون غير محدد"
+  },
+
+  "folderApplying": "جاري التطبيق...",
+  "@folderApplying": {
+    "description": "رسالة جاري التطبيق"
+  },
+
+  "folderApplyIcon": "تطبيق \"{name}\"",
+  "@folderApplyIcon": {
+    "description": "زر تطبيق الأيقونة",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "folderIconChangedSuccess": "تم تغيير أيقونة المجلد \"{name}\" بنجاح",
+  "@folderIconChangedSuccess": {
+    "description": "رسالة نجاح تغيير الأيقونة",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "folderColorGray": "رمادي فاتح",
+  "@folderColorGray": {
+    "description": "اسم اللون الرمادي الفاتح"
+  },
+
+  "folderColorRed": "أحمر",
+  "@folderColorRed": {
+    "description": "اسم اللون الأحمر"
+  },
+
+  "folderColorOrange": "برتقالي",
+  "@folderColorOrange": {
+    "description": "اسم اللون البرتقالي"
+  },
+
+  "folderColorYellow": "أصفر",
+  "@folderColorYellow": {
+    "description": "اسم اللون الأصفر"
+  },
+
+  "folderColorGreen": "أخضر",
+  "@folderColorGreen": {
+    "description": "اسم اللون الأخضر"
+  },
+
+  "folderColorCyan": "أزرق سماوي",
+  "@folderColorCyan": {
+    "description": "اسم اللون الأزرق السماوي"
+  },
+
+  "folderColorPurple": "بنفسجي",
+  "@folderColorPurple": {
+    "description": "اسم اللون البنفسجي"
+  },
+
+  "folderColorPink": "وردي",
+  "@folderColorPink": {
+    "description": "اسم اللون الوردي"
+  },
+
+  "folderPreview": "معاينة المجلد",
+  "@folderPreview": {
+    "description": "عنوان معاينة المجلد"
+  },
+
+  "folderNamePlaceholder": "اسم المجلد",
+  "@folderNamePlaceholder": {
+    "description": "نص بديل لاسم المجلد"
+  },
+
+  "folderNameLabel": "اسم المجلد *",
+  "@folderNameLabel": {
+    "description": "تسمية حقل اسم المجلد"
+  },
+
+  "folderNameHint": "أدخل اسم المجلد",
+  "@folderNameHint": {
+    "description": "نص تلميحي لحقل اسم المجلد"
+  },
+
+  "folderNameRequired": "اسم المجلد مطلوب",
+  "@folderNameRequired": {
+    "description": "رسالة خطأ: اسم المجلد مطلوب"
+  },
+
+  "folderNameMinLength": "اسم المجلد يجب أن يكون على الأقل حرفين",
+  "@folderNameMinLength": {
+    "description": "رسالة خطأ: الحد الأدنى لطول اسم المجلد"
+  },
+
+  "folderNameMaxLength": "اسم المجلد يجب ألا يتجاوز 50 حرفاً",
+  "@folderNameMaxLength": {
+    "description": "رسالة خطأ: الحد الأقصى لطول اسم المجلد"
+  },
+
+  "folderSaveChanges": "حفظ التعديلات",
+  "@folderSaveChanges": {
+    "description": "زر حفظ التعديلات"
+  },
+
+  "folderCreate": "إنشاء المجلد",
+  "@folderCreate": {
+    "description": "زر إنشاء المجلد"
+  },
+
+  "folderCreatedSuccess": "تم إنشاء المجلد بنجاح",
+  "@folderCreatedSuccess": {
+    "description": "رسالة نجاح إنشاء المجلد"
+  },
+
+  "folderUpdatedSuccess": "تم تحديث المجلد بنجاح",
+  "@folderUpdatedSuccess": {
+    "description": "رسالة نجاح تحديث المجلد"
+  },
+
+  "iconCategoryGeneral": "عام",
+  "@iconCategoryGeneral": {
+    "description": "اسم فئة الأيقونات العامة"
+  },
+
+  "iconCategoryProgramming": "البرمجة",
+  "@iconCategoryProgramming": {
+    "description": "اسم فئة أيقونات البرمجة"
+  },
+
+  "iconCategoryMathematics": "الرياضيات",
+  "@iconCategoryMathematics": {
+    "description": "اسم فئة أيقونات الرياضيات"
+  },
+
+  "iconCategoryScience": "العلوم",
+  "@iconCategoryScience": {
+    "description": "اسم فئة أيقونات العلوم"
+  },
+
+  "iconCategoryStudy": "الدراسة",
+  "@iconCategoryStudy": {
+    "description": "اسم فئة أيقونات الدراسة"
+  },
+
+  "iconCategoryCreativity": "الإبداع",
+  "@iconCategoryCreativity": {
+    "description": "اسم فئة أيقونات الإبداع"
+  },
+
+  "iconCategoryCollaboration": "العمل الجماعي",
+  "@iconCategoryCollaboration": {
+    "description": "اسم فئة أيقونات العمل الجماعي"
+  },
+
+  "iconCategorySystem": "النظام",
+  "@iconCategorySystem": {
+    "description": "اسم فئة أيقونات النظام"
+  },
+
+  "iconFolderGeneral": "مجلد عادي",
+  "@iconFolderGeneral": {
+    "description": "اسم أيقونة مجلد عادي"
+  },
+
+  "iconFolderStar": "نجمة",
+  "@iconFolderStar": {
+    "description": "اسم أيقونة نجمة"
+  },
+
+  "iconFolderHeart": "قلب",
+  "@iconFolderHeart": {
+    "description": "اسم أيقونة قلب"
+  },
+
+  "iconFolderHome": "الرئيسية",
+  "@iconFolderHome": {
+    "description": "اسم أيقونة الرئيسية"
+  },
+
+  "iconFolderThumbtack": "مثبت",
+  "@iconFolderThumbtack": {
+    "description": "اسم أيقونة مثبت"
+  },
+
+  "iconFolderPlus": "إضافة مجلد",
+  "@iconFolderPlus": {
+    "description": "اسم أيقونة إضافة مجلد"
+  },
+
+  "iconFolderOpen": "مجلد مفتوح",
+  "@iconFolderOpen": {
+    "description": "اسم أيقونة مجلد مفتوح"
+  },
+
+  "iconCode": "كود",
+  "@iconCode": {
+    "description": "اسم أيقونة كود"
+  },
+
+  "iconLaptopCode": "لابتوب كود",
+  "@iconLaptopCode": {
+    "description": "اسم أيقونة لابتوب كود"
+  },
+
+  "iconTerminal": "طرفية",
+  "@iconTerminal": {
+    "description": "اسم أيقونة طرفية"
+  },
+
+  "iconBug": "خطأ برمجي",
+  "@iconBug": {
+    "description": "اسم أيقونة خطأ برمجي"
+  },
+
+  "iconCogs": "إعدادات",
+  "@iconCogs": {
+    "description": "اسم أيقونة إعدادات"
+  },
+
+  "iconMicrochip": "معالج",
+  "@iconMicrochip": {
+    "description": "اسم أيقونة معالج"
+  },
+
+  "iconServer": "خادم",
+  "@iconServer": {
+    "description": "اسم أيقونة خادم"
+  },
+
+  "iconNetworkWired": "شبكة",
+  "@iconNetworkWired": {
+    "description": "اسم أيقونة شبكة"
+  },
+
+  "iconShieldAlt": "حماية",
+  "@iconShieldAlt": {
+    "description": "اسم أيقونة حماية"
+  },
+
+  "iconKey": "مفتاح",
+  "@iconKey": {
+    "description": "اسم أيقونة مفتاح"
+  },
+
+  "iconDatabase": "قاعدة بيانات",
+  "@iconDatabase": {
+    "description": "اسم أيقونة قاعدة بيانات"
+  },
+
+  "iconTable": "جدول",
+  "@iconTable": {
+    "description": "اسم أيقونة جدول"
+  },
+
+  "iconChartBar": "رسم بياني",
+  "@iconChartBar": {
+    "description": "اسم أيقونة رسم بياني"
+  },
+
+  "iconMobileAlt": "جوال",
+  "@iconMobileAlt": {
+    "description": "اسم أيقونة جوال"
+  },
+
+  "iconGlobe": "عالمي",
+  "@iconGlobe": {
+    "description": "اسم أيقونة عالمي"
+  },
+
+  "iconCloud": "سحابة",
+  "@iconCloud": {
+    "description": "اسم أيقونة سحابة"
+  },
+
+  "iconRobot": "روبوت",
+  "@iconRobot": {
+    "description": "اسم أيقونة روبوت"
+  },
+
+  "iconBrain": "دماغ",
+  "@iconBrain": {
+    "description": "اسم أيقونة دماغ"
+  },
+
+  "iconSitemap": "خريطة موقع",
+  "@iconSitemap": {
+    "description": "اسم أيقونة خريطة موقع"
+  },
+
+  "iconProjectDiagram": "مخطط مشروع",
+  "@iconProjectDiagram": {
+    "description": "اسم أيقونة مخطط مشروع"
+  },
+
+  "iconFileCode": "ملف كود",
+  "@iconFileCode": {
+    "description": "اسم أيقونة ملف كود"
+  },
+
+  "iconCodeBranch": "فرع كود",
+  "@iconCodeBranch": {
+    "description": "اسم أيقونة فرع كود"
+  },
+
+  "iconCodeMerge": "دمج كود",
+  "@iconCodeMerge": {
+    "description": "اسم أيقونة دمج كود"
+  },
+
+  "iconCodeCompare": "مقارنة كود",
+  "@iconCodeCompare": {
+    "description": "اسم أيقونة مقارنة كود"
+  },
+
+  "iconCalculator": "آلة حاسبة",
+  "@iconCalculator": {
+    "description": "اسم أيقونة آلة حاسبة"
+  },
+
+  "iconSquareRootAlt": "جذر تربيعي",
+  "@iconSquareRootAlt": {
+    "description": "اسم أيقونة جذر تربيعي"
+  },
+
+  "iconInfinity": "لانهاية",
+  "@iconInfinity": {
+    "description": "اسم أيقونة لانهاية"
+  },
+
+  "iconPercentage": "نسبة مئوية",
+  "@iconPercentage": {
+    "description": "اسم أيقونة نسبة مئوية"
+  },
+
+  "iconChartLine": "رسم خطي",
+  "@iconChartLine": {
+    "description": "اسم أيقونة رسم خطي"
+  },
+
+  "iconChartPie": "رسم دائري",
+  "@iconChartPie": {
+    "description": "اسم أيقونة رسم دائري"
+  },
+
+  "iconChartArea": "رسم مساحي",
+  "@iconChartArea": {
+    "description": "اسم أيقونة رسم مساحي"
+  },
+
+  "iconSortNumericUp": "ترتيب تصاعدي",
+  "@iconSortNumericUp": {
+    "description": "اسم أيقونة ترتيب تصاعدي"
+  },
+
+  "iconSortNumericDown": "ترتيب تنازلي",
+  "@iconSortNumericDown": {
+    "description": "اسم أيقونة ترتيب تنازلي"
+  },
+
+  "iconEquals": "يساوي",
+  "@iconEquals": {
+    "description": "اسم أيقونة يساوي"
+  },
+
+  "iconPlus": "زائد",
+  "@iconPlus": {
+    "description": "اسم أيقونة زائد"
+  },
+
+  "iconMinus": "ناقص",
+  "@iconMinus": {
+    "description": "اسم أيقونة ناقص"
+  },
+
+  "iconTimes": "ضرب",
+  "@iconTimes": {
+    "description": "اسم أيقونة ضرب"
+  },
+
+  "iconDivide": "قسمة",
+  "@iconDivide": {
+    "description": "اسم أيقونة قسمة"
+  },
+
+  "iconSuperscript": "أس علوي",
+  "@iconSuperscript": {
+    "description": "اسم أيقونة أس علوي"
+  },
+
+  "iconSubscript": "أس سفلي",
+  "@iconSubscript": {
+    "description": "اسم أيقونة أس سفلي"
+  },
+
+  "iconSigma": "سيجما",
+  "@iconSigma": {
+    "description": "اسم أيقونة سيجما"
+  },
+
+  "iconPi": "باي",
+  "@iconPi": {
+    "description": "اسم أيقونة باي"
+  },
+
+  "iconFunction": "دالة",
+  "@iconFunction": {
+    "description": "اسم أيقونة دالة"
+  },
+
+  "iconIntegral": "تكامل",
+  "@iconIntegral": {
+    "description": "اسم أيقونة تكامل"
+  },
+
+  "iconTriangle": "مثلث",
+  "@iconTriangle": {
+    "description": "اسم أيقونة مثلث"
+  },
+
+  "iconOmega": "أوميغا",
+  "@iconOmega": {
+    "description": "اسم أيقونة أوميغا"
+  },
+
+  "iconTheta": "ثيتا",
+  "@iconTheta": {
+    "description": "اسم أيقونة ثيتا"
+  },
+
+  "iconAtom": "ذرة",
+  "@iconAtom": {
+    "description": "اسم أيقونة ذرة"
+  },
+
+  "iconFlask": "قارورة",
+  "@iconFlask": {
+    "description": "اسم أيقونة قارورة"
+  },
+
+  "iconMicroscope": "مجهر",
+  "@iconMicroscope": {
+    "description": "اسم أيقونة مجهر"
+  },
+
+  "iconDna": "DNA",
+  "@iconDna": {
+    "description": "اسم أيقونة DNA"
+  },
+
+  "iconLeaf": "ورقة",
+  "@iconLeaf": {
+    "description": "اسم أيقونة ورقة"
+  },
+
+  "iconSeedling": "نبتة",
+  "@iconSeedling": {
+    "description": "اسم أيقونة نبتة"
+  },
+
+  "iconDroplet": "قطرة",
+  "@iconDroplet": {
+    "description": "اسم أيقونة قطرة"
+  },
+
+  "iconFire": "نار",
+  "@iconFire": {
+    "description": "اسم أيقونة نار"
+  },
+
+  "iconBolt": "برق",
+  "@iconBolt": {
+    "description": "اسم أيقونة برق"
+  },
+
+  "iconMagnet": "مغناطيس",
+  "@iconMagnet": {
+    "description": "اسم أيقونة مغناطيس"
+  },
+
+  "iconSatellite": "قمر صناعي",
+  "@iconSatellite": {
+    "description": "اسم أيقونة قمر صناعي"
+  },
+
+  "iconRocket": "صاروخ",
+  "@iconRocket": {
+    "description": "اسم أيقونة صاروخ"
+  },
+
+  "iconSun": "شمس",
+  "@iconSun": {
+    "description": "اسم أيقونة شمس"
+  },
+
+  "iconMoon": "قمر",
+  "@iconMoon": {
+    "description": "اسم أيقونة قمر"
+  },
+
+  "iconStar": "نجمة",
+  "@iconStar": {
+    "description": "اسم أيقونة نجمة"
+  },
+
+  "iconTelescope": "تلسكوب",
+  "@iconTelescope": {
+    "description": "اسم أيقونة تلسكوب"
+  },
+
+  "iconVial": "أنبوب اختبار",
+  "@iconVial": {
+    "description": "اسم أيقونة أنبوب اختبار"
+  },
+
+  "iconPills": "أقراص",
+  "@iconPills": {
+    "description": "اسم أيقونة أقراص"
+  },
+
+  "iconStethoscope": "سماعة طبية",
+  "@iconStethoscope": {
+    "description": "اسم أيقونة سماعة طبية"
+  },
+
+  "iconHeartbeat": "نبض",
+  "@iconHeartbeat": {
+    "description": "اسم أيقونة نبض"
+  },
+
+  "iconEye": "عين",
+  "@iconEye": {
+    "description": "اسم أيقونة عين"
+  },
+
+  "iconEar": "أذن",
+  "@iconEar": {
+    "description": "اسم أيقونة أذن"
+  },
+
+  "iconNose": "أنف",
+  "@iconNose": {
+    "description": "اسم أيقونة أنف"
+  },
+
+  "iconTooth": "سن",
+  "@iconTooth": {
+    "description": "اسم أيقونة سن"
+  },
+
+  "iconBone": "عظم",
+  "@iconBone": {
+    "description": "اسم أيقونة عظم"
+  },
+
+  "iconLungs": "رئتان",
+  "@iconLungs": {
+    "description": "اسم أيقونة رئتان"
+  },
+
+  "iconLiver": "كبد",
+  "@iconLiver": {
+    "description": "اسم أيقونة كبد"
+  },
+
+  "iconKidney": "كلية",
+  "@iconKidney": {
+    "description": "اسم أيقونة كلية"
+  },
+
+  "iconStomach": "معدة",
+  "@iconStomach": {
+    "description": "اسم أيقونة معدة"
+  },
+
+  "iconIntestines": "أمعاء",
+  "@iconIntestines": {
+    "description": "اسم أيقونة أمعاء"
+  },
+
+  "iconGraduationCap": "قبعة تخرج",
+  "@iconGraduationCap": {
+    "description": "اسم أيقونة قبعة تخرج"
+  },
+
+  "iconBook": "كتاب",
+  "@iconBook": {
+    "description": "اسم أيقونة كتاب"
+  },
+
+  "iconBookOpen": "كتاب مفتوح",
+  "@iconBookOpen": {
+    "description": "اسم أيقونة كتاب مفتوح"
+  },
+
+  "iconPen": "قلم",
+  "@iconPen": {
+    "description": "اسم أيقونة قلم"
+  },
+
+  "iconPencilAlt": "قلم رصاص",
+  "@iconPencilAlt": {
+    "description": "اسم أيقونة قلم رصاص"
+  },
+
+  "iconHighlighter": "قلم تمييز",
+  "@iconHighlighter": {
+    "description": "اسم أيقونة قلم تمييز"
+  },
+
+  "iconStickyNote": "ملاحظة",
+  "@iconStickyNote": {
+    "description": "اسم أيقونة ملاحظة"
+  },
+
+  "iconClipboard": "لوح",
+  "@iconClipboard": {
+    "description": "اسم أيقونة لوح"
+  },
+
+  "iconFileAlt": "ملف",
+  "@iconFileAlt": {
+    "description": "اسم أيقونة ملف"
+  },
+
+  "iconArchive": "أرشيف",
+  "@iconArchive": {
+    "description": "اسم أيقونة أرشيف"
+  },
+
+  "iconCalendarAlt": "تقويم",
+  "@iconCalendarAlt": {
+    "description": "اسم أيقونة تقويم"
+  },
+
+  "iconClock": "ساعة",
+  "@iconClock": {
+    "description": "اسم أيقونة ساعة"
+  },
+
+  "iconStopwatch": "ساعة توقيت",
+  "@iconStopwatch": {
+    "description": "اسم أيقونة ساعة توقيت"
+  },
+
+  "iconHourglassHalf": "ساعة رملية",
+  "@iconHourglassHalf": {
+    "description": "اسم أيقونة ساعة رملية"
+  },
+
+  "iconBell": "جرس",
+  "@iconBell": {
+    "description": "اسم أيقونة جرس"
+  },
+
+  "iconFlag": "علم",
+  "@iconFlag": {
+    "description": "اسم أيقونة علم"
+  },
+
+  "iconTrophy": "كأس",
+  "@iconTrophy": {
+    "description": "اسم أيقونة كأس"
+  },
+
+  "iconMedal": "ميدالية",
+  "@iconMedal": {
+    "description": "اسم أيقونة ميدالية"
+  },
+
+  "iconCertificate": "شهادة",
+  "@iconCertificate": {
+    "description": "اسم أيقونة شهادة"
+  },
+
+  "iconAward": "جائزة",
+  "@iconAward": {
+    "description": "اسم أيقونة جائزة"
+  },
+
+  "iconUserGraduate": "طالب",
+  "@iconUserGraduate": {
+    "description": "اسم أيقونة طالب"
+  },
+
+  "iconChalkboardTeacher": "معلم",
+  "@iconChalkboardTeacher": {
+    "description": "اسم أيقونة معلم"
+  },
+
+  "iconChalkboard": "سبورة",
+  "@iconChalkboard": {
+    "description": "اسم أيقونة سبورة"
+  },
+
+  "iconSearch": "بحث",
+  "@iconSearch": {
+    "description": "اسم أيقونة بحث"
+  },
+
+  "iconQuestionCircle": "سؤال",
+  "@iconQuestionCircle": {
+    "description": "اسم أيقونة سؤال"
+  },
+
+  "iconLightbulb": "فكرة",
+  "@iconLightbulb": {
+    "description": "اسم أيقونة فكرة"
+  },
+
+  "iconInbox": "صندوق وارد",
+  "@iconInbox": {
+    "description": "اسم أيقونة صندوق وارد"
+  },
+
+  "iconPalette": "لوحة ألوان",
+  "@iconPalette": {
+    "description": "اسم أيقونة لوحة ألوان"
+  },
+
+  "iconPaintBrush": "فرشاة",
+  "@iconPaintBrush": {
+    "description": "اسم أيقونة فرشاة"
+  },
+
+  "iconMagic": "سحر",
+  "@iconMagic": {
+    "description": "اسم أيقونة سحر"
+  },
+
+  "iconSparkles": "شرارات",
+  "@iconSparkles": {
+    "description": "اسم أيقونة شرارات"
+  },
+
+  "iconEyeDropper": "قطارة",
+  "@iconEyeDropper": {
+    "description": "اسم أيقونة قطارة"
+  },
+
+  "iconCamera": "كاميرا",
+  "@iconCamera": {
+    "description": "اسم أيقونة كاميرا"
+  },
+
+  "iconVideo": "فيديو",
+  "@iconVideo": {
+    "description": "اسم أيقونة فيديو"
+  },
+
+  "iconMusic": "موسيقى",
+  "@iconMusic": {
+    "description": "اسم أيقونة موسيقى"
+  },
+
+  "iconHeadphones": "سماعات",
+  "@iconHeadphones": {
+    "description": "اسم أيقونة سماعات"
+  },
+
+  "iconGamepad": "جهاز ألعاب",
+  "@iconGamepad": {
+    "description": "اسم أيقونة جهاز ألعاب"
+  },
+
+  "iconDice": "نرد",
+  "@iconDice": {
+    "description": "اسم أيقونة نرد"
+  },
+
+  "iconPuzzlePiece": "قطعة أحجية",
+  "@iconPuzzlePiece": {
+    "description": "اسم أيقونة قطعة أحجية"
+  },
+
+  "iconCube": "مكعب",
+  "@iconCube": {
+    "description": "اسم أيقونة مكعب"
+  },
+
+  "iconGem": "جوهرة",
+  "@iconGem": {
+    "description": "اسم أيقونة جوهرة"
+  },
+
+  "iconCrown": "تاج",
+  "@iconCrown": {
+    "description": "اسم أيقونة تاج"
+  },
+
+  "iconRibbon": "شريط",
+  "@iconRibbon": {
+    "description": "اسم أيقونة شريط"
+  },
+
+  "iconUsers": "مستخدمون",
+  "@iconUsers": {
+    "description": "اسم أيقونة مستخدمون"
+  },
+
+  "iconUserFriends": "أصدقاء",
+  "@iconUserFriends": {
+    "description": "اسم أيقونة أصدقاء"
+  },
+
+  "iconHandshake": "مصافحة",
+  "@iconHandshake": {
+    "description": "اسم أيقونة مصافحة"
+  },
+
+  "iconComments": "تعليقات",
+  "@iconComments": {
+    "description": "اسم أيقونة تعليقات"
+  },
+
+  "iconCommentDots": "تعليق",
+  "@iconCommentDots": {
+    "description": "اسم أيقونة تعليق"
+  },
+
+  "iconEnvelope": "ظرف",
+  "@iconEnvelope": {
+    "description": "اسم أيقونة ظرف"
+  },
+
+  "iconPhone": "هاتف",
+  "@iconPhone": {
+    "description": "اسم أيقونة هاتف"
+  },
+
+  "iconVideoCamera": "كاميرا فيديو",
+  "@iconVideoCamera": {
+    "description": "اسم أيقونة كاميرا فيديو"
+  },
+
+  "iconShareAlt": "مشاركة",
+  "@iconShareAlt": {
+    "description": "اسم أيقونة مشاركة"
+  },
+
+  "iconLink": "رابط",
+  "@iconLink": {
+    "description": "اسم أيقونة رابط"
+  },
+
+  "iconSync": "مزامنة",
+  "@iconSync": {
+    "description": "اسم أيقونة مزامنة"
+  },
+
+  "iconDownload": "تحميل",
+  "@iconDownload": {
+    "description": "اسم أيقونة تحميل"
+  },
+
+  "iconUpload": "رفع",
+  "@iconUpload": {
+    "description": "اسم أيقونة رفع"
+  },
+
+  "iconPrint": "طباعة",
+  "@iconPrint": {
+    "description": "اسم أيقونة طباعة"
+  },
+
+  "iconCopy": "نسخ",
+  "@iconCopy": {
+    "description": "اسم أيقونة نسخ"
+  },
+
+  "iconPaperPlane": "طائرة ورقية",
+  "@iconPaperPlane": {
+    "description": "اسم أيقونة طائرة ورقية"
+  },
+
+  "iconSend": "إرسال",
+  "@iconSend": {
+    "description": "اسم أيقونة إرسال"
+  },
+
+  "iconBellSlash": "إيقاف التنبيهات",
+  "@iconBellSlash": {
+    "description": "اسم أيقونة إيقاف التنبيهات"
+  },
+
+  "iconChat": "محادثة",
+  "@iconChat": {
+    "description": "اسم أيقونة محادثة"
+  },
+
+  "iconMessage": "رسالة",
+  "@iconMessage": {
+    "description": "اسم أيقونة رسالة"
+  },
+
+  "iconReply": "رد",
+  "@iconReply": {
+    "description": "اسم أيقونة رد"
+  },
+
+  "iconShare": "مشاركة",
+  "@iconShare": {
+    "description": "اسم أيقونة مشاركة"
+  },
+
+  "iconAttach": "مرفق",
+  "@iconAttach": {
+    "description": "اسم أيقونة مرفق"
+  },
+
+  "iconImage": "صورة",
+  "@iconImage": {
+    "description": "اسم أيقونة صورة"
+  },
+
+  "iconFile": "ملف",
+  "@iconFile": {
+    "description": "اسم أيقونة ملف"
+  },
+
+  "iconPaperclip": "مشبك ورق",
+  "@iconPaperclip": {
+    "description": "اسم أيقونة مشبك ورق"
+  },
+
+  "iconSettings": "إعدادات",
+  "@iconSettings": {
+    "description": "اسم أيقونة إعدادات"
+  },
+
+  "iconCog": "ترس",
+  "@iconCog": {
+    "description": "اسم أيقونة ترس"
+  },
+
+  "iconShield": "درع",
+  "@iconShield": {
+    "description": "اسم أيقونة درع"
+  },
+
+  "iconInfo": "معلومات",
+  "@iconInfo": {
+    "description": "اسم أيقونة معلومات"
+  },
+
+  "iconHelp": "مساعدة",
+  "@iconHelp": {
+    "description": "اسم أيقونة مساعدة"
+  },
+
+  "iconQuestion": "سؤال",
+  "@iconQuestion": {
+    "description": "اسم أيقونة سؤال"
+  },
+
+  "iconCheck": "صح",
+  "@iconCheck": {
+    "description": "اسم أيقونة صح"
+  },
+
+  "iconWarning": "تحذير",
+  "@iconWarning": {
+    "description": "اسم أيقونة تحذير"
+  },
+
+  "iconError": "خطأ",
+  "@iconError": {
+    "description": "اسم أيقونة خطأ"
+  },
+
+  "iconInfoCircle": "معلومات",
+  "@iconInfoCircle": {
+    "description": "اسم أيقونة معلومات"
+  },
+
+  "iconExclamation": "تعجب",
+  "@iconExclamation": {
+    "description": "اسم أيقونة تعجب"
+  },
+
+  "iconExclamationTriangle": "مثلث تحذير",
+  "@iconExclamationTriangle": {
+    "description": "اسم أيقونة مثلث تحذير"
+  },
+
+  "iconUser": "مستخدم",
+  "@iconUser": {
+    "description": "اسم أيقونة مستخدم"
+  },
+
+  "iconLock": "قفل",
+  "@iconLock": {
+    "description": "اسم أيقونة قفل"
+  },
+
+  "iconSignIn": "تسجيل دخول",
+  "@iconSignIn": {
+    "description": "اسم أيقونة تسجيل دخول"
+  },
+
+  "iconSignOut": "تسجيل خروج",
+  "@iconSignOut": {
+    "description": "اسم أيقونة تسجيل خروج"
+  },
+
+  "iconEdit": "تعديل",
+  "@iconEdit": {
+    "description": "اسم أيقونة تعديل"
+  },
+
+  "iconDelete": "حذف",
+  "@iconDelete": {
+    "description": "اسم أيقونة حذف"
+  },
+
+  "iconTrash": "سلة",
+  "@iconTrash": {
+    "description": "اسم أيقونة سلة"
+  },
+
+  "iconSave": "حفظ",
+  "@iconSave": {
+    "description": "اسم أيقونة حفظ"
+  },
+
+  "iconHistory": "تاريخ",
+  "@iconHistory": {
+    "description": "اسم أيقونة تاريخ"
+  },
+
+  "iconLockKeyhole": "قفل",
+  "@iconLockKeyhole": {
+    "description": "اسم أيقونة قفل"
+  },
+
+  "iconUnlock": "فتح",
+  "@iconUnlock": {
+    "description": "اسم أيقونة فتح"
+  },
+
+  "iconMicrophone": "ميكروفون",
+  "@iconMicrophone": {
+    "description": "اسم أيقونة ميكروفون"
+  },
+
+  "iconFileCodeIcon": "ملف كود",
+  "@iconFileCodeIcon": {
+    "description": "اسم أيقونة ملف كود"
+  },
+
+  "iconList": "قائمة",
+  "@iconList": {
+    "description": "اسم أيقونة قائمة"
+  },
+
+  "iconGrid": "شبكة",
+  "@iconGrid": {
+    "description": "اسم أيقونة شبكة"
+  },
+
+  "iconThLarge": "شبكة كبيرة",
+  "@iconThLarge": {
+    "description": "اسم أيقونة شبكة كبيرة"
+  },
+
+  "iconBars": "أشرطة",
+  "@iconBars": {
+    "description": "اسم أيقونة أشرطة"
+  },
+
+  "iconMenu": "قائمة",
+  "@iconMenu": {
+    "description": "اسم أيقونة قائمة"
+  },
+
+  "iconFilter": "تصفية",
+  "@iconFilter": {
+    "description": "اسم أيقونة تصفية"
+  },
+
+  "iconSort": "ترتيب",
+  "@iconSort": {
+    "description": "اسم أيقونة ترتيب"
+  },
+
+  "iconRefresh": "تحديث",
+  "@iconRefresh": {
+    "description": "اسم أيقونة تحديث"
+  },
+
+  "iconBack": "رجوع",
+  "@iconBack": {
+    "description": "اسم أيقونة رجوع"
+  },
+
+  "iconNext": "التالي",
+  "@iconNext": {
+    "description": "اسم أيقونة التالي"
+  },
+
+  "iconPrevious": "السابق",
+  "@iconPrevious": {
+    "description": "اسم أيقونة السابق"
+  },
+
+  "iconClose": "إغلاق",
+  "@iconClose": {
+    "description": "اسم أيقونة إغلاق"
+  },
+
+  "iconEllipsis": "نقاط",
+  "@iconEllipsis": {
+    "description": "اسم أيقونة نقاط"
+  },
+
+  "iconEllipsisH": "نقاط أفقية",
+  "@iconEllipsisH": {
+    "description": "اسم أيقونة نقاط أفقية"
+  },
+
+  "iconEllipsisV": "نقاط عمودية",
+  "@iconEllipsisV": {
+    "description": "اسم أيقونة نقاط عمودية"
+  },
+
+  "iconChevronUp": "سهم علوي",
+  "@iconChevronUp": {
+    "description": "اسم أيقونة سهم علوي"
+  },
+
+  "iconChevronDown": "سهم سفلي",
+  "@iconChevronDown": {
+    "description": "اسم أيقونة سهم سفلي"
+  },
+
+  "iconChevronLeft": "سهم يسار",
+  "@iconChevronLeft": {
+    "description": "اسم أيقونة سهم يسار"
+  },
+
+  "iconChevronRight": "سهم يمين",
+  "@iconChevronRight": {
+    "description": "اسم أيقونة سهم يمين"
+  },
+
+  "iconAngleUp": "زاوية علوية",
+  "@iconAngleUp": {
+    "description": "اسم أيقونة زاوية علوية"
+  },
+
+  "iconAngleDown": "زاوية سفلية",
+  "@iconAngleDown": {
+    "description": "اسم أيقونة زاوية سفلية"
+  },
+
+  "iconAngleLeft": "زاوية يسارية",
+  "@iconAngleLeft": {
+    "description": "اسم أيقونة زاوية يسارية"
+  },
+
+  "iconAngleRight": "زاوية يمينية",
+  "@iconAngleRight": {
+    "description": "اسم أيقونة زاوية يمينية"
+  },
+
+  "iconAnglesUp": "زوايا علوية",
+  "@iconAnglesUp": {
+    "description": "اسم أيقونة زوايا علوية"
+  },
+
+  "iconAnglesDown": "زوايا سفلية",
+  "@iconAnglesDown": {
+    "description": "اسم أيقونة زوايا سفلية"
+  },
+
+  "iconUpRightAndDownLeftFromCenter": "توسيع",
+  "@iconUpRightAndDownLeftFromCenter": {
+    "description": "اسم أيقونة توسيع"
+  },
+
+  "iconDownLeftAndUpRightToCenter": "طي",
+  "@iconDownLeftAndUpRightToCenter": {
+    "description": "اسم أيقونة طي"
+  },
+
+  "iconPlay": "تشغيل",
+  "@iconPlay": {
+    "description": "اسم أيقونة تشغيل"
+  },
+
+  "iconPause": "إيقاف",
+  "@iconPause": {
+    "description": "اسم أيقونة إيقاف"
+  },
+
+  "iconStop": "إيقاف",
+  "@iconStop": {
+    "description": "اسم أيقونة إيقاف"
+  },
+
+  "iconFilm": "فيلم",
+  "@iconFilm": {
+    "description": "اسم أيقونة فيلم"
+  },
+
+  "iconFileText": "ملف نصي",
+  "@iconFileText": {
+    "description": "اسم أيقونة ملف نصي"
+  },
+
+  "iconFileLines": "ملف",
+  "@iconFileLines": {
+    "description": "اسم أيقونة ملف"
+  },
+
+  "iconArrowLeft": "سهم يسار",
+  "@iconArrowLeft": {
+    "description": "اسم أيقونة سهم يسار"
+  },
+
+  "iconArrowRight": "سهم يمين",
+  "@iconArrowRight": {
+    "description": "اسم أيقونة سهم يمين"
+  },
+
+  "iconArrowUp": "سهم أعلى",
+  "@iconArrowUp": {
+    "description": "اسم أيقونة سهم أعلى"
+  },
+
+  "iconArrowDown": "سهم أسفل",
+  "@iconArrowDown": {
+    "description": "اسم أيقونة سهم أسفل"
+  },
+
+  "iconArrowTurnUpLeft": "سهم منعطف",
+  "@iconArrowTurnUpLeft": {
+    "description": "اسم أيقونة سهم منعطف"
+  },
+
+  "iconArrowTurnUpRight": "سهم منعطف",
+  "@iconArrowTurnUpRight": {
+    "description": "اسم أيقونة سهم منعطف"
+  },
+
+  "iconArrowTurnDownLeft": "سهم منعطف",
+  "@iconArrowTurnDownLeft": {
+    "description": "اسم أيقونة سهم منعطف"
+  },
+
+  "iconArrowTurnDownRight": "سهم منعطف",
+  "@iconArrowTurnDownRight": {
+    "description": "اسم أيقونة سهم منعطف"
+  },
+
+  "iconXmark": "إغلاق",
+  "@iconXmark": {
+    "description": "اسم أيقونة إغلاق"
+  },
+
+  "iconCheckCircle": "صح دائري",
+  "@iconCheckCircle": {
+    "description": "اسم أيقونة صح دائري"
+  },
+
+  "iconTimesCircle": "خطأ دائري",
+  "@iconTimesCircle": {
+    "description": "اسم أيقونة خطأ دائري"
+  },
+
+  "iconInfoCircleIcon": "معلومات دائري",
+  "@iconInfoCircleIcon": {
+    "description": "اسم أيقونة معلومات دائري"
+  },
+
+  "iconExclamationCircle": "تعجب دائري",
+  "@iconExclamationCircle": {
+    "description": "اسم أيقونة تعجب دائري"
+  },
+
+  "chatWelcome": "مرحباً بك في مساعد كفو!",
+  "@chatWelcome": {
+    "description": "رسالة الترحيب في شاشة المحادثة"
+  },
+
+  "chatWelcomeMessage": "أنا مساعدك الذكي. يمكنني مساعدتك في المذاكرة، الشؤون الأكاديمية، وحل المشاكل الدراسية.",
+  "@chatWelcomeMessage": {
+    "description": "نص الترحيب في شاشة المحادثة"
+  },
+
+  "chatSuggestionCourses": "المقررات الدراسية",
+  "@chatSuggestionCourses": {
+    "description": "عنوان بطاقة اقتراح المقررات الدراسية"
+  },
+
+  "chatSuggestionCoursesSubtitle": "مساعدة في أحد المقررات الدراسية",
+  "@chatSuggestionCoursesSubtitle": {
+    "description": "وصف بطاقة اقتراح المقررات الدراسية"
+  },
+
+  "chatSuggestionCoursesAction": "أريد مساعدة في حل مشكلة برمجية",
+  "@chatSuggestionCoursesAction": {
+    "description": "رسالة اقتراح المقررات الدراسية"
+  },
+
+  "chatSuggestionSchedules": "الجداول الدراسية",
+  "@chatSuggestionSchedules": {
+    "description": "عنوان بطاقة اقتراح الجداول الدراسية"
+  },
+
+  "chatSuggestionSchedulesSubtitle": "معرفة مواعيد الامتحانات والمحاضرات",
+  "@chatSuggestionSchedulesSubtitle": {
+    "description": "وصف بطاقة اقتراح الجداول الدراسية"
+  },
+
+  "chatSuggestionSchedulesAction": "متى موعد الامتحانات النهائية؟",
+  "@chatSuggestionSchedulesAction": {
+    "description": "رسالة اقتراح الجداول الدراسية"
+  },
+
+  "chatSuggestionGrades": "الدرجات والتقديرات",
+  "@chatSuggestionGrades": {
+    "description": "عنوان بطاقة اقتراح الدرجات والتقديرات"
+  },
+
+  "chatSuggestionGradesSubtitle": "الاستعلام عن النتائج والدرجات",
+  "@chatSuggestionGradesSubtitle": {
+    "description": "وصف بطاقة اقتراح الدرجات والتقديرات"
+  },
+
+  "chatSuggestionGradesAction": "كيف أستعلم عن درجاتي؟",
+  "@chatSuggestionGradesAction": {
+    "description": "رسالة اقتراح الدرجات والتقديرات"
+  },
+
+  "chatSuggestionAcademic": "الشؤون الأكاديمية",
+  "@chatSuggestionAcademic": {
+    "description": "عنوان بطاقة اقتراح الشؤون الأكاديمية"
+  },
+
+  "chatSuggestionAcademicSubtitle": "الاستفسار عن الشؤون الأكاديمية",
+  "@chatSuggestionAcademicSubtitle": {
+    "description": "وصف بطاقة اقتراح الشؤون الأكاديمية"
+  },
+
+  "chatSuggestionAcademicAction": "أريد أن أستفسر عن موضوع بخصوص الحضور",
+  "@chatSuggestionAcademicAction": {
+    "description": "رسالة اقتراح الشؤون الأكاديمية"
+  },
+
+  "chatQuickActionProgramming": "مساعدة في البرمجة",
+  "@chatQuickActionProgramming": {
+    "description": "عنوان زر الإجراء السريع للبرمجة"
+  },
+
+  "chatQuickActionProgrammingAction": "أحتاج مساعدة في حل مشكلة برمجية",
+  "@chatQuickActionProgrammingAction": {
+    "description": "رسالة زر الإجراء السريع للبرمجة"
+  },
+
+  "chatQuickActionAcademicDates": "المواعيد الأكاديمية",
+  "@chatQuickActionAcademicDates": {
+    "description": "عنوان زر الإجراء السريع للمواعيد الأكاديمية"
+  },
+
+  "chatQuickActionAcademicDatesAction": "ما هي المواعيد المهمة للفصل الدراسي؟",
+  "@chatQuickActionAcademicDatesAction": {
+    "description": "رسالة زر الإجراء السريع للمواعيد الأكاديمية"
+  },
+
+  "chatQuickActionProgrammingTips": "نصائح البرمجة",
+  "@chatQuickActionProgrammingTips": {
+    "description": "عنوان زر الإجراء السريع لنصائح البرمجة"
+  },
+
+  "chatQuickActionProgrammingTipsAction": "كيف أحسن مهاراتي في البرمجة؟",
+  "@chatQuickActionProgrammingTipsAction": {
+    "description": "رسالة زر الإجراء السريع لنصائح البرمجة"
+  },
+
+  "chatQuickActionDataStructures": "هياكل البيانات",
+  "@chatQuickActionDataStructures": {
+    "description": "عنوان زر الإجراء السريع لهياكل البيانات"
+  },
+
+  "chatQuickActionDataStructuresAction": "أحتاج شرح لهياكل البيانات",
+  "@chatQuickActionDataStructuresAction": {
+    "description": "رسالة زر الإجراء السريع لهياكل البيانات"
+  },
+
+  "chatSearchInMessages": "البحث في الرسائل...",
+  "@chatSearchInMessages": {
+    "description": "نص توضيحي لحقل البحث في الرسائل"
+  },
+
+  "chatNoSearchResults": "لا توجد نتائج بحث",
+  "@chatNoSearchResults": {
+    "description": "رسالة عدم وجود نتائج بحث"
+  },
+
+  "chatWriteYourMessage": "اكتب رسالتك هنا...",
+  "@chatWriteYourMessage": {
+    "description": "نص توضيحي لحقل إدخال الرسالة"
+  },
+
+  "chatFolders": "المجلدات",
+  "@chatFolders": {
+    "description": "عنوان قسم المجلدات"
+  },
+
+  "chatAllChats": "جميع المحادثات",
+  "@chatAllChats": {
+    "description": "خيار عرض جميع المحادثات"
+  },
+
+  "chatNoFolders": "لا توجد مجلدات",
+  "@chatNoFolders": {
+    "description": "رسالة عدم وجود مجلدات"
+  },
+
+  "chatDelete": "حذف",
+  "@chatDelete": {
+    "description": "زر حذف"
+  },
+
+  "chatSearchAndSettings": "البحث والإعدادات",
+  "@chatSearchAndSettings": {
+    "description": "عنوان قسم البحث والإعدادات"
+  },
+
+  "chatSearchInChats": "البحث في المحادثات...",
+  "@chatSearchInChats": {
+    "description": "نص توضيحي لحقل البحث في المحادثات"
+  },
+
+  "chatSearchByDate": "البحث بالتاريخ",
+  "@chatSearchByDate": {
+    "description": "عنوان خيار البحث بالتاريخ"
+  },
+
+  "chatSearchByDateSubtitle": "البحث في المحادثات حسب التاريخ",
+  "@chatSearchByDateSubtitle": {
+    "description": "وصف خيار البحث بالتاريخ"
+  },
+
+  "chatSearchByFolder": "البحث بالمجلد",
+  "@chatSearchByFolder": {
+    "description": "عنوان خيار البحث بالمجلد"
+  },
+
+  "chatSearchByFolderSubtitle": "البحث في محادثات مجلد معين",
+  "@chatSearchByFolderSubtitle": {
+    "description": "وصف خيار البحث بالمجلد"
+  },
+
+  "chatSearchByTags": "البحث بالعلامات",
+  "@chatSearchByTags": {
+    "description": "عنوان خيار البحث بالعلامات"
+  },
+
+  "chatSearchByTagsSubtitle": "البحث باستخدام العلامات والكلمات المفتاحية",
+  "@chatSearchByTagsSubtitle": {
+    "description": "وصف خيار البحث بالعلامات"
+  },
+
+  "chatSettingsTitle": "إعدادات المحادثة",
+  "@chatSettingsTitle": {
+    "description": "عنوان قسم إعدادات المحادثة"
+  },
+
+  "chatSettingsNotifications": "الإشعارات",
+  "@chatSettingsNotifications": {
+    "description": "عنوان خيار الإشعارات"
+  },
+
+  "chatSettingsNotificationsSubtitle": "إعدادات الإشعارات",
+  "@chatSettingsNotificationsSubtitle": {
+    "description": "وصف خيار الإشعارات"
+  },
+
+  "chatSettingsAppearance": "المظهر",
+  "@chatSettingsAppearance": {
+    "description": "عنوان خيار المظهر"
+  },
+
+  "chatSettingsAppearanceSubtitle": "تغيير مظهر التطبيق",
+  "@chatSettingsAppearanceSubtitle": {
+    "description": "وصف خيار المظهر"
+  },
+
+  "chatSettingsLanguage": "اللغة",
+  "@chatSettingsLanguage": {
+    "description": "عنوان خيار اللغة"
+  },
+
+  "chatSettingsLanguageSubtitle": "تغيير لغة التطبيق",
+  "@chatSettingsLanguageSubtitle": {
+    "description": "وصف خيار اللغة"
+  },
+
+  "chatSettingsBackup": "النسخ الاحتياطي",
+  "@chatSettingsBackup": {
+    "description": "عنوان خيار النسخ الاحتياطي"
+  },
+
+  "chatSettingsBackupSubtitle": "نسخ احتياطي للمحادثات",
+  "@chatSettingsBackupSubtitle": {
+    "description": "وصف خيار النسخ الاحتياطي"
+  },
+
+  "chatNewChat": "محادثة جديدة",
+  "@chatNewChat": {
+    "description": "عنوان محادثة جديدة"
+  },
+
+  "chatMessageCount": "{count} رسالة",
+  "@chatMessageCount": {
+    "description": "عدد الرسائل في المحادثة",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "chatLastActivity": "آخر نشاط: {date}",
+  "@chatLastActivity": {
+    "description": "تاريخ آخر نشاط في المحادثة",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatSuggestionMedicine": "الطب",
+  "@chatSuggestionMedicine": {
+    "description": "عنوان بطاقة اقتراح الطب"
+  },
+
+  "chatSuggestionMedicineSubtitle": "مساعدة في المواد الطبية والتشخيص",
+  "@chatSuggestionMedicineSubtitle": {
+    "description": "وصف بطاقة اقتراح الطب"
+  },
+
+  "chatSuggestionMedicineAction": "أحتاج شرحاً عن آلية عمل القلب والدورة الدموية",
+  "@chatSuggestionMedicineAction": {
+    "description": "رسالة اقتراح الطب"
+  },
+
+  "chatSuggestionPharmacy": "الصيدلة",
+  "@chatSuggestionPharmacy": {
+    "description": "عنوان بطاقة اقتراح الصيدلة"
+  },
+
+  "chatSuggestionPharmacySubtitle": "مساعدة في الأدوية والتفاعلات الدوائية",
+  "@chatSuggestionPharmacySubtitle": {
+    "description": "وصف بطاقة اقتراح الصيدلة"
+  },
+
+  "chatSuggestionPharmacyAction": "ما هي التفاعلات الدوائية المحتملة بين الأسبرين والإيبوبروفين؟",
+  "@chatSuggestionPharmacyAction": {
+    "description": "رسالة اقتراح الصيدلة"
+  },
+
+  "chatSuggestionHealthSciences": "العلوم الصحية",
+  "@chatSuggestionHealthSciences": {
+    "description": "عنوان بطاقة اقتراح العلوم الصحية"
+  },
+
+  "chatSuggestionHealthSciencesSubtitle": "مساعدة في العلوم الصحية والتغذية",
+  "@chatSuggestionHealthSciencesSubtitle": {
+    "description": "وصف بطاقة اقتراح العلوم الصحية"
+  },
+
+  "chatSuggestionHealthSciencesAction": "ما هي العناصر الغذائية الأساسية للجسم؟",
+  "@chatSuggestionHealthSciencesAction": {
+    "description": "رسالة اقتراح العلوم الصحية"
+  },
+
+  "chatSuggestionEngineering": "الهندسة",
+  "@chatSuggestionEngineering": {
+    "description": "عنوان بطاقة اقتراح الهندسة"
+  },
+
+  "chatSuggestionEngineeringSubtitle": "مساعدة في المواد الهندسية والتصميم",
+  "@chatSuggestionEngineeringSubtitle": {
+    "description": "وصف بطاقة اقتراح الهندسة"
+  },
+
+  "chatSuggestionEngineeringAction": "أحتاج شرحاً عن مبادئ الديناميكا الحرارية",
+  "@chatSuggestionEngineeringAction": {
+    "description": "رسالة اقتراح الهندسة"
+  },
+
+  "chatSuggestionComputerScience": "علوم الحاسب",
+  "@chatSuggestionComputerScience": {
+    "description": "عنوان بطاقة اقتراح علوم الحاسب"
+  },
+
+  "chatSuggestionComputerScienceSubtitle": "مساعدة في البرمجة والخوارزميات",
+  "@chatSuggestionComputerScienceSubtitle": {
+    "description": "وصف بطاقة اقتراح علوم الحاسب"
+  },
+
+  "chatSuggestionComputerScienceAction": "كيف يمكن تحسين أداء خوارزمية البحث الثنائي؟",
+  "@chatSuggestionComputerScienceAction": {
+    "description": "رسالة اقتراح علوم الحاسب"
+  },
+
+  "chatSuggestionCivilEngineering": "الهندسة المدنية",
+  "@chatSuggestionCivilEngineering": {
+    "description": "عنوان بطاقة اقتراح الهندسة المدنية"
+  },
+
+  "chatSuggestionCivilEngineeringSubtitle": "مساعدة في الإنشاءات والبنية التحتية",
+  "@chatSuggestionCivilEngineeringSubtitle": {
+    "description": "وصف بطاقة اقتراح الهندسة المدنية"
+  },
+
+  "chatSuggestionCivilEngineeringAction": "ما هي العوامل المؤثرة في تصميم الجسور؟",
+  "@chatSuggestionCivilEngineeringAction": {
+    "description": "رسالة اقتراح الهندسة المدنية"
+  },
+
+  "chatSuggestionArts": "الآداب",
+  "@chatSuggestionArts": {
+    "description": "عنوان بطاقة اقتراح الآداب"
+  },
+
+  "chatSuggestionArtsSubtitle": "مساعدة في الأدب واللغة والنقد",
+  "@chatSuggestionArtsSubtitle": {
+    "description": "وصف بطاقة اقتراح الآداب"
+  },
+
+  "chatSuggestionArtsAction": "ما هي خصائص الشعر الجاهلي؟",
+  "@chatSuggestionArtsAction": {
+    "description": "رسالة اقتراح الآداب"
+  },
+
+  "chatSuggestionIslamicStudies": "الدراسات الإسلامية",
+  "@chatSuggestionIslamicStudies": {
+    "description": "عنوان بطاقة اقتراح الدراسات الإسلامية"
+  },
+
+  "chatSuggestionIslamicStudiesSubtitle": "مساعدة في الفقه والتفسير والحديث",
+  "@chatSuggestionIslamicStudiesSubtitle": {
+    "description": "وصف بطاقة اقتراح الدراسات الإسلامية"
+  },
+
+  "chatSuggestionIslamicStudiesAction": "ما هو الفرق بين الفقه والأصول؟",
+  "@chatSuggestionIslamicStudiesAction": {
+    "description": "رسالة اقتراح الدراسات الإسلامية"
+  },
+
+  "chatSuggestionEducation": "العلوم التربوية",
+  "@chatSuggestionEducation": {
+    "description": "عنوان بطاقة اقتراح العلوم التربوية"
+  },
+
+  "chatSuggestionEducationSubtitle": "مساعدة في التربية وطرق التدريس",
+  "@chatSuggestionEducationSubtitle": {
+    "description": "وصف بطاقة اقتراح العلوم التربوية"
+  },
+
+  "chatSuggestionEducationAction": "ما هي أفضل طرق التدريس للطلاب ذوي صعوبات التعلم؟",
+  "@chatSuggestionEducationAction": {
+    "description": "رسالة اقتراح العلوم التربوية"
+  },
+
+  "chatSuggestionBusiness": "إدارة الأعمال",
+  "@chatSuggestionBusiness": {
+    "description": "عنوان بطاقة اقتراح إدارة الأعمال"
+  },
+
+  "chatSuggestionBusinessSubtitle": "مساعدة في الإدارة والتسويق والتمويل",
+  "@chatSuggestionBusinessSubtitle": {
+    "description": "وصف بطاقة اقتراح إدارة الأعمال"
+  },
+
+  "chatSuggestionBusinessAction": "كيف يمكن تحليل السوق المستهدف لمشروع جديد؟",
+  "@chatSuggestionBusinessAction": {
+    "description": "رسالة اقتراح إدارة الأعمال"
+  },
+
+  "chatSuggestionEconomics": "الاقتصاد",
+  "@chatSuggestionEconomics": {
+    "description": "عنوان بطاقة اقتراح الاقتصاد"
+  },
+
+  "chatSuggestionEconomicsSubtitle": "مساعدة في الاقتصاد والمالية",
+  "@chatSuggestionEconomicsSubtitle": {
+    "description": "وصف بطاقة اقتراح الاقتصاد"
+  },
+
+  "chatSuggestionEconomicsAction": "ما هو الفرق بين الاقتصاد الكلي والجزئي؟",
+  "@chatSuggestionEconomicsAction": {
+    "description": "رسالة اقتراح الاقتصاد"
+  },
+
+  "chatSuggestionSciences": "العلوم",
+  "@chatSuggestionSciences": {
+    "description": "عنوان بطاقة اقتراح العلوم"
+  },
+
+  "chatSuggestionSciencesSubtitle": "مساعدة في الفيزياء والرياضيات",
+  "@chatSuggestionSciencesSubtitle": {
+    "description": "وصف بطاقة اقتراح العلوم"
+  },
+
+  "chatSuggestionSciencesAction": "أحتاج شرحاً عن قوانين نيوتن للحركة",
+  "@chatSuggestionSciencesAction": {
+    "description": "رسالة اقتراح العلوم"
+  },
+
+  "chatSuggestionChemistry": "الكيمياء",
+  "@chatSuggestionChemistry": {
+    "description": "عنوان بطاقة اقتراح الكيمياء"
+  },
+
+  "chatSuggestionChemistrySubtitle": "مساعدة في الكيمياء والتفاعلات",
+  "@chatSuggestionChemistrySubtitle": {
+    "description": "وصف بطاقة اقتراح الكيمياء"
+  },
+
+  "chatSuggestionChemistryAction": "ما هي أنواع التفاعلات الكيميائية؟",
+  "@chatSuggestionChemistryAction": {
+    "description": "رسالة اقتراح الكيمياء"
+  },
+
+  "chatSuggestionBiology": "الأحياء",
+  "@chatSuggestionBiology": {
+    "description": "عنوان بطاقة اقتراح الأحياء"
+  },
+
+  "chatSuggestionBiologySubtitle": "مساعدة في علم الأحياء والوراثة",
+  "@chatSuggestionBiologySubtitle": {
+    "description": "وصف بطاقة اقتراح الأحياء"
+  },
+
+  "chatSuggestionBiologyAction": "كيف تعمل عملية البناء الضوئي في النباتات؟",
+  "@chatSuggestionBiologyAction": {
+    "description": "رسالة اقتراح الأحياء"
+  },
+
+  "chatMessageCopy": "نسخ",
+  "@chatMessageCopy": {
+    "description": "زر نسخ محتوى الرسالة"
+  },
+
+  "chatMessageEdit": "تحرير",
+  "@chatMessageEdit": {
+    "description": "زر تحرير رسالة المستخدم"
+  },
+
+  "chatMessageThumbUp": "إعجاب",
+  "@chatMessageThumbUp": {
+    "description": "زر الإعجاب بالإجابة"
+  },
+
+  "chatMessageThumbDown": "عدم إعجاب",
+  "@chatMessageThumbDown": {
+    "description": "زر عدم الإعجاب بالإجابة"
+  },
+
+  "chatMessageRetry": "إعادة المحاولة",
+  "@chatMessageRetry": {
+    "description": "زر إعادة إرسال الطلب السابق"
+  },
+
+  "chatMessageCopied": "تم نسخ المحتوى",
+  "@chatMessageCopied": {
+    "description": "رسالة تأكيد نسخ المحتوى"
   }
 }

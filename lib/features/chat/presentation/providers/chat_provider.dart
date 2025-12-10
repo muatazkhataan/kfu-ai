@@ -218,7 +218,23 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
       // إضافة الرسالة المؤقتة للحالة
       final updatedMessages = [...state.messages, tempMessage];
-      state = state.copyWith(messages: updatedMessages);
+      
+      // إضافة رسالة مساعد فورية (فارغة) لعرضها مباشرة
+      final tempAssistantMessageId = _generateMessageId();
+      final tempAssistantMessage = Message(
+        id: tempAssistantMessageId,
+        content: '', // محتوى فارغ - سيتم ملؤه عند وصول الرد
+        type: MessageType.assistant,
+        chatId: state.currentChat!.id,
+        senderId: 'assistant',
+        senderName: 'مساعد كفو',
+        createdAt: DateTime.now(),
+        state: MessageState.sending, // حالة إرسال/تحميل
+      );
+      
+      // إضافة رسالة المساعد الفورية بعد رسالة المستخدم
+      final messagesWithAssistant = [...updatedMessages, tempAssistantMessage];
+      state = state.copyWith(messages: messagesWithAssistant);
 
       // ignore: avoid_print
       print(
@@ -293,9 +309,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
         _ensureSessionTitleUpdated(state.currentChat!.id, generatedTitle);
       }
 
-      // عرض مؤشر الكتابة ثم بدء الاستطلاع لجلب رد المساعد وتدفقه
-      startTyping();
-      _pollForAssistantResponse();
+      // بدء الاستطلاع لجلب رد المساعد وتحديث الرسالة الفورية
+      // لا حاجة لمؤشر الكتابة لأن الرسالة الفورية موجودة بالفعل
+      _pollForAssistantResponse(tempAssistantMessageId);
     } catch (e, stackTrace) {
       // ignore: avoid_print
       print('[ChatNotifier] ❌ خطأ في إرسال الرسالة: $e');
@@ -327,8 +343,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
   }
 
-  /// استطلاع دوري لجلب رد المساعد وإظهاره بتدفق تدريجي
-  Future<void> _pollForAssistantResponse() async {
+  /// استطلاع دوري لجلب رد المساعد وتحديث الرسالة الفورية
+  Future<void> _pollForAssistantResponse(String tempAssistantMessageId) async {
     // حماية: يجب أن توجد محادثة
     if (state.currentChat == null) return;
 
@@ -344,41 +360,40 @@ class ChatNotifier extends StateNotifier<ChatState> {
         if (response.success && response.data != null) {
           final sessionDto = response.data!;
 
-          // إذا وصلت رسالة مساعد جديدة غير موجودة محليًا
+          // البحث عن رسالة مساعد جديدة
           if ((sessionDto.messages?.isNotEmpty ?? false)) {
             final lastDto = sessionDto.messages!.last;
             final isAssistant = lastDto.isAssistantMessage;
-            final notExists =
-                state.messages.indexWhere((m) => m.id == lastDto.messageId) ==
-                -1;
 
-            if (isAssistant && notExists) {
-              // أنشئ رسالة مساعد محلية فارغة ثم قم بتعبئتها تدريجيًا
-              final assistantMsgId = lastDto.messageId;
+            if (isAssistant) {
               final fullText = lastDto.content;
+              
+              // تحديث الرسالة الفورية بالمحتوى الفعلي
+              final updatedMessages = state.messages.map((m) {
+                if (m.id == tempAssistantMessageId) {
+                  return Message(
+                    id: lastDto.messageId, // استبدال المعرف المؤقت بالفعلي
+                    content: fullText,
+                    type: MessageType.assistant,
+                    chatId: sessionId,
+                    senderId: lastDto.senderId ?? 'assistant',
+                    senderName: lastDto.aiProvider ?? 'مساعد كفو',
+                    createdAt: lastDto.createdAt,
+                    state: MessageState.sent,
+                    updatedAt: DateTime.now(),
+                  );
+                }
+                return m;
+              }).toList();
 
-              // أضف رسالة فارغة أولاً
-              final assistantMessage = Message(
-                id: assistantMsgId,
-                content: '',
-                type: MessageType.assistant,
-                chatId: sessionId,
-                senderId: lastDto.senderId ?? 'assistant',
-                senderName: lastDto.aiProvider ?? 'مساعد كفو',
-                createdAt: lastDto.createdAt,
-                state: MessageState.sent,
-              );
+              state = state.copyWith(messages: updatedMessages);
 
-              state = state.copyWith(
-                messages: [...state.messages, assistantMessage],
-              );
+              // نفذ بثًا تدريجيًا للنص إذا كان طويلاً
+              if (fullText.length > 50) {
+                await _animateAssistantStreaming(lastDto.messageId, fullText);
+              }
 
-              // نفذ بثًا تدريجيًا للنص
-              await _animateAssistantStreaming(assistantMsgId, fullText);
-
-              // أوقف مؤشر الكتابة بعد اكتمال الرد
-              stopTyping();
-              return;
+              return; // اكتمل بنجاح
             }
           }
         }
@@ -387,8 +402,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
       }
     }
 
-    // في حال عدم وصول رد خلال الزمن المحدد، أوقف مؤشر الكتابة
-    stopTyping();
+    // في حال عدم وصول رد خلال الزمن المحدد، احذف الرسالة الفورية أو ضع رسالة خطأ
+    final finalMessages = state.messages.where((m) => m.id != tempAssistantMessageId).toList();
+    state = state.copyWith(messages: finalMessages);
   }
 
   /// بث النص تدريجيًا داخل رسالة المساعد المحددة

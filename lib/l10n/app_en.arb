@@ -1207,5 +1207,2120 @@
   "creativityDescriptionCreative": "Creative and innovative responses with flexibility in interpretation",
   "@creativityDescriptionCreative": {
     "description": "Creative style description"
+  },
+
+  "sidebarClose": "Close Sidebar",
+  "@sidebarClose": {
+    "description": "Close sidebar button"
+  },
+
+  "sidebarUserDefault": "User",
+  "@sidebarUserDefault": {
+    "description": "Default user name"
+  },
+
+  "sidebarUserIdDisplay": "ID: {id}...",
+  "@sidebarUserIdDisplay": {
+    "description": "User ID display",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+
+  "sidebarSignOut": "Sign Out",
+  "@sidebarSignOut": {
+    "description": "Sign out button"
+  },
+
+  "sidebarSearchInChats": "Search in Chats",
+  "@sidebarSearchInChats": {
+    "description": "Search in chats button"
+  },
+
+  "sidebarOpenFoldersScreen": "Open Folders Screen",
+  "@sidebarOpenFoldersScreen": {
+    "description": "Open folders screen tooltip"
+  },
+
+  "sidebarNoFolders": "No folders",
+  "@sidebarNoFolders": {
+    "description": "No folders message"
+  },
+
+  "sidebarFixedFolderTooltip": "Fixed folder cannot be modified",
+  "@sidebarFixedFolderTooltip": {
+    "description": "Fixed folder tooltip"
+  },
+
+  "sidebarSystemFolderTooltip": "System folder cannot be modified",
+  "@sidebarSystemFolderTooltip": {
+    "description": "System folder tooltip"
+  },
+
+  "sidebarProtectedFolderTooltip": "This folder cannot be modified",
+  "@sidebarProtectedFolderTooltip": {
+    "description": "Protected folder tooltip"
+  },
+
+  "sidebarDeleteFolderTitle": "Delete Folder",
+  "@sidebarDeleteFolderTitle": {
+    "description": "Delete folder dialog title"
+  },
+
+  "sidebarDeleteFolderMessage": "Are you sure you want to delete the folder \"{name}\"?\n\nThis action cannot be undone.",
+  "@sidebarDeleteFolderMessage": {
+    "description": "Delete folder confirmation message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "sidebarFolderDeletedSuccess": "Folder deleted successfully",
+  "@sidebarFolderDeletedSuccess": {
+    "description": "Folder deleted success message"
+  },
+
+  "chatSources": "Sources",
+  "@chatSources": {
+    "description": "Sources section title in chat"
+  },
+
+  "navbarOpenMenu": "Open Menu",
+  "@navbarOpenMenu": {
+    "description": "Open menu button tooltip in navbar"
+  },
+
+  "navbarCloseMenu": "Close Menu",
+  "@navbarCloseMenu": {
+    "description": "Close menu button tooltip in navbar"
+  },
+
+  "navbarMenu": "Menu",
+  "@navbarMenu": {
+    "description": "Menu button tooltip in navbar"
+  },
+
+  "navbarSettings": "Settings",
+  "@navbarSettings": {
+    "description": "Settings button tooltip in navbar"
+  },
+
+  "chatReply": "Reply",
+  "@chatReply": {
+    "description": "Reply message button"
+  },
+
+  "chatCopy": "Copy",
+  "@chatCopy": {
+    "description": "Copy message button"
+  },
+
+  "chatShare": "Share",
+  "@chatShare": {
+    "description": "Share message button"
+  },
+
+  "chatEdit": "Edit",
+  "@chatEdit": {
+    "description": "Edit message button"
+  },
+
+  "chatMore": "More",
+  "@chatMore": {
+    "description": "More options button"
+  },
+
+  "chatMoveToArchive": "Move to Archive",
+  "@chatMoveToArchive": {
+    "description": "Move chat to archive option"
+  },
+
+  "chatMoveToFolder": "Move to Folder",
+  "@chatMoveToFolder": {
+    "description": "Move chat to folder option"
+  },
+
+  "chatDeleteChatTitle": "Delete Chat",
+  "@chatDeleteChatTitle": {
+    "description": "Delete chat dialog title"
+  },
+
+  "chatDeleteChatMessage": "Are you sure you want to delete the chat \"{title}\"?",
+  "@chatDeleteChatMessage": {
+    "description": "Delete chat confirmation message",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatMoveToFolderTitle": "Move to Folder",
+  "@chatMoveToFolderTitle": {
+    "description": "Move chat to folder dialog title"
+  },
+
+  "chatNoFoldersAvailable": "No folders available",
+  "@chatNoFoldersAvailable": {
+    "description": "No folders available message"
+  },
+
+  "chatNoFolder": "No Folder",
+  "@chatNoFolder": {
+    "description": "No folder option"
+  },
+
+  "chatOpeningChat": "Opening chat: {title}",
+  "@chatOpeningChat": {
+    "description": "Opening chat message",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatDeleted": "Chat deleted: {title}",
+  "@chatDeleted": {
+    "description": "Chat deleted message",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatHistoryUpdated": "Chat history updated",
+  "@chatHistoryUpdated": {
+    "description": "Chat history updated message"
+  },
+
+  "chatDeleteFolderTitle": "Delete Folder",
+  "@chatDeleteFolderTitle": {
+    "description": "Delete folder dialog title"
+  },
+
+  "chatDeleteFolderMessage": "Are you sure you want to delete the folder \"{name}\"?",
+  "@chatDeleteFolderMessage": {
+    "description": "Delete folder confirmation message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatFolderDeletedSuccess": "Folder deleted successfully",
+  "@chatFolderDeletedSuccess": {
+    "description": "Folder deleted success message"
+  },
+
+  "chatError": "Error: {error}",
+  "@chatError": {
+    "description": "Error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatAttachmentSelected": "{type} selected",
+  "@chatAttachmentSelected": {
+    "description": "Attachment selected message",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatSettings": "Chat Settings",
+  "@chatSettings": {
+    "description": "Chat settings title"
+  },
+
+  "chatCreateFolderTitle": "Create New Folder",
+  "@chatCreateFolderTitle": {
+    "description": "Create new folder dialog title"
+  },
+
+  "chatCreate": "Create",
+  "@chatCreate": {
+    "description": "Create button"
+  },
+
+  "chatEditFolderTitle": "Edit Folder",
+  "@chatEditFolderTitle": {
+    "description": "Edit folder dialog title"
+  },
+
+  "chatChangeIcon": "Change Icon",
+  "@chatChangeIcon": {
+    "description": "Change icon title"
+  },
+
+  "chatAddToFavorites": "Add to Favorites",
+  "@chatAddToFavorites": {
+    "description": "Add chat to favorites"
+  },
+
+  "chatRemoveFromFavorites": "Remove from Favorites",
+  "@chatRemoveFromFavorites": {
+    "description": "Remove chat from favorites"
+  },
+
+  "chatPin": "Pin",
+  "@chatPin": {
+    "description": "Pin chat"
+  },
+
+  "chatUnpin": "Unpin",
+  "@chatUnpin": {
+    "description": "Unpin chat"
+  },
+
+  "chatMoveToFolderSuccess": "Chat moved to \"{folder}\" successfully",
+  "@chatMoveToFolderSuccess": {
+    "description": "Move chat to folder success message",
+    "placeholders": {
+      "folder": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatMoveToFolderFailed": "Failed to move chat",
+  "@chatMoveToFolderFailed": {
+    "description": "Move chat to folder failed message"
+  },
+
+  "chatArchiveSuccess": "Chat moved to archive successfully",
+  "@chatArchiveSuccess": {
+    "description": "Archive chat success message"
+  },
+
+  "chatArchiveFailed": "Failed to move chat to archive",
+  "@chatArchiveFailed": {
+    "description": "Archive chat failed message"
+  },
+
+  "chatDeleteSuccess": "Chat deleted successfully",
+  "@chatDeleteSuccess": {
+    "description": "Delete chat success message"
+  },
+
+  "chatDeleteFailed": "Failed to delete chat",
+  "@chatDeleteFailed": {
+    "description": "Delete chat failed message"
+  },
+
+  "folderChangeIconTitle": "Change Folder Icon",
+  "@folderChangeIconTitle": {
+    "description": "Change folder icon screen title"
+  },
+
+  "folderSelectIcon": "Select Icon",
+  "@folderSelectIcon": {
+    "description": "Select icon section title"
+  },
+
+  "folderSelectColor": "Select Color",
+  "@folderSelectColor": {
+    "description": "Select color section title"
+  },
+
+  "folderSelectedColor": "Selected color: {name}",
+  "@folderSelectedColor": {
+    "description": "Selected color message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "folderColorUndefined": "Undefined",
+  "@folderColorUndefined": {
+    "description": "Undefined color"
+  },
+
+  "folderApplying": "Applying...",
+  "@folderApplying": {
+    "description": "Applying message"
+  },
+
+  "folderApplyIcon": "Apply \"{name}\"",
+  "@folderApplyIcon": {
+    "description": "Apply icon button",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "folderIconChangedSuccess": "Folder icon \"{name}\" changed successfully",
+  "@folderIconChangedSuccess": {
+    "description": "Icon changed success message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "folderColorGray": "Light Gray",
+  "@folderColorGray": {
+    "description": "Light gray color name"
+  },
+
+  "folderColorRed": "Red",
+  "@folderColorRed": {
+    "description": "Red color name"
+  },
+
+  "folderColorOrange": "Orange",
+  "@folderColorOrange": {
+    "description": "Orange color name"
+  },
+
+  "folderColorYellow": "Yellow",
+  "@folderColorYellow": {
+    "description": "Yellow color name"
+  },
+
+  "folderColorGreen": "Green",
+  "@folderColorGreen": {
+    "description": "Green color name"
+  },
+
+  "folderColorCyan": "Cyan",
+  "@folderColorCyan": {
+    "description": "Cyan color name"
+  },
+
+  "folderColorPurple": "Purple",
+  "@folderColorPurple": {
+    "description": "Purple color name"
+  },
+
+  "folderColorPink": "Pink",
+  "@folderColorPink": {
+    "description": "Pink color name"
+  },
+
+  "folderPreview": "Folder Preview",
+  "@folderPreview": {
+    "description": "Folder preview title"
+  },
+
+  "folderNamePlaceholder": "Folder Name",
+  "@folderNamePlaceholder": {
+    "description": "Folder name placeholder text"
+  },
+
+  "folderNameLabel": "Folder Name *",
+  "@folderNameLabel": {
+    "description": "Folder name field label"
+  },
+
+  "folderNameHint": "Enter folder name",
+  "@folderNameHint": {
+    "description": "Folder name field hint"
+  },
+
+  "folderNameRequired": "Folder name is required",
+  "@folderNameRequired": {
+    "description": "Error message: folder name required"
+  },
+
+  "folderNameMinLength": "Folder name must be at least 2 characters",
+  "@folderNameMinLength": {
+    "description": "Error message: minimum folder name length"
+  },
+
+  "folderNameMaxLength": "Folder name must not exceed 50 characters",
+  "@folderNameMaxLength": {
+    "description": "Error message: maximum folder name length"
+  },
+
+  "folderSaveChanges": "Save Changes",
+  "@folderSaveChanges": {
+    "description": "Save changes button"
+  },
+
+  "folderCreate": "Create Folder",
+  "@folderCreate": {
+    "description": "Create folder button"
+  },
+
+  "folderCreatedSuccess": "Folder created successfully",
+  "@folderCreatedSuccess": {
+    "description": "Folder created success message"
+  },
+
+  "folderUpdatedSuccess": "Folder updated successfully",
+  "@folderUpdatedSuccess": {
+    "description": "Folder updated success message"
+  },
+
+  "iconCategoryGeneral": "General",
+  "@iconCategoryGeneral": {
+    "description": "General icon category name"
+  },
+
+  "iconCategoryProgramming": "Programming",
+  "@iconCategoryProgramming": {
+    "description": "Programming icon category name"
+  },
+
+  "iconCategoryMathematics": "Mathematics",
+  "@iconCategoryMathematics": {
+    "description": "Mathematics icon category name"
+  },
+
+  "iconCategoryScience": "Science",
+  "@iconCategoryScience": {
+    "description": "Science icon category name"
+  },
+
+  "iconCategoryStudy": "Study",
+  "@iconCategoryStudy": {
+    "description": "Study icon category name"
+  },
+
+  "iconCategoryCreativity": "Creativity",
+  "@iconCategoryCreativity": {
+    "description": "Creativity icon category name"
+  },
+
+  "iconCategoryCollaboration": "Collaboration",
+  "@iconCategoryCollaboration": {
+    "description": "Collaboration icon category name"
+  },
+
+  "iconCategorySystem": "System",
+  "@iconCategorySystem": {
+    "description": "System icon category name"
+  },
+
+  "iconFolderGeneral": "General Folder",
+  "@iconFolderGeneral": {
+    "description": "General folder icon name"
+  },
+
+  "iconFolderStar": "Star",
+  "@iconFolderStar": {
+    "description": "Star icon name"
+  },
+
+  "iconFolderHeart": "Heart",
+  "@iconFolderHeart": {
+    "description": "Heart icon name"
+  },
+
+  "iconFolderHome": "Home",
+  "@iconFolderHome": {
+    "description": "Home icon name"
+  },
+
+  "iconFolderThumbtack": "Pinned",
+  "@iconFolderThumbtack": {
+    "description": "Pinned icon name"
+  },
+
+  "iconFolderPlus": "Add Folder",
+  "@iconFolderPlus": {
+    "description": "Add folder icon name"
+  },
+
+  "iconFolderOpen": "Open Folder",
+  "@iconFolderOpen": {
+    "description": "Open folder icon name"
+  },
+
+  "iconCode": "Code",
+  "@iconCode": {
+    "description": "Code icon name"
+  },
+
+  "iconLaptopCode": "Laptop Code",
+  "@iconLaptopCode": {
+    "description": "Laptop code icon name"
+  },
+
+  "iconTerminal": "Terminal",
+  "@iconTerminal": {
+    "description": "Terminal icon name"
+  },
+
+  "iconBug": "Bug",
+  "@iconBug": {
+    "description": "Bug icon name"
+  },
+
+  "iconCogs": "Settings",
+  "@iconCogs": {
+    "description": "Settings icon name"
+  },
+
+  "iconMicrochip": "Processor",
+  "@iconMicrochip": {
+    "description": "Processor icon name"
+  },
+
+  "iconServer": "Server",
+  "@iconServer": {
+    "description": "Server icon name"
+  },
+
+  "iconNetworkWired": "Network",
+  "@iconNetworkWired": {
+    "description": "Network icon name"
+  },
+
+  "iconShieldAlt": "Security",
+  "@iconShieldAlt": {
+    "description": "Security icon name"
+  },
+
+  "iconKey": "Key",
+  "@iconKey": {
+    "description": "Key icon name"
+  },
+
+  "iconDatabase": "Database",
+  "@iconDatabase": {
+    "description": "Database icon name"
+  },
+
+  "iconTable": "Table",
+  "@iconTable": {
+    "description": "Table icon name"
+  },
+
+  "iconChartBar": "Bar Chart",
+  "@iconChartBar": {
+    "description": "Bar chart icon name"
+  },
+
+  "iconMobileAlt": "Mobile",
+  "@iconMobileAlt": {
+    "description": "Mobile icon name"
+  },
+
+  "iconGlobe": "Global",
+  "@iconGlobe": {
+    "description": "Global icon name"
+  },
+
+  "iconCloud": "Cloud",
+  "@iconCloud": {
+    "description": "Cloud icon name"
+  },
+
+  "iconRobot": "Robot",
+  "@iconRobot": {
+    "description": "Robot icon name"
+  },
+
+  "iconBrain": "Brain",
+  "@iconBrain": {
+    "description": "Brain icon name"
+  },
+
+  "iconSitemap": "Sitemap",
+  "@iconSitemap": {
+    "description": "Sitemap icon name"
+  },
+
+  "iconProjectDiagram": "Project Diagram",
+  "@iconProjectDiagram": {
+    "description": "Project diagram icon name"
+  },
+
+  "iconFileCode": "Code File",
+  "@iconFileCode": {
+    "description": "Code file icon name"
+  },
+
+  "iconCodeBranch": "Code Branch",
+  "@iconCodeBranch": {
+    "description": "Code branch icon name"
+  },
+
+  "iconCodeMerge": "Code Merge",
+  "@iconCodeMerge": {
+    "description": "Code merge icon name"
+  },
+
+  "iconCodeCompare": "Code Compare",
+  "@iconCodeCompare": {
+    "description": "Code compare icon name"
+  },
+
+  "iconCalculator": "Calculator",
+  "@iconCalculator": {
+    "description": "Calculator icon name"
+  },
+
+  "iconSquareRootAlt": "Square Root",
+  "@iconSquareRootAlt": {
+    "description": "Square root icon name"
+  },
+
+  "iconInfinity": "Infinity",
+  "@iconInfinity": {
+    "description": "Infinity icon name"
+  },
+
+  "iconPercentage": "Percentage",
+  "@iconPercentage": {
+    "description": "Percentage icon name"
+  },
+
+  "iconChartLine": "Line Chart",
+  "@iconChartLine": {
+    "description": "Line chart icon name"
+  },
+
+  "iconChartPie": "Pie Chart",
+  "@iconChartPie": {
+    "description": "Pie chart icon name"
+  },
+
+  "iconChartArea": "Area Chart",
+  "@iconChartArea": {
+    "description": "Area chart icon name"
+  },
+
+  "iconSortNumericUp": "Sort Ascending",
+  "@iconSortNumericUp": {
+    "description": "Sort ascending icon name"
+  },
+
+  "iconSortNumericDown": "Sort Descending",
+  "@iconSortNumericDown": {
+    "description": "Sort descending icon name"
+  },
+
+  "iconEquals": "Equals",
+  "@iconEquals": {
+    "description": "Equals icon name"
+  },
+
+  "iconPlus": "Plus",
+  "@iconPlus": {
+    "description": "Plus icon name"
+  },
+
+  "iconMinus": "Minus",
+  "@iconMinus": {
+    "description": "Minus icon name"
+  },
+
+  "iconTimes": "Multiply",
+  "@iconTimes": {
+    "description": "Multiply icon name"
+  },
+
+  "iconDivide": "Divide",
+  "@iconDivide": {
+    "description": "Divide icon name"
+  },
+
+  "iconSuperscript": "Superscript",
+  "@iconSuperscript": {
+    "description": "Superscript icon name"
+  },
+
+  "iconSubscript": "Subscript",
+  "@iconSubscript": {
+    "description": "Subscript icon name"
+  },
+
+  "iconSigma": "Sigma",
+  "@iconSigma": {
+    "description": "Sigma icon name"
+  },
+
+  "iconPi": "Pi",
+  "@iconPi": {
+    "description": "Pi icon name"
+  },
+
+  "iconFunction": "Function",
+  "@iconFunction": {
+    "description": "Function icon name"
+  },
+
+  "iconIntegral": "Integral",
+  "@iconIntegral": {
+    "description": "Integral icon name"
+  },
+
+  "iconTriangle": "Triangle",
+  "@iconTriangle": {
+    "description": "Triangle icon name"
+  },
+
+  "iconOmega": "Omega",
+  "@iconOmega": {
+    "description": "Omega icon name"
+  },
+
+  "iconTheta": "Theta",
+  "@iconTheta": {
+    "description": "Theta icon name"
+  },
+
+  "iconAtom": "Atom",
+  "@iconAtom": {
+    "description": "Atom icon name"
+  },
+
+  "iconFlask": "Flask",
+  "@iconFlask": {
+    "description": "Flask icon name"
+  },
+
+  "iconMicroscope": "Microscope",
+  "@iconMicroscope": {
+    "description": "Microscope icon name"
+  },
+
+  "iconDna": "DNA",
+  "@iconDna": {
+    "description": "DNA icon name"
+  },
+
+  "iconLeaf": "Leaf",
+  "@iconLeaf": {
+    "description": "Leaf icon name"
+  },
+
+  "iconSeedling": "Seedling",
+  "@iconSeedling": {
+    "description": "Seedling icon name"
+  },
+
+  "iconDroplet": "Droplet",
+  "@iconDroplet": {
+    "description": "Droplet icon name"
+  },
+
+  "iconFire": "Fire",
+  "@iconFire": {
+    "description": "Fire icon name"
+  },
+
+  "iconBolt": "Lightning",
+  "@iconBolt": {
+    "description": "Lightning icon name"
+  },
+
+  "iconMagnet": "Magnet",
+  "@iconMagnet": {
+    "description": "Magnet icon name"
+  },
+
+  "iconSatellite": "Satellite",
+  "@iconSatellite": {
+    "description": "Satellite icon name"
+  },
+
+  "iconRocket": "Rocket",
+  "@iconRocket": {
+    "description": "Rocket icon name"
+  },
+
+  "iconSun": "Sun",
+  "@iconSun": {
+    "description": "Sun icon name"
+  },
+
+  "iconMoon": "Moon",
+  "@iconMoon": {
+    "description": "Moon icon name"
+  },
+
+  "iconStar": "Star",
+  "@iconStar": {
+    "description": "Star icon name"
+  },
+
+  "iconTelescope": "Telescope",
+  "@iconTelescope": {
+    "description": "Telescope icon name"
+  },
+
+  "iconVial": "Test Tube",
+  "@iconVial": {
+    "description": "Test tube icon name"
+  },
+
+  "iconPills": "Pills",
+  "@iconPills": {
+    "description": "Pills icon name"
+  },
+
+  "iconStethoscope": "Stethoscope",
+  "@iconStethoscope": {
+    "description": "Stethoscope icon name"
+  },
+
+  "iconHeartbeat": "Heartbeat",
+  "@iconHeartbeat": {
+    "description": "Heartbeat icon name"
+  },
+
+  "iconEye": "Eye",
+  "@iconEye": {
+    "description": "Eye icon name"
+  },
+
+  "iconEar": "Ear",
+  "@iconEar": {
+    "description": "Ear icon name"
+  },
+
+  "iconNose": "Nose",
+  "@iconNose": {
+    "description": "Nose icon name"
+  },
+
+  "iconTooth": "Tooth",
+  "@iconTooth": {
+    "description": "Tooth icon name"
+  },
+
+  "iconBone": "Bone",
+  "@iconBone": {
+    "description": "Bone icon name"
+  },
+
+  "iconLungs": "Lungs",
+  "@iconLungs": {
+    "description": "Lungs icon name"
+  },
+
+  "iconLiver": "Liver",
+  "@iconLiver": {
+    "description": "Liver icon name"
+  },
+
+  "iconKidney": "Kidney",
+  "@iconKidney": {
+    "description": "Kidney icon name"
+  },
+
+  "iconStomach": "Stomach",
+  "@iconStomach": {
+    "description": "Stomach icon name"
+  },
+
+  "iconIntestines": "Intestines",
+  "@iconIntestines": {
+    "description": "Intestines icon name"
+  },
+
+  "iconGraduationCap": "Graduation Cap",
+  "@iconGraduationCap": {
+    "description": "Graduation cap icon name"
+  },
+
+  "iconBook": "Book",
+  "@iconBook": {
+    "description": "Book icon name"
+  },
+
+  "iconBookOpen": "Open Book",
+  "@iconBookOpen": {
+    "description": "Open book icon name"
+  },
+
+  "iconPen": "Pen",
+  "@iconPen": {
+    "description": "Pen icon name"
+  },
+
+  "iconPencilAlt": "Pencil",
+  "@iconPencilAlt": {
+    "description": "Pencil icon name"
+  },
+
+  "iconHighlighter": "Highlighter",
+  "@iconHighlighter": {
+    "description": "Highlighter icon name"
+  },
+
+  "iconStickyNote": "Note",
+  "@iconStickyNote": {
+    "description": "Note icon name"
+  },
+
+  "iconClipboard": "Clipboard",
+  "@iconClipboard": {
+    "description": "Clipboard icon name"
+  },
+
+  "iconFileAlt": "File",
+  "@iconFileAlt": {
+    "description": "File icon name"
+  },
+
+  "iconArchive": "Archive",
+  "@iconArchive": {
+    "description": "Archive icon name"
+  },
+
+  "iconCalendarAlt": "Calendar",
+  "@iconCalendarAlt": {
+    "description": "Calendar icon name"
+  },
+
+  "iconClock": "Clock",
+  "@iconClock": {
+    "description": "Clock icon name"
+  },
+
+  "iconStopwatch": "Stopwatch",
+  "@iconStopwatch": {
+    "description": "Stopwatch icon name"
+  },
+
+  "iconHourglassHalf": "Hourglass",
+  "@iconHourglassHalf": {
+    "description": "Hourglass icon name"
+  },
+
+  "iconBell": "Bell",
+  "@iconBell": {
+    "description": "Bell icon name"
+  },
+
+  "iconFlag": "Flag",
+  "@iconFlag": {
+    "description": "Flag icon name"
+  },
+
+  "iconTrophy": "Trophy",
+  "@iconTrophy": {
+    "description": "Trophy icon name"
+  },
+
+  "iconMedal": "Medal",
+  "@iconMedal": {
+    "description": "Medal icon name"
+  },
+
+  "iconCertificate": "Certificate",
+  "@iconCertificate": {
+    "description": "Certificate icon name"
+  },
+
+  "iconAward": "Award",
+  "@iconAward": {
+    "description": "Award icon name"
+  },
+
+  "iconUserGraduate": "Student",
+  "@iconUserGraduate": {
+    "description": "Student icon name"
+  },
+
+  "iconChalkboardTeacher": "Teacher",
+  "@iconChalkboardTeacher": {
+    "description": "Teacher icon name"
+  },
+
+  "iconChalkboard": "Chalkboard",
+  "@iconChalkboard": {
+    "description": "Chalkboard icon name"
+  },
+
+  "iconSearch": "Search",
+  "@iconSearch": {
+    "description": "Search icon name"
+  },
+
+  "iconQuestionCircle": "Question",
+  "@iconQuestionCircle": {
+    "description": "Question icon name"
+  },
+
+  "iconLightbulb": "Idea",
+  "@iconLightbulb": {
+    "description": "Idea icon name"
+  },
+
+  "iconInbox": "Inbox",
+  "@iconInbox": {
+    "description": "Inbox icon name"
+  },
+
+  "iconPalette": "Color Palette",
+  "@iconPalette": {
+    "description": "Color palette icon name"
+  },
+
+  "iconPaintBrush": "Paint Brush",
+  "@iconPaintBrush": {
+    "description": "Paint brush icon name"
+  },
+
+  "iconMagic": "Magic",
+  "@iconMagic": {
+    "description": "Magic icon name"
+  },
+
+  "iconSparkles": "Sparkles",
+  "@iconSparkles": {
+    "description": "Sparkles icon name"
+  },
+
+  "iconEyeDropper": "Eye Dropper",
+  "@iconEyeDropper": {
+    "description": "Eye dropper icon name"
+  },
+
+  "iconCamera": "Camera",
+  "@iconCamera": {
+    "description": "Camera icon name"
+  },
+
+  "iconVideo": "Video",
+  "@iconVideo": {
+    "description": "Video icon name"
+  },
+
+  "iconMusic": "Music",
+  "@iconMusic": {
+    "description": "Music icon name"
+  },
+
+  "iconHeadphones": "Headphones",
+  "@iconHeadphones": {
+    "description": "Headphones icon name"
+  },
+
+  "iconGamepad": "Gamepad",
+  "@iconGamepad": {
+    "description": "Gamepad icon name"
+  },
+
+  "iconDice": "Dice",
+  "@iconDice": {
+    "description": "Dice icon name"
+  },
+
+  "iconPuzzlePiece": "Puzzle Piece",
+  "@iconPuzzlePiece": {
+    "description": "Puzzle piece icon name"
+  },
+
+  "iconCube": "Cube",
+  "@iconCube": {
+    "description": "Cube icon name"
+  },
+
+  "iconGem": "Gem",
+  "@iconGem": {
+    "description": "Gem icon name"
+  },
+
+  "iconCrown": "Crown",
+  "@iconCrown": {
+    "description": "Crown icon name"
+  },
+
+  "iconRibbon": "Ribbon",
+  "@iconRibbon": {
+    "description": "Ribbon icon name"
+  },
+
+  "iconUsers": "Users",
+  "@iconUsers": {
+    "description": "Users icon name"
+  },
+
+  "iconUserFriends": "Friends",
+  "@iconUserFriends": {
+    "description": "Friends icon name"
+  },
+
+  "iconHandshake": "Handshake",
+  "@iconHandshake": {
+    "description": "Handshake icon name"
+  },
+
+  "iconComments": "Comments",
+  "@iconComments": {
+    "description": "Comments icon name"
+  },
+
+  "iconCommentDots": "Comment",
+  "@iconCommentDots": {
+    "description": "Comment icon name"
+  },
+
+  "iconEnvelope": "Envelope",
+  "@iconEnvelope": {
+    "description": "Envelope icon name"
+  },
+
+  "iconPhone": "Phone",
+  "@iconPhone": {
+    "description": "Phone icon name"
+  },
+
+  "iconVideoCamera": "Video Camera",
+  "@iconVideoCamera": {
+    "description": "Video camera icon name"
+  },
+
+  "iconShareAlt": "Share",
+  "@iconShareAlt": {
+    "description": "Share icon name"
+  },
+
+  "iconLink": "Link",
+  "@iconLink": {
+    "description": "Link icon name"
+  },
+
+  "iconSync": "Sync",
+  "@iconSync": {
+    "description": "Sync icon name"
+  },
+
+  "iconDownload": "Download",
+  "@iconDownload": {
+    "description": "Download icon name"
+  },
+
+  "iconUpload": "Upload",
+  "@iconUpload": {
+    "description": "Upload icon name"
+  },
+
+  "iconPrint": "Print",
+  "@iconPrint": {
+    "description": "Print icon name"
+  },
+
+  "iconCopy": "Copy",
+  "@iconCopy": {
+    "description": "Copy icon name"
+  },
+
+  "iconPaperPlane": "Paper Plane",
+  "@iconPaperPlane": {
+    "description": "Paper plane icon name"
+  },
+
+  "iconSend": "Send",
+  "@iconSend": {
+    "description": "Send icon name"
+  },
+
+  "iconBellSlash": "Mute Notifications",
+  "@iconBellSlash": {
+    "description": "Mute notifications icon name"
+  },
+
+  "iconChat": "Chat",
+  "@iconChat": {
+    "description": "Chat icon name"
+  },
+
+  "iconMessage": "Message",
+  "@iconMessage": {
+    "description": "Message icon name"
+  },
+
+  "iconReply": "Reply",
+  "@iconReply": {
+    "description": "Reply icon name"
+  },
+
+  "iconShare": "Share",
+  "@iconShare": {
+    "description": "Share icon name"
+  },
+
+  "iconAttach": "Attachment",
+  "@iconAttach": {
+    "description": "Attachment icon name"
+  },
+
+  "iconImage": "Image",
+  "@iconImage": {
+    "description": "Image icon name"
+  },
+
+  "iconFile": "File",
+  "@iconFile": {
+    "description": "File icon name"
+  },
+
+  "iconPaperclip": "Paperclip",
+  "@iconPaperclip": {
+    "description": "Paperclip icon name"
+  },
+
+  "iconSettings": "Settings",
+  "@iconSettings": {
+    "description": "Settings icon name"
+  },
+
+  "iconCog": "Gear",
+  "@iconCog": {
+    "description": "Gear icon name"
+  },
+
+  "iconShield": "Shield",
+  "@iconShield": {
+    "description": "Shield icon name"
+  },
+
+  "iconInfo": "Info",
+  "@iconInfo": {
+    "description": "Info icon name"
+  },
+
+  "iconHelp": "Help",
+  "@iconHelp": {
+    "description": "Help icon name"
+  },
+
+  "iconQuestion": "Question",
+  "@iconQuestion": {
+    "description": "Question icon name"
+  },
+
+  "iconCheck": "Check",
+  "@iconCheck": {
+    "description": "Check icon name"
+  },
+
+  "iconWarning": "Warning",
+  "@iconWarning": {
+    "description": "Warning icon name"
+  },
+
+  "iconError": "Error",
+  "@iconError": {
+    "description": "Error icon name"
+  },
+
+  "iconInfoCircle": "Info",
+  "@iconInfoCircle": {
+    "description": "Info icon name"
+  },
+
+  "iconExclamation": "Exclamation",
+  "@iconExclamation": {
+    "description": "Exclamation icon name"
+  },
+
+  "iconExclamationTriangle": "Warning Triangle",
+  "@iconExclamationTriangle": {
+    "description": "Warning triangle icon name"
+  },
+
+  "iconUser": "User",
+  "@iconUser": {
+    "description": "User icon name"
+  },
+
+  "iconLock": "Lock",
+  "@iconLock": {
+    "description": "Lock icon name"
+  },
+
+  "iconSignIn": "Sign In",
+  "@iconSignIn": {
+    "description": "Sign in icon name"
+  },
+
+  "iconSignOut": "Sign Out",
+  "@iconSignOut": {
+    "description": "Sign out icon name"
+  },
+
+  "iconEdit": "Edit",
+  "@iconEdit": {
+    "description": "Edit icon name"
+  },
+
+  "iconDelete": "Delete",
+  "@iconDelete": {
+    "description": "Delete icon name"
+  },
+
+  "iconTrash": "Trash",
+  "@iconTrash": {
+    "description": "Trash icon name"
+  },
+
+  "iconSave": "Save",
+  "@iconSave": {
+    "description": "Save icon name"
+  },
+
+  "iconHistory": "History",
+  "@iconHistory": {
+    "description": "History icon name"
+  },
+
+  "iconLockKeyhole": "Lock",
+  "@iconLockKeyhole": {
+    "description": "Lock icon name"
+  },
+
+  "iconUnlock": "Unlock",
+  "@iconUnlock": {
+    "description": "Unlock icon name"
+  },
+
+  "iconMicrophone": "Microphone",
+  "@iconMicrophone": {
+    "description": "Microphone icon name"
+  },
+
+  "iconFileCodeIcon": "Code File",
+  "@iconFileCodeIcon": {
+    "description": "Code file icon name"
+  },
+
+  "iconList": "List",
+  "@iconList": {
+    "description": "List icon name"
+  },
+
+  "iconGrid": "Grid",
+  "@iconGrid": {
+    "description": "Grid icon name"
+  },
+
+  "iconThLarge": "Large Grid",
+  "@iconThLarge": {
+    "description": "Large grid icon name"
+  },
+
+  "iconBars": "Bars",
+  "@iconBars": {
+    "description": "Bars icon name"
+  },
+
+  "iconMenu": "Menu",
+  "@iconMenu": {
+    "description": "Menu icon name"
+  },
+
+  "iconFilter": "Filter",
+  "@iconFilter": {
+    "description": "Filter icon name"
+  },
+
+  "iconSort": "Sort",
+  "@iconSort": {
+    "description": "Sort icon name"
+  },
+
+  "iconRefresh": "Refresh",
+  "@iconRefresh": {
+    "description": "Refresh icon name"
+  },
+
+  "iconBack": "Back",
+  "@iconBack": {
+    "description": "Back icon name"
+  },
+
+  "iconNext": "Next",
+  "@iconNext": {
+    "description": "Next icon name"
+  },
+
+  "iconPrevious": "Previous",
+  "@iconPrevious": {
+    "description": "Previous icon name"
+  },
+
+  "iconClose": "Close",
+  "@iconClose": {
+    "description": "Close icon name"
+  },
+
+  "iconEllipsis": "Ellipsis",
+  "@iconEllipsis": {
+    "description": "Ellipsis icon name"
+  },
+
+  "iconEllipsisH": "Horizontal Ellipsis",
+  "@iconEllipsisH": {
+    "description": "Horizontal ellipsis icon name"
+  },
+
+  "iconEllipsisV": "Vertical Ellipsis",
+  "@iconEllipsisV": {
+    "description": "Vertical ellipsis icon name"
+  },
+
+  "iconChevronUp": "Chevron Up",
+  "@iconChevronUp": {
+    "description": "Chevron up icon name"
+  },
+
+  "iconChevronDown": "Chevron Down",
+  "@iconChevronDown": {
+    "description": "Chevron down icon name"
+  },
+
+  "iconChevronLeft": "Chevron Left",
+  "@iconChevronLeft": {
+    "description": "Chevron left icon name"
+  },
+
+  "iconChevronRight": "Chevron Right",
+  "@iconChevronRight": {
+    "description": "Chevron right icon name"
+  },
+
+  "iconAngleUp": "Angle Up",
+  "@iconAngleUp": {
+    "description": "Angle up icon name"
+  },
+
+  "iconAngleDown": "Angle Down",
+  "@iconAngleDown": {
+    "description": "Angle down icon name"
+  },
+
+  "iconAngleLeft": "Angle Left",
+  "@iconAngleLeft": {
+    "description": "Angle left icon name"
+  },
+
+  "iconAngleRight": "Angle Right",
+  "@iconAngleRight": {
+    "description": "Angle right icon name"
+  },
+
+  "iconAnglesUp": "Angles Up",
+  "@iconAnglesUp": {
+    "description": "Angles up icon name"
+  },
+
+  "iconAnglesDown": "Angles Down",
+  "@iconAnglesDown": {
+    "description": "Angles down icon name"
+  },
+
+  "iconUpRightAndDownLeftFromCenter": "Expand",
+  "@iconUpRightAndDownLeftFromCenter": {
+    "description": "Expand icon name"
+  },
+
+  "iconDownLeftAndUpRightToCenter": "Collapse",
+  "@iconDownLeftAndUpRightToCenter": {
+    "description": "Collapse icon name"
+  },
+
+  "iconPlay": "Play",
+  "@iconPlay": {
+    "description": "Play icon name"
+  },
+
+  "iconPause": "Pause",
+  "@iconPause": {
+    "description": "Pause icon name"
+  },
+
+  "iconStop": "Stop",
+  "@iconStop": {
+    "description": "Stop icon name"
+  },
+
+  "iconFilm": "Film",
+  "@iconFilm": {
+    "description": "Film icon name"
+  },
+
+  "iconFileText": "Text File",
+  "@iconFileText": {
+    "description": "Text file icon name"
+  },
+
+  "iconFileLines": "File",
+  "@iconFileLines": {
+    "description": "File icon name"
+  },
+
+  "iconArrowLeft": "Arrow Left",
+  "@iconArrowLeft": {
+    "description": "Arrow left icon name"
+  },
+
+  "iconArrowRight": "Arrow Right",
+  "@iconArrowRight": {
+    "description": "Arrow right icon name"
+  },
+
+  "iconArrowUp": "Arrow Up",
+  "@iconArrowUp": {
+    "description": "Arrow up icon name"
+  },
+
+  "iconArrowDown": "Arrow Down",
+  "@iconArrowDown": {
+    "description": "Arrow down icon name"
+  },
+
+  "iconArrowTurnUpLeft": "Turn Arrow",
+  "@iconArrowTurnUpLeft": {
+    "description": "Turn arrow icon name"
+  },
+
+  "iconArrowTurnUpRight": "Turn Arrow",
+  "@iconArrowTurnUpRight": {
+    "description": "Turn arrow icon name"
+  },
+
+  "iconArrowTurnDownLeft": "Turn Arrow",
+  "@iconArrowTurnDownLeft": {
+    "description": "Turn arrow icon name"
+  },
+
+  "iconArrowTurnDownRight": "Turn Arrow",
+  "@iconArrowTurnDownRight": {
+    "description": "Turn arrow icon name"
+  },
+
+  "iconXmark": "Close",
+  "@iconXmark": {
+    "description": "Close icon name"
+  },
+
+  "iconCheckCircle": "Check Circle",
+  "@iconCheckCircle": {
+    "description": "Check circle icon name"
+  },
+
+  "iconTimesCircle": "Error Circle",
+  "@iconTimesCircle": {
+    "description": "Error circle icon name"
+  },
+
+  "iconInfoCircleIcon": "Info Circle",
+  "@iconInfoCircleIcon": {
+    "description": "Info circle icon name"
+  },
+
+  "iconExclamationCircle": "Exclamation Circle",
+  "@iconExclamationCircle": {
+    "description": "Exclamation circle icon name"
+  },
+
+  "chatWelcome": "Welcome to KFU Assistant!",
+  "@chatWelcome": {
+    "description": "Welcome message in chat screen"
+  },
+
+  "chatWelcomeMessage": "I'm your smart assistant. I can help you with studying, academic affairs, and solving study problems.",
+  "@chatWelcomeMessage": {
+    "description": "Welcome text in chat screen"
+  },
+
+  "chatSuggestionCourses": "Courses",
+  "@chatSuggestionCourses": {
+    "description": "Course suggestion card title"
+  },
+
+  "chatSuggestionCoursesSubtitle": "Help with a course",
+  "@chatSuggestionCoursesSubtitle": {
+    "description": "Course suggestion card description"
+  },
+
+  "chatSuggestionCoursesAction": "I need help solving a programming problem",
+  "@chatSuggestionCoursesAction": {
+    "description": "Course suggestion message"
+  },
+
+  "chatSuggestionSchedules": "Schedules",
+  "@chatSuggestionSchedules": {
+    "description": "Schedule suggestion card title"
+  },
+
+  "chatSuggestionSchedulesSubtitle": "Know exam and lecture dates",
+  "@chatSuggestionSchedulesSubtitle": {
+    "description": "Schedule suggestion card description"
+  },
+
+  "chatSuggestionSchedulesAction": "When are the final exams?",
+  "@chatSuggestionSchedulesAction": {
+    "description": "Schedule suggestion message"
+  },
+
+  "chatSuggestionGrades": "Grades",
+  "@chatSuggestionGrades": {
+    "description": "Grade suggestion card title"
+  },
+
+  "chatSuggestionGradesSubtitle": "Inquire about results and grades",
+  "@chatSuggestionGradesSubtitle": {
+    "description": "Grade suggestion card description"
+  },
+
+  "chatSuggestionGradesAction": "How do I check my grades?",
+  "@chatSuggestionGradesAction": {
+    "description": "Grade suggestion message"
+  },
+
+  "chatSuggestionAcademic": "Academic Affairs",
+  "@chatSuggestionAcademic": {
+    "description": "Academic affairs suggestion card title"
+  },
+
+  "chatSuggestionAcademicSubtitle": "Inquire about academic affairs",
+  "@chatSuggestionAcademicSubtitle": {
+    "description": "Academic affairs suggestion card description"
+  },
+
+  "chatSuggestionAcademicAction": "I want to inquire about attendance",
+  "@chatSuggestionAcademicAction": {
+    "description": "Academic affairs suggestion message"
+  },
+
+  "chatQuickActionProgramming": "Programming Help",
+  "@chatQuickActionProgramming": {
+    "description": "Programming quick action button title"
+  },
+
+  "chatQuickActionProgrammingAction": "I need help solving a programming problem",
+  "@chatQuickActionProgrammingAction": {
+    "description": "Programming quick action button message"
+  },
+
+  "chatQuickActionAcademicDates": "Academic Dates",
+  "@chatQuickActionAcademicDates": {
+    "description": "Academic dates quick action button title"
+  },
+
+  "chatQuickActionAcademicDatesAction": "What are the important dates for the semester?",
+  "@chatQuickActionAcademicDatesAction": {
+    "description": "Academic dates quick action button message"
+  },
+
+  "chatQuickActionProgrammingTips": "Programming Tips",
+  "@chatQuickActionProgrammingTips": {
+    "description": "Programming tips quick action button title"
+  },
+
+  "chatQuickActionProgrammingTipsAction": "How can I improve my programming skills?",
+  "@chatQuickActionProgrammingTipsAction": {
+    "description": "Programming tips quick action button message"
+  },
+
+  "chatQuickActionDataStructures": "Data Structures",
+  "@chatQuickActionDataStructures": {
+    "description": "Data structures quick action button title"
+  },
+
+  "chatQuickActionDataStructuresAction": "I need an explanation of data structures",
+  "@chatQuickActionDataStructuresAction": {
+    "description": "Data structures quick action button message"
+  },
+
+  "chatSearchInMessages": "Search in messages...",
+  "@chatSearchInMessages": {
+    "description": "Search in messages field hint"
+  },
+
+  "chatNoSearchResults": "No search results",
+  "@chatNoSearchResults": {
+    "description": "No search results message"
+  },
+
+  "chatWriteYourMessage": "Write your message here...",
+  "@chatWriteYourMessage": {
+    "description": "Message input field hint"
+  },
+
+  "chatFolders": "Folders",
+  "@chatFolders": {
+    "description": "Folders section title"
+  },
+
+  "chatAllChats": "All Chats",
+  "@chatAllChats": {
+    "description": "All chats option"
+  },
+
+  "chatNoFolders": "No folders",
+  "@chatNoFolders": {
+    "description": "No folders message"
+  },
+
+  "chatDelete": "Delete",
+  "@chatDelete": {
+    "description": "Delete button"
+  },
+
+  "chatSearchAndSettings": "Search and Settings",
+  "@chatSearchAndSettings": {
+    "description": "Search and settings section title"
+  },
+
+  "chatSearchInChats": "Search in chats...",
+  "@chatSearchInChats": {
+    "description": "Search in chats field hint"
+  },
+
+  "chatSearchByDate": "Search by Date",
+  "@chatSearchByDate": {
+    "description": "Search by date option title"
+  },
+
+  "chatSearchByDateSubtitle": "Search chats by date",
+  "@chatSearchByDateSubtitle": {
+    "description": "Search by date option description"
+  },
+
+  "chatSearchByFolder": "Search by Folder",
+  "@chatSearchByFolder": {
+    "description": "Search by folder option title"
+  },
+
+  "chatSearchByFolderSubtitle": "Search chats in a specific folder",
+  "@chatSearchByFolderSubtitle": {
+    "description": "Search by folder option description"
+  },
+
+  "chatSearchByTags": "Search by Tags",
+  "@chatSearchByTags": {
+    "description": "Search by tags option title"
+  },
+
+  "chatSearchByTagsSubtitle": "Search using tags and keywords",
+  "@chatSearchByTagsSubtitle": {
+    "description": "Search by tags option description"
+  },
+
+  "chatSettingsTitle": "Chat Settings",
+  "@chatSettingsTitle": {
+    "description": "Chat settings section title"
+  },
+
+  "chatSettingsNotifications": "Notifications",
+  "@chatSettingsNotifications": {
+    "description": "Notifications option title"
+  },
+
+  "chatSettingsNotificationsSubtitle": "Notification settings",
+  "@chatSettingsNotificationsSubtitle": {
+    "description": "Notifications option description"
+  },
+
+  "chatSettingsAppearance": "Appearance",
+  "@chatSettingsAppearance": {
+    "description": "Appearance option title"
+  },
+
+  "chatSettingsAppearanceSubtitle": "Change app appearance",
+  "@chatSettingsAppearanceSubtitle": {
+    "description": "Appearance option description"
+  },
+
+  "chatSettingsLanguage": "Language",
+  "@chatSettingsLanguage": {
+    "description": "Language option title"
+  },
+
+  "chatSettingsLanguageSubtitle": "Change app language",
+  "@chatSettingsLanguageSubtitle": {
+    "description": "Language option description"
+  },
+
+  "chatSettingsBackup": "Backup",
+  "@chatSettingsBackup": {
+    "description": "Backup option title"
+  },
+
+  "chatSettingsBackupSubtitle": "Backup conversations",
+  "@chatSettingsBackupSubtitle": {
+    "description": "Backup option description"
+  },
+
+  "chatNewChat": "New Chat",
+  "@chatNewChat": {
+    "description": "New chat title"
+  },
+
+  "chatMessageCount": "{count} message",
+  "@chatMessageCount": {
+    "description": "Number of messages in chat",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "chatLastActivity": "Last activity: {date}",
+  "@chatLastActivity": {
+    "description": "Last activity date in chat",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+
+  "chatSuggestionMedicine": "Medicine",
+  "@chatSuggestionMedicine": {
+    "description": "Medicine suggestion card title"
+  },
+
+  "chatSuggestionMedicineSubtitle": "Help with medical subjects and diagnosis",
+  "@chatSuggestionMedicineSubtitle": {
+    "description": "Medicine suggestion card description"
+  },
+
+  "chatSuggestionMedicineAction": "I need an explanation of how the heart and circulatory system work",
+  "@chatSuggestionMedicineAction": {
+    "description": "Medicine suggestion message"
+  },
+
+  "chatSuggestionPharmacy": "Pharmacy",
+  "@chatSuggestionPharmacy": {
+    "description": "Pharmacy suggestion card title"
+  },
+
+  "chatSuggestionPharmacySubtitle": "Help with medications and drug interactions",
+  "@chatSuggestionPharmacySubtitle": {
+    "description": "Pharmacy suggestion card description"
+  },
+
+  "chatSuggestionPharmacyAction": "What are the potential drug interactions between aspirin and ibuprofen?",
+  "@chatSuggestionPharmacyAction": {
+    "description": "Pharmacy suggestion message"
+  },
+
+  "chatSuggestionHealthSciences": "Health Sciences",
+  "@chatSuggestionHealthSciences": {
+    "description": "Health sciences suggestion card title"
+  },
+
+  "chatSuggestionHealthSciencesSubtitle": "Help with health sciences and nutrition",
+  "@chatSuggestionHealthSciencesSubtitle": {
+    "description": "Health sciences suggestion card description"
+  },
+
+  "chatSuggestionHealthSciencesAction": "What are the essential nutrients for the body?",
+  "@chatSuggestionHealthSciencesAction": {
+    "description": "Health sciences suggestion message"
+  },
+
+  "chatSuggestionEngineering": "Engineering",
+  "@chatSuggestionEngineering": {
+    "description": "Engineering suggestion card title"
+  },
+
+  "chatSuggestionEngineeringSubtitle": "Help with engineering subjects and design",
+  "@chatSuggestionEngineeringSubtitle": {
+    "description": "Engineering suggestion card description"
+  },
+
+  "chatSuggestionEngineeringAction": "I need an explanation of thermodynamics principles",
+  "@chatSuggestionEngineeringAction": {
+    "description": "Engineering suggestion message"
+  },
+
+  "chatSuggestionComputerScience": "Computer Science",
+  "@chatSuggestionComputerScience": {
+    "description": "Computer science suggestion card title"
+  },
+
+  "chatSuggestionComputerScienceSubtitle": "Help with programming and algorithms",
+  "@chatSuggestionComputerScienceSubtitle": {
+    "description": "Computer science suggestion card description"
+  },
+
+  "chatSuggestionComputerScienceAction": "How can I improve the performance of binary search algorithm?",
+  "@chatSuggestionComputerScienceAction": {
+    "description": "Computer science suggestion message"
+  },
+
+  "chatSuggestionCivilEngineering": "Civil Engineering",
+  "@chatSuggestionCivilEngineering": {
+    "description": "Civil engineering suggestion card title"
+  },
+
+  "chatSuggestionCivilEngineeringSubtitle": "Help with construction and infrastructure",
+  "@chatSuggestionCivilEngineeringSubtitle": {
+    "description": "Civil engineering suggestion card description"
+  },
+
+  "chatSuggestionCivilEngineeringAction": "What are the factors affecting bridge design?",
+  "@chatSuggestionCivilEngineeringAction": {
+    "description": "Civil engineering suggestion message"
+  },
+
+  "chatSuggestionArts": "Arts",
+  "@chatSuggestionArts": {
+    "description": "Arts suggestion card title"
+  },
+
+  "chatSuggestionArtsSubtitle": "Help with literature, language, and criticism",
+  "@chatSuggestionArtsSubtitle": {
+    "description": "Arts suggestion card description"
+  },
+
+  "chatSuggestionArtsAction": "What are the characteristics of pre-Islamic poetry?",
+  "@chatSuggestionArtsAction": {
+    "description": "Arts suggestion message"
+  },
+
+  "chatSuggestionIslamicStudies": "Islamic Studies",
+  "@chatSuggestionIslamicStudies": {
+    "description": "Islamic studies suggestion card title"
+  },
+
+  "chatSuggestionIslamicStudiesSubtitle": "Help with jurisprudence, interpretation, and hadith",
+  "@chatSuggestionIslamicStudiesSubtitle": {
+    "description": "Islamic studies suggestion card description"
+  },
+
+  "chatSuggestionIslamicStudiesAction": "What is the difference between jurisprudence and principles?",
+  "@chatSuggestionIslamicStudiesAction": {
+    "description": "Islamic studies suggestion message"
+  },
+
+  "chatSuggestionEducation": "Education",
+  "@chatSuggestionEducation": {
+    "description": "Education suggestion card title"
+  },
+
+  "chatSuggestionEducationSubtitle": "Help with education and teaching methods",
+  "@chatSuggestionEducationSubtitle": {
+    "description": "Education suggestion card description"
+  },
+
+  "chatSuggestionEducationAction": "What are the best teaching methods for students with learning difficulties?",
+  "@chatSuggestionEducationAction": {
+    "description": "Education suggestion message"
+  },
+
+  "chatSuggestionBusiness": "Business Administration",
+  "@chatSuggestionBusiness": {
+    "description": "Business suggestion card title"
+  },
+
+  "chatSuggestionBusinessSubtitle": "Help with management, marketing, and finance",
+  "@chatSuggestionBusinessSubtitle": {
+    "description": "Business suggestion card description"
+  },
+
+  "chatSuggestionBusinessAction": "How can I analyze the target market for a new project?",
+  "@chatSuggestionBusinessAction": {
+    "description": "Business suggestion message"
+  },
+
+  "chatSuggestionEconomics": "Economics",
+  "@chatSuggestionEconomics": {
+    "description": "Economics suggestion card title"
+  },
+
+  "chatSuggestionEconomicsSubtitle": "Help with economics and finance",
+  "@chatSuggestionEconomicsSubtitle": {
+    "description": "Economics suggestion card description"
+  },
+
+  "chatSuggestionEconomicsAction": "What is the difference between macroeconomics and microeconomics?",
+  "@chatSuggestionEconomicsAction": {
+    "description": "Economics suggestion message"
+  },
+
+  "chatSuggestionSciences": "Sciences",
+  "@chatSuggestionSciences": {
+    "description": "Sciences suggestion card title"
+  },
+
+  "chatSuggestionSciencesSubtitle": "Help with physics and mathematics",
+  "@chatSuggestionSciencesSubtitle": {
+    "description": "Sciences suggestion card description"
+  },
+
+  "chatSuggestionSciencesAction": "I need an explanation of Newton's laws of motion",
+  "@chatSuggestionSciencesAction": {
+    "description": "Sciences suggestion message"
+  },
+
+  "chatSuggestionChemistry": "Chemistry",
+  "@chatSuggestionChemistry": {
+    "description": "Chemistry suggestion card title"
+  },
+
+  "chatSuggestionChemistrySubtitle": "Help with chemistry and reactions",
+  "@chatSuggestionChemistrySubtitle": {
+    "description": "Chemistry suggestion card description"
+  },
+
+  "chatSuggestionChemistryAction": "What are the types of chemical reactions?",
+  "@chatSuggestionChemistryAction": {
+    "description": "Chemistry suggestion message"
+  },
+
+  "chatSuggestionBiology": "Biology",
+  "@chatSuggestionBiology": {
+    "description": "Biology suggestion card title"
+  },
+
+  "chatSuggestionBiologySubtitle": "Help with biology and genetics",
+  "@chatSuggestionBiologySubtitle": {
+    "description": "Biology suggestion card description"
+  },
+
+  "chatSuggestionBiologyAction": "How does photosynthesis work in plants?",
+  "@chatSuggestionBiologyAction": {
+    "description": "Biology suggestion message"
+  },
+
+  "chatMessageCopy": "Copy",
+  "@chatMessageCopy": {
+    "description": "Copy message content button"
+  },
+
+  "chatMessageEdit": "Edit",
+  "@chatMessageEdit": {
+    "description": "Edit user message button"
+  },
+
+  "chatMessageThumbUp": "Thumb Up",
+  "@chatMessageThumbUp": {
+    "description": "Thumb up answer button"
+  },
+
+  "chatMessageThumbDown": "Thumb Down",
+  "@chatMessageThumbDown": {
+    "description": "Thumb down answer button"
+  },
+
+  "chatMessageRetry": "Retry",
+  "@chatMessageRetry": {
+    "description": "Retry previous request button"
+  },
+
+  "chatMessageCopied": "Content copied",
+  "@chatMessageCopied": {
+    "description": "Content copied confirmation message"
   }
 }

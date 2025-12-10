@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/typing_indicator.dart';
@@ -11,13 +12,12 @@ import '../providers/chat_sessions_provider.dart';
 import '../../../../core/widgets/neural_network_effect.dart';
 import '../../../../core/theme/icons.dart';
 // import '../../domain/models/chat.dart';
-// import '../../domain/models/message.dart';
+import '../../domain/models/message.dart';
 import '../../../../features/folders/domain/models/folder.dart';
 import '../../../../features/folders/presentation/providers/folder_provider.dart';
 import '../../../../features/folders/presentation/screens/create_folder_screen.dart';
 import '../../../../features/folders/presentation/screens/folder_list_screen.dart';
 import '../../../../features/folders/presentation/screens/change_icon_screen.dart';
-import '../../../../features/folders/presentation/screens/folder_content_screen.dart';
 import '../../../../features/help/presentation/screens/help_screen.dart';
 import '../../../../features/settings/presentation/screens/settings_screen.dart'
     as settings;
@@ -28,6 +28,7 @@ import '../../../../core/widgets/app_drawer.dart';
 import '../../../../core/providers/sidebar_provider.dart';
 import '../../../../app/app.dart';
 import '../../../../core/localization/l10n.dart';
+import '../../domain/models/suggestion_prompts.dart';
 
 /// الشاشة الرئيسية للمحادثة
 ///
@@ -48,7 +49,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   final TextEditingController _searchController = TextEditingController();
 
   String? _selectedChatId; // بدء بشاشة فارغة
-  // String? _selectedFolderId;
+  String? _selectedFolderId;
   // bool _showSidebar = true;
   bool _isSearching = false;
 
@@ -85,6 +86,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       // ref.read(chatProvider.notifier).createNewChat();
       // ref.read(folderProvider.notifier).loadDefaultFolders();
       // ref.read(chatHistoryProvider.notifier).loadChatHistory();
+
+      // فتح القائمة الجانبية تلقائياً إذا كانت مغلقة وكانت الشاشة عريضة
+      if (mounted) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isWideScreen = screenWidth >= 600;
+        final sidebarOpen = ref.read(sidebarProvider);
+
+        if (!sidebarOpen && isWideScreen) {
+          ref.read(sidebarProvider.notifier).open();
+          // ignore: avoid_print
+          print(
+            '🗂️ [ChatScreen] فتح القائمة الجانبية تلقائياً (screenWidth: $screenWidth)',
+          );
+        }
+      }
     });
   }
 
@@ -154,7 +170,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
-                  width: sidebarOpen ? 320 : 0,
+                  width: sidebarOpen ? 400 : 0,
                   child: sidebarOpen
                       ? const AppDrawer(isSidebar: true)
                       : const SizedBox.shrink(),
@@ -280,8 +296,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                           }
                         },
                         tooltip: isWideScreen
-                            ? (sidebarOpen ? 'إغلاق القائمة' : 'فتح القائمة')
-                            : 'القائمة',
+                            ? (sidebarOpen
+                                  ? context.l10n.navbarCloseMenu
+                                  : context.l10n.navbarOpenMenu)
+                            : context.l10n.navbarMenu,
                       ),
                     );
                   },
@@ -355,7 +373,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         ),
                       );
                     },
-                    tooltip: 'الإعدادات',
+                    tooltip: context.l10n.navbarSettings,
                   ),
                 ),
               ],
@@ -449,7 +467,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           final message = chatState.messages[index];
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
-            child: MessageBubble(message: message),
+            child: MessageBubble(
+              message: message,
+              onCopy: () => _copyMessage(message),
+              onEditMessage: message.isUserMessage
+                  ? () => _editUserMessage(message)
+                  : null,
+              onThumbUp: message.isAssistantMessage
+                  ? () => _onThumbUp(message)
+                  : null,
+              onThumbDown: message.isAssistantMessage
+                  ? () => _onThumbDown(message)
+                  : null,
+              onRetry: message.isAssistantMessage
+                  ? () => _retryMessage(message)
+                  : null,
+            ),
           );
         } else {
           // مؤشر الكتابة مع أيقونة المساعد
@@ -516,7 +549,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
             // عنوان الترحيب
             Text(
-              'مرحباً بك في مساعد كفو!',
+              context.l10n.chatWelcome,
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -528,7 +561,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
             // نص الترحيب
             Text(
-              'أنا مساعدك الذكي. يمكنني مساعدتك في المذاكرة، الشؤون الأكاديمية، وحل المشاكل الدراسية.',
+              context.l10n.chatWelcomeMessage,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 height: 1.6,
@@ -538,12 +571,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
             const SizedBox(height: 40),
 
-            // بطاقات الاقتراحات
-            _buildSuggestionCards(theme),
+            // بطاقات الاقتراحات الرئيسية (الأربعة الكبيرة)
+            _buildMainSuggestionCards(theme),
 
             const SizedBox(height: 32),
 
-            // الإجراءات السريعة
+            // الإجراءات السريعة (4 طلبات عشوائية من بنك الطلبات)
             _buildQuickActions(theme),
           ],
         ),
@@ -551,32 +584,33 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     );
   }
 
-  /// بناء بطاقات الاقتراحات
-  Widget _buildSuggestionCards(ThemeData theme) {
+  /// بناء بطاقات الاقتراحات الرئيسية (الأربعة الكبيرة)
+  Widget _buildMainSuggestionCards(ThemeData theme) {
+    final l10n = context.l10n;
     final suggestions = [
       {
         'icon': '📖',
-        'title': 'المقررات الدراسية',
-        'subtitle': 'مساعدة في أحد المقررات الدراسية',
-        'action': 'أريد مساعدة في حل مشكلة برمجية',
+        'title': l10n.chatSuggestionCourses,
+        'subtitle': l10n.chatSuggestionCoursesSubtitle,
+        'action': l10n.chatSuggestionCoursesAction,
       },
       {
         'icon': '📅',
-        'title': 'الجداول الدراسية',
-        'subtitle': 'معرفة مواعيد الامتحانات والمحاضرات',
-        'action': 'متى موعد الامتحانات النهائية؟',
+        'title': l10n.chatSuggestionSchedules,
+        'subtitle': l10n.chatSuggestionSchedulesSubtitle,
+        'action': l10n.chatSuggestionSchedulesAction,
       },
       {
         'icon': '📊',
-        'title': 'الدرجات والتقديرات',
-        'subtitle': 'الاستعلام عن النتائج والدرجات',
-        'action': 'كيف أستعلم عن درجاتي؟',
+        'title': l10n.chatSuggestionGrades,
+        'subtitle': l10n.chatSuggestionGradesSubtitle,
+        'action': l10n.chatSuggestionGradesAction,
       },
       {
         'icon': '🎓',
-        'title': 'الشؤون الأكاديمية',
-        'subtitle': 'الاستفسار عن الشؤون الأكاديمية',
-        'action': 'أريد أن أستفسر عن موضوع بخصوص الحضور',
+        'title': l10n.chatSuggestionAcademic,
+        'subtitle': l10n.chatSuggestionAcademicSubtitle,
+        'action': l10n.chatSuggestionAcademicAction,
       },
     ];
 
@@ -802,30 +836,175 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     return card;
   }
 
-  /// بناء الإجراءات السريعة
+  /// تحويل emoji إلى AppIcon
+  AppIcon _getAppIconFromEmoji(String emoji) {
+    switch (emoji) {
+      case '🏥':
+      case '💊':
+      case '🔬':
+        return AppIcon.stethoscope; // الطب والصيدلة والعلوم الصحية
+      case '⚙️':
+      case '🏗️':
+        return AppIcon.cogs; // الهندسة
+      case '💻':
+        return AppIcon.laptopCode; // علوم الحاسب
+      case '📚':
+        return AppIcon.book; // الآداب
+      case '🕌':
+        return AppIcon.graduationCap; // الدراسات الإسلامية
+      case '👨‍🏫':
+        return AppIcon.chalkboardTeacher; // العلوم التربوية
+      case '💼':
+        return AppIcon.chartBar; // إدارة الأعمال
+      case '📊':
+        return AppIcon.chartBar; // الاقتصاد
+      case '🧪':
+        return AppIcon.flask; // الكيمياء
+      case '🌍':
+        return AppIcon.globe; // الأحياء
+      default:
+        return AppIcon.lightbulb; // افتراضي
+    }
+  }
+
+  /// الحصول على النص المترجم من المفتاح
+  String _getLocalizedString(dynamic l10n, String key) {
+    switch (key) {
+      // الطب
+      case 'chatSuggestionMedicine':
+        return l10n.chatSuggestionMedicine;
+      case 'chatSuggestionMedicineSubtitle':
+        return l10n.chatSuggestionMedicineSubtitle;
+      case 'chatSuggestionMedicineAction':
+        return l10n.chatSuggestionMedicineAction;
+      case 'chatSuggestionPharmacy':
+        return l10n.chatSuggestionPharmacy;
+      case 'chatSuggestionPharmacySubtitle':
+        return l10n.chatSuggestionPharmacySubtitle;
+      case 'chatSuggestionPharmacyAction':
+        return l10n.chatSuggestionPharmacyAction;
+      case 'chatSuggestionHealthSciences':
+        return l10n.chatSuggestionHealthSciences;
+      case 'chatSuggestionHealthSciencesSubtitle':
+        return l10n.chatSuggestionHealthSciencesSubtitle;
+      case 'chatSuggestionHealthSciencesAction':
+        return l10n.chatSuggestionHealthSciencesAction;
+      // الهندسة
+      case 'chatSuggestionEngineering':
+        return l10n.chatSuggestionEngineering;
+      case 'chatSuggestionEngineeringSubtitle':
+        return l10n.chatSuggestionEngineeringSubtitle;
+      case 'chatSuggestionEngineeringAction':
+        return l10n.chatSuggestionEngineeringAction;
+      case 'chatSuggestionComputerScience':
+        return l10n.chatSuggestionComputerScience;
+      case 'chatSuggestionComputerScienceSubtitle':
+        return l10n.chatSuggestionComputerScienceSubtitle;
+      case 'chatSuggestionComputerScienceAction':
+        return l10n.chatSuggestionComputerScienceAction;
+      case 'chatSuggestionCivilEngineering':
+        return l10n.chatSuggestionCivilEngineering;
+      case 'chatSuggestionCivilEngineeringSubtitle':
+        return l10n.chatSuggestionCivilEngineeringSubtitle;
+      case 'chatSuggestionCivilEngineeringAction':
+        return l10n.chatSuggestionCivilEngineeringAction;
+      // الآداب والعلوم الإنسانية
+      case 'chatSuggestionArts':
+        return l10n.chatSuggestionArts;
+      case 'chatSuggestionArtsSubtitle':
+        return l10n.chatSuggestionArtsSubtitle;
+      case 'chatSuggestionArtsAction':
+        return l10n.chatSuggestionArtsAction;
+      case 'chatSuggestionIslamicStudies':
+        return l10n.chatSuggestionIslamicStudies;
+      case 'chatSuggestionIslamicStudiesSubtitle':
+        return l10n.chatSuggestionIslamicStudiesSubtitle;
+      case 'chatSuggestionIslamicStudiesAction':
+        return l10n.chatSuggestionIslamicStudiesAction;
+      case 'chatSuggestionEducation':
+        return l10n.chatSuggestionEducation;
+      case 'chatSuggestionEducationSubtitle':
+        return l10n.chatSuggestionEducationSubtitle;
+      case 'chatSuggestionEducationAction':
+        return l10n.chatSuggestionEducationAction;
+      // إدارة الأعمال
+      case 'chatSuggestionBusiness':
+        return l10n.chatSuggestionBusiness;
+      case 'chatSuggestionBusinessSubtitle':
+        return l10n.chatSuggestionBusinessSubtitle;
+      case 'chatSuggestionBusinessAction':
+        return l10n.chatSuggestionBusinessAction;
+      case 'chatSuggestionEconomics':
+        return l10n.chatSuggestionEconomics;
+      case 'chatSuggestionEconomicsSubtitle':
+        return l10n.chatSuggestionEconomicsSubtitle;
+      case 'chatSuggestionEconomicsAction':
+        return l10n.chatSuggestionEconomicsAction;
+      // العلوم
+      case 'chatSuggestionSciences':
+        return l10n.chatSuggestionSciences;
+      case 'chatSuggestionSciencesSubtitle':
+        return l10n.chatSuggestionSciencesSubtitle;
+      case 'chatSuggestionSciencesAction':
+        return l10n.chatSuggestionSciencesAction;
+      case 'chatSuggestionChemistry':
+        return l10n.chatSuggestionChemistry;
+      case 'chatSuggestionChemistrySubtitle':
+        return l10n.chatSuggestionChemistrySubtitle;
+      case 'chatSuggestionChemistryAction':
+        return l10n.chatSuggestionChemistryAction;
+      case 'chatSuggestionBiology':
+        return l10n.chatSuggestionBiology;
+      case 'chatSuggestionBiologySubtitle':
+        return l10n.chatSuggestionBiologySubtitle;
+      case 'chatSuggestionBiologyAction':
+        return l10n.chatSuggestionBiologyAction;
+      // المقررات الدراسية العامة (موجودة بالفعل)
+      case 'chatSuggestionCourses':
+        return l10n.chatSuggestionCourses;
+      case 'chatSuggestionCoursesSubtitle':
+        return l10n.chatSuggestionCoursesSubtitle;
+      case 'chatSuggestionCoursesAction':
+        return l10n.chatSuggestionCoursesAction;
+      case 'chatSuggestionSchedules':
+        return l10n.chatSuggestionSchedules;
+      case 'chatSuggestionSchedulesSubtitle':
+        return l10n.chatSuggestionSchedulesSubtitle;
+      case 'chatSuggestionSchedulesAction':
+        return l10n.chatSuggestionSchedulesAction;
+      case 'chatSuggestionGrades':
+        return l10n.chatSuggestionGrades;
+      case 'chatSuggestionGradesSubtitle':
+        return l10n.chatSuggestionGradesSubtitle;
+      case 'chatSuggestionGradesAction':
+        return l10n.chatSuggestionGradesAction;
+      case 'chatSuggestionAcademic':
+        return l10n.chatSuggestionAcademic;
+      case 'chatSuggestionAcademicSubtitle':
+        return l10n.chatSuggestionAcademicSubtitle;
+      case 'chatSuggestionAcademicAction':
+        return l10n.chatSuggestionAcademicAction;
+      default:
+        return key;
+    }
+  }
+
+  /// بناء الإجراءات السريعة (4 طلبات عشوائية من بنك الطلبات)
   Widget _buildQuickActions(ThemeData theme) {
-    final actions = [
-      {
-        'icon': AppIcon.code,
-        'title': 'مساعدة في البرمجة',
-        'action': 'أحتاج مساعدة في حل مشكلة برمجية',
-      },
-      {
-        'icon': AppIcon.calendarAlt,
-        'title': 'المواعيد الأكاديمية',
-        'action': 'ما هي المواعيد المهمة للفصل الدراسي؟',
-      },
-      {
-        'icon': AppIcon.brain,
-        'title': 'نصائح البرمجة',
-        'action': 'كيف أحسن مهاراتي في البرمجة؟',
-      },
-      {
-        'icon': AppIcon.sitemap,
-        'title': 'هياكل البيانات',
-        'action': 'أحتاج شرح لهياكل البيانات',
-      },
-    ];
+    final l10n = context.l10n;
+    // الحصول على 4 طلبات عشوائية من البنك
+    final randomPrompts = SuggestionPrompts.getRandomPrompts(4);
+
+    // تحويل المفاتيح إلى نصوص مترجمة وتحويل الأيقونات
+    final actions = randomPrompts.map((prompt) {
+      // تحويل emoji icon إلى AppIcon
+      final icon = _getAppIconFromEmoji(prompt['icon']!);
+      return {
+        'icon': icon,
+        'title': _getLocalizedString(l10n, prompt['title']!),
+        'action': _getLocalizedString(l10n, prompt['action']!),
+      };
+    }).toList();
 
     return Wrap(
       spacing: 12,
@@ -884,7 +1063,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         TextField(
           controller: _searchController,
           decoration: InputDecoration(
-            hintText: 'البحث في الرسائل...',
+            hintText: context.l10n.chatSearchInMessages,
             prefixIcon: Icon(AppIcons.getIcon(AppIcon.search)),
             suffixIcon: IconButton(
               onPressed: () {
@@ -912,7 +1091,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
         Expanded(
           child: Center(
             child: Text(
-              'لا توجد نتائج بحث',
+              context.l10n.chatNoSearchResults,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -929,7 +1108,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       onSend: (message) => _onMessageSent(message),
       onAttachFile: () => _onAttachmentSelected('file'),
       enabled: !_isSearching,
-      hintText: 'اكتب رسالتك هنا...',
+      hintText: context.l10n.chatWriteYourMessage,
       onTextChanged: (text) {
         // يمكن إضافة معالجة تغيير النص هنا إذا لزم الأمر
       },
@@ -939,7 +1118,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   /// بناء القائمة الجانبية الرئيسية (المجلدات والمحادثات) - DEPRECATED
   Widget _buildNavigationDrawer(ThemeData theme) {
     final authState = ref.watch(authProvider);
-    final userName = authState.loginResponse?.profile?['fullName'] ?? 'مستخدم';
+    final userName =
+        authState.loginResponse?.profile?['fullName'] ??
+        context.l10n.sidebarUserDefault;
     final userId = authState.userId ?? '';
 
     return Drawer(
@@ -974,7 +1155,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'مساعد كفو',
+                      context.l10n.appNameShort,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onSurface,
@@ -1048,7 +1229,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                       size: 18,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    tooltip: 'تسجيل الخروج',
+                    tooltip: context.l10n.sidebarSignOut,
                   ),
                 ],
               ),
@@ -1068,7 +1249,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         ref.read(chatProvider.notifier).createNewChat();
                       },
                       icon: Icon(AppIcons.getIcon(AppIcon.plus), size: 16),
-                      label: const Text('محادثة جديدة'),
+                      label: Text(context.l10n.chatNew),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                           vertical: 10,
@@ -1090,7 +1271,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                         // TODO: فتح البحث في سجل المحادثات
                       },
                       icon: Icon(AppIcons.getIcon(AppIcon.search), size: 16),
-                      label: const Text('بحث في المحادثات'),
+                      label: Text(context.l10n.sidebarSearchInChats),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                           vertical: 10,
@@ -1153,7 +1334,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'المجلدات',
+                  context.l10n.chatFolders,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.onSurfaceVariant,
@@ -1178,7 +1359,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   ),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
-                  tooltip: 'فتح شاشة المجلدات',
+                  tooltip: context.l10n.sidebarOpenFoldersScreen,
                 ),
                 // زر إضافة مجلد جديد
                 IconButton(
@@ -1201,7 +1382,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                   ),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
-                  tooltip: 'إنشاء مجلد جديد',
+                  tooltip: context.l10n.foldersCreate,
                 ),
               ],
             ),
@@ -1222,51 +1403,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // عنوان قسم المحادثات
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest.withAlpha(75),
-              borderRadius: BorderRadius.circular(8),
-              border: Border(
-                bottom: BorderSide(
-                  color: theme.colorScheme.outline.withAlpha(25),
-                  width: 1,
-                ),
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  AppIcons.getIcon(AppIcon.chat),
-                  size: 14,
-                  color: theme.colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'المحادثات الأخيرة',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    ref.read(chatSessionsProvider.notifier).loadRecentChats();
-                  },
-                  icon: Icon(
-                    AppIcons.getIcon(AppIcon.refresh),
-                    size: 14,
-                    color: theme.colorScheme.primary,
-                  ),
-                  constraints: const BoxConstraints(),
-                  padding: EdgeInsets.zero,
-                  tooltip: 'تحديث',
-                ),
-              ],
-            ),
-          ),
           const SizedBox(height: 4),
 
           // قائمة المحادثات
@@ -1294,7 +1430,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           _buildFooterMenuItem(
             theme,
             icon: AppIcons.getIcon(AppIcon.settings),
-            title: 'الإعدادات',
+            title: context.l10n.settingsTitle,
             onTap: () {
               Navigator.pop(context);
               // TODO: فتح الإعدادات
@@ -1304,7 +1440,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           _buildFooterMenuItem(
             theme,
             icon: AppIcons.getIcon(AppIcon.help),
-            title: 'المساعدة',
+            title: context.l10n.helpTitle,
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).push(
@@ -1350,7 +1486,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     if (chatState.currentChat != null) {
       return chatState.currentChat.title;
     }
-    return 'محادثة جديدة';
+    return context.l10n.chatNewChat;
   }
 
   /// الحصول على العنوان الفرعي للمحادثة
@@ -1358,7 +1494,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     if (chatState.currentChat != null) {
       final chat = chatState.currentChat;
       if (chat.messageCount > 0) {
-        return '${chat.messageCount} رسالة • آخر نشاط: ${chat.updatedAt.toString()}';
+        final messageCount = context.l10n.chatMessageCount(chat.messageCount);
+        final lastActivity = context.l10n.chatLastActivity(
+          chat.updatedAt.toString(),
+        );
+        return '$messageCount • $lastActivity';
       }
     }
     return '';
@@ -1367,16 +1507,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   // ==================== Event Handlers ====================
 
   void _onFolderSelected(String? folderId) {
-    // setState(() {
-    //   _selectedFolderId = folderId;
-    //   _selectedChatId = null; // إعادة تعيين المحادثة المحددة
-    // });
+    // ignore: avoid_print
+    print('\n╔═══════════════════════════════════════════════');
+    // ignore: avoid_print
+    print('║ 📁 ChatScreen: اختيار مجلد');
+    // ignore: avoid_print
+    print('╠═══════════════════════════════════════════════');
+    // ignore: avoid_print
+    print('║ 🆔 Folder ID: $folderId');
+    // ignore: avoid_print
+    print('╚═══════════════════════════════════════════════\n');
 
-    // تحديث فلتر المحادثات حسب المجلد المحدد
+    setState(() {
+      _selectedFolderId = folderId;
+      _selectedChatId = null; // إعادة تعيين المحادثة المحددة
+    });
+
+    // تحميل محادثات المجلد المحدد
     if (folderId != null) {
-      // ref.read(chatHistoryProvider.notifier).filterByFolder(folderId);
+      // ignore: avoid_print
+      print('📥 تحميل محادثات المجلد...\n');
+      ref.read(chatSessionsProvider.notifier).loadFolderChats(folderId);
     } else {
-      // ref.read(chatHistoryProvider.notifier).clearFilter();
+      // ignore: avoid_print
+      print('📥 تحميل جميع المحادثات الأخيرة...\n');
+      ref.read(chatSessionsProvider.notifier).loadRecentChats();
     }
   }
 
@@ -1441,12 +1596,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('حذف المجلد'),
-        content: Text('هل أنت متأكد من حذف مجلد "${folder.name}"؟'),
+        title: Text(context.l10n.chatDeleteFolderTitle),
+        content: Text(context.l10n.chatDeleteFolderMessage(folder.name)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+            child: Text(context.l10n.commonCancel),
           ),
           TextButton(
             onPressed: () async {
@@ -1455,8 +1610,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 await ref.read(folderProvider.notifier).deleteFolder(folder.id);
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('تم حذف المجلد بنجاح'),
+                    SnackBar(
+                      content: Text(context.l10n.chatFolderDeletedSuccess),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -1465,7 +1620,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('خطأ: ${e.toString()}'),
+                      content: Text(context.l10n.chatError(e.toString())),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -1475,7 +1630,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,
             ),
-            child: const Text('حذف'),
+            child: Text(context.l10n.commonDelete),
           ),
         ],
       ),
@@ -1533,11 +1688,81 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     }
   }
 
+  /// نسخ محتوى الرسالة
+  void _copyMessage(Message message) {
+    // استخراج النص من HTML إن وجد
+    final text = message.content.replaceAll(RegExp(r'<[^>]*>'), '').trim();
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(context.l10n.chatMessageCopied),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  /// تحرير رسالة المستخدم (إعادة إضافة للتحرير)
+  void _editUserMessage(Message message) {
+    // TODO: إضافة منطق لإعادة إضافة النص إلى حقل الإدخال
+    // يمكن استخدام TextEditingController أو Provider لإدارة حالة حقل الإدخال
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('سيتم إضافة النص للتحرير قريباً'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  /// الإعجاب بالإجابة
+  void _onThumbUp(Message message) {
+    // TODO: إرسال تقييم إيجابي للـ API
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('شكراً لك على التقييم الإيجابي'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  /// عدم الإعجاب بالإجابة
+  void _onThumbDown(Message message) {
+    // TODO: إرسال تقييم سلبي للـ API
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('شكراً لك على التقييم، سنعمل على التحسين'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  /// إعادة إرسال الطلب السابق
+  void _retryMessage(Message message) {
+    // البحث عن رسالة المستخدم السابقة لهذه الإجابة
+    final chatState = ref.read(chatProvider);
+    final messages = chatState.messages;
+    final currentIndex = messages.indexOf(message);
+
+    if (currentIndex > 0) {
+      // البحث عن آخر رسالة من المستخدم قبل هذه الإجابة
+      for (int i = currentIndex - 1; i >= 0; i--) {
+        if (messages[i].isUserMessage) {
+          // إعادة إرسال رسالة المستخدم
+          ref.read(chatProvider.notifier).sendMessage(messages[i].content);
+          // التمرير للأسفل
+          Future.delayed(const Duration(milliseconds: 100), () {
+            _scrollToBottom();
+          });
+          break;
+        }
+      }
+    }
+  }
+
   void _onAttachmentSelected(String attachmentType) {
     // TODO: معالجة إضافة المرفقات
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('تم تحديد $attachmentType'),
+        content: Text(context.l10n.chatAttachmentSelected(attachmentType)),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -1568,9 +1793,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
   void _onChatSettings() {
     // TODO: عرض إعدادات المحادثة
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('إعدادات المحادثة'),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: Text(context.l10n.chatSettings),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -1579,24 +1804,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   Widget _buildCreateFolderDialog() {
     return AlertDialog(
-      title: const Text('إنشاء مجلد جديد'),
-      content: const TextField(
+      title: Text(context.l10n.chatCreateFolderTitle),
+      content: TextField(
         decoration: InputDecoration(
-          labelText: 'اسم المجلد',
-          border: OutlineInputBorder(),
+          labelText: context.l10n.folderNameLabel,
+          border: const OutlineInputBorder(),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('إلغاء'),
+          child: Text(context.l10n.commonCancel),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
             // TODO: إنشاء المجلد
           },
-          child: const Text('إنشاء'),
+          child: Text(context.l10n.chatCreate),
         ),
       ],
     );
@@ -1604,25 +1829,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   Widget _buildEditFolderDialog(Folder folder) {
     return AlertDialog(
-      title: const Text('تعديل المجلد'),
+      title: Text(context.l10n.chatEditFolderTitle),
       content: TextField(
-        decoration: const InputDecoration(
-          labelText: 'اسم المجلد',
-          border: OutlineInputBorder(),
+        decoration: InputDecoration(
+          labelText: context.l10n.folderNameLabel,
+          border: const OutlineInputBorder(),
         ),
         controller: TextEditingController(text: folder.name),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('إلغاء'),
+          child: Text(context.l10n.commonCancel),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
             // TODO: تحديث المجلد
           },
-          child: const Text('حفظ'),
+          child: Text(context.l10n.commonSave),
         ),
       ],
     );
@@ -1669,7 +1894,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               onPressed: () {
                 ref.read(folderProvider.notifier).refresh();
               },
-              child: const Text('إعادة المحاولة'),
+              child: Text(context.l10n.commonRetry),
             ),
           ],
         ),
@@ -1690,7 +1915,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             ),
             const SizedBox(height: 8),
             Text(
-              'لا توجد مجلدات',
+              context.l10n.chatNoFolders,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -1701,66 +1926,126 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
     }
 
     return Column(
-      children: folders.map((folder) {
-        return ListTile(
+      children: [
+        // خيار "جميع المحادثات"
+        ListTile(
           dense: true,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 8,
             vertical: 2,
           ),
+          selected: _selectedFolderId == null,
+          selectedTileColor: theme.colorScheme.primaryContainer.withAlpha(128),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: _selectedFolderId == null
+                ? BorderSide(color: theme.colorScheme.primary, width: 1)
+                : BorderSide.none,
+          ),
           leading: Container(
             width: 28,
             height: 28,
             decoration: BoxDecoration(
-              color: _getFolderColor(folder, theme),
+              color: theme.colorScheme.primary,
               borderRadius: BorderRadius.circular(6),
             ),
-            child: Icon(folder.icon.iconData, size: 14, color: Colors.white),
+            child: Icon(
+              AppIcons.getIcon(AppIcon.comments),
+              size: 14,
+              color: Colors.white,
+            ),
           ),
           title: Text(
-            folder.name,
+            context.l10n.chatAllChats,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface,
+              color: _selectedFolderId == null
+                  ? theme.colorScheme.onPrimaryContainer
+                  : theme.colorScheme.onSurface,
+              fontWeight: _selectedFolderId == null
+                  ? FontWeight.w600
+                  : FontWeight.normal,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: folder.hasChats
-              ? Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    folder.chatCount.toString(),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
-                    ),
-                  ),
-                )
-              : null,
           onTap: () {
             Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => FolderContentScreen(folder: folder),
-              ),
-            );
+            _onFolderSelected(null);
           },
-          onLongPress: folder.isEditable
-              ? () {
-                  _showFolderContextMenu(context, folder, theme);
-                }
-              : null,
-        );
-      }).toList(),
+        ),
+        const SizedBox(height: 4),
+        // المجلدات
+        ...folders.map((folder) {
+          final isSelected = _selectedFolderId == folder.id;
+          return ListTile(
+            dense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 2,
+            ),
+            selected: isSelected,
+            selectedTileColor: theme.colorScheme.primaryContainer.withAlpha(
+              128,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+              side: isSelected
+                  ? BorderSide(color: theme.colorScheme.primary, width: 1)
+                  : BorderSide.none,
+            ),
+            leading: Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: _getFolderColor(folder, theme),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Icon(folder.icon.iconData, size: 14, color: Colors.white),
+            ),
+            title: Text(
+              folder.name,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: isSelected
+                    ? theme.colorScheme.onPrimaryContainer
+                    : theme.colorScheme.onSurface,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: folder.hasChats
+                ? Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      folder.chatCount.toString(),
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                      ),
+                    ),
+                  )
+                : null,
+            onTap: () {
+              Navigator.pop(context);
+              // تحميل محادثات المجلد في الشاشة الحالية
+              _onFolderSelected(folder.id);
+            },
+            onLongPress: folder.isEditable
+                ? () {
+                    _showFolderContextMenu(context, folder, theme);
+                  }
+                : null,
+          );
+        }),
+      ],
     );
   }
 
@@ -1792,7 +2077,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 AppIcons.getIcon(AppIcon.edit),
                 color: theme.colorScheme.primary,
               ),
-              title: const Text('تحرير'),
+              title: Text(context.l10n.chatEdit),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pop(context);
@@ -1804,7 +2089,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 AppIcons.getIcon(AppIcon.palette),
                 color: theme.colorScheme.primary,
               ),
-              title: const Text('تغيير الأيقونة'),
+              title: Text(context.l10n.chatChangeIcon),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pop(context);
@@ -1820,7 +2105,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 color: theme.colorScheme.error,
               ),
               title: Text(
-                'حذف',
+                context.l10n.chatDelete,
                 style: TextStyle(color: theme.colorScheme.error),
               ),
               onTap: () {
@@ -1837,16 +2122,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
 
   /// بناء قائمة المحادثات المبسطة
   Widget _buildChatList(ThemeData theme) {
-    return SizedBox(
-      height: 300, // ارتفاع محدد للقائمة
-      child: RecentChatsWidget(
-        selectedSessionId: _selectedChatId,
-        onSessionSelected: (sessionId) {
-          Navigator.pop(context);
-          _onChatSelected(sessionId);
-        },
-        showRefreshButton: false, // لأن هناك زر تحديث في القسم
-      ),
+    return RecentChatsWidget(
+      selectedSessionId: _selectedChatId,
+      onSessionSelected: (sessionId) {
+        Navigator.pop(context);
+        _onChatSelected(sessionId);
+      },
+      showRefreshButton: false, // لأن هناك زر تحديث في القسم
     );
   }
 
@@ -1872,7 +2154,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               child: Column(
                 children: [
                   Text(
-                    'البحث والإعدادات',
+                    context.l10n.chatSearchAndSettings,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: theme.colorScheme.onSurface,
@@ -1924,7 +2206,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            'البحث في المحادثات...',
+                            context.l10n.chatSearchInChats,
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
@@ -1946,20 +2228,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 _buildSearchOption(
                   theme,
                   AppIcon.calendarAlt,
-                  'البحث بالتاريخ',
-                  'البحث في المحادثات حسب التاريخ',
+                  context.l10n.chatSearchByDate,
+                  context.l10n.chatSearchByDateSubtitle,
                 ),
                 _buildSearchOption(
                   theme,
                   AppIcon.folder,
-                  'البحث بالمجلد',
-                  'البحث في محادثات مجلد معين',
+                  context.l10n.chatSearchByFolder,
+                  context.l10n.chatSearchByFolderSubtitle,
                 ),
                 _buildSearchOption(
                   theme,
                   AppIcon.search,
-                  'البحث بالعلامات',
-                  'البحث باستخدام العلامات والكلمات المفتاحية',
+                  context.l10n.chatSearchByTags,
+                  context.l10n.chatSearchByTagsSubtitle,
                 ),
 
                 const SizedBox(height: 24),
@@ -1967,7 +2249,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 const SizedBox(height: 16),
 
                 Text(
-                  'إعدادات المحادثة',
+                  context.l10n.chatSettingsTitle,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.onSurface,
@@ -1978,26 +2260,26 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
                 _buildSettingOption(
                   theme,
                   AppIcon.bell,
-                  'الإشعارات',
-                  'إعدادات الإشعارات',
+                  context.l10n.chatSettingsNotifications,
+                  context.l10n.chatSettingsNotificationsSubtitle,
                 ),
                 _buildSettingOption(
                   theme,
                   AppIcon.palette,
-                  'المظهر',
-                  'تغيير مظهر التطبيق',
+                  context.l10n.chatSettingsAppearance,
+                  context.l10n.chatSettingsAppearanceSubtitle,
                 ),
                 _buildSettingOption(
                   theme,
                   AppIcon.settings,
-                  'اللغة',
-                  'تغيير لغة التطبيق',
+                  context.l10n.chatSettingsLanguage,
+                  context.l10n.chatSettingsLanguageSubtitle,
                 ),
                 _buildSettingOption(
                   theme,
                   AppIcon.download,
-                  'النسخ الاحتياطي',
-                  'نسخ احتياطي للمحادثات',
+                  context.l10n.chatSettingsBackup,
+                  context.l10n.chatSettingsBackupSubtitle,
                 ),
               ],
             ),

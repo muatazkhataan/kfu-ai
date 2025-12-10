@@ -7,6 +7,7 @@ import '../widgets/folder_icon_picker_widget.dart';
 import '../widgets/folder_color_picker_widget.dart';
 import '../widgets/folder_preview_widget.dart';
 import '../../../../core/theme/icons.dart';
+import '../../../../core/localization/l10n.dart';
 
 /// شاشة تغيير أيقونة المجلد
 ///
@@ -37,11 +38,16 @@ class _ChangeIconScreenState extends ConsumerState<ChangeIconScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final folderState = ref.watch(folderProvider);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTabletOrDesktop = screenWidth >= 600;
 
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 600, maxHeight: 700),
+        constraints: BoxConstraints(
+          maxWidth: isTabletOrDesktop ? 800 : double.infinity,
+          maxHeight: isTabletOrDesktop ? 800 : MediaQuery.of(context).size.height * 0.9,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -64,7 +70,7 @@ class _ChangeIconScreenState extends ConsumerState<ChangeIconScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'تغيير أيقونة المجلد',
+                      context.l10n.folderChangeIconTitle,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -82,6 +88,7 @@ class _ChangeIconScreenState extends ConsumerState<ChangeIconScreen> {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
+                clipBehavior: Clip.antiAlias,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -94,19 +101,24 @@ class _ChangeIconScreenState extends ConsumerState<ChangeIconScreen> {
                     const SizedBox(height: 24),
 
                     // اختيار الأيقونة
-                    Text('اختر الأيقونة', style: theme.textTheme.titleMedium),
+                    Text(
+                      context.l10n.folderSelectIcon,
+                      style: theme.textTheme.titleMedium,
+                    ),
                     const SizedBox(height: 12),
                     SizedBox(
-                      height: 300,
-                      child: FolderIconPickerWidget(
-                        selectedIcon: _selectedIcon,
-                        initialCategory: _selectedCategory,
-                        onIconSelected: (icon) {
-                          setState(() {
-                            _selectedIcon = icon;
-                            _selectedCategory = icon.category;
-                          });
-                        },
+                      height: isTabletOrDesktop ? 400 : 300,
+                      child: ClipRect(
+                        child: FolderIconPickerWidget(
+                          selectedIcon: _selectedIcon,
+                          initialCategory: _selectedCategory,
+                          onIconSelected: (icon) {
+                            setState(() {
+                              _selectedIcon = icon;
+                              _selectedCategory = icon.category;
+                            });
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -166,7 +178,7 @@ class _ChangeIconScreenState extends ConsumerState<ChangeIconScreen> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('إلغاء'),
+                      child: Text(context.l10n.commonCancel),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -185,8 +197,8 @@ class _ChangeIconScreenState extends ConsumerState<ChangeIconScreen> {
                           : Icon(AppIcons.getIcon(AppIcon.check)),
                       label: Text(
                         folderState.isUpdatingFolder
-                            ? 'جاري التطبيق...'
-                            : 'تطبيق "${_selectedIcon.name}"',
+                            ? context.l10n.folderApplying
+                            : context.l10n.folderApplyIcon(_selectedIcon.name),
                       ),
                     ),
                   ),
@@ -241,7 +253,7 @@ class _ChangeIconScreenState extends ConsumerState<ChangeIconScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'تم تغيير أيقونة المجلد "${widget.folder.name}" بنجاح',
+                    context.l10n.folderIconChangedSuccess(widget.folder.name),
                   ),
                 ),
               ],
@@ -260,7 +272,7 @@ class _ChangeIconScreenState extends ConsumerState<ChangeIconScreen> {
               children: [
                 const Icon(Icons.error, color: Colors.white),
                 const SizedBox(width: 8),
-                Expanded(child: Text('خطأ: ${e.toString()}')),
+                Expanded(child: Text(context.l10n.chatError(e.toString()))),
               ],
             ),
             backgroundColor: Colors.red,

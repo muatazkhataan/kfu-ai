@@ -1,8 +1,18 @@
 flutter build apk --debug
 
 flutter build apk --release
+
 تشغيل ويندوز
+
+flutter run -d windows
+
 flutter build windows --debug
+
+بناء ويندوز
+
+flutter build windows --release
+
+
 أو
 flutter clean
 flutter build windows
@@ -22,6 +32,7 @@ cd ..
 flutter pub get
 flutter run
 
+
 **FLUTTER DEBUG RUN**
 
 flutter clean
@@ -31,7 +42,6 @@ cd ..
 flutter pub get
 flutter run --debug
 
-
 **FLUTTER RELEASE RUN**
 
 flutter clean
@@ -40,7 +50,6 @@ cd android
 cd ..
 flutter pub get
 flutter run --release
-
 
 **FLUTTER BUILKD RELEASE **
 

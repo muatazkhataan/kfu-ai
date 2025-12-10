@@ -4,6 +4,8 @@ import '../../../chat/domain/models/chat_status.dart';
 import '../../../../state/chat_history_state.dart';
 import '../../../../services/api/api_manager.dart';
 import '../../../../services/api/chat/models/session_dto.dart';
+import '../../../../services/api/search/models/search_chats_request.dart';
+import '../../../search/domain/models/search_filter.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 
 /// مزود حالة سجل المحادثات
@@ -73,7 +75,7 @@ class ChatHistoryNotifier extends StateNotifier<ChatHistoryState> {
     }
   }
 
-  /// البحث في المحادثات
+  /// البحث في المحادثات باستخدام API
   Future<void> searchChats(String query) async {
     try {
       state = state.copyWith(
@@ -82,24 +84,71 @@ class ChatHistoryNotifier extends StateNotifier<ChatHistoryState> {
         searchError: null,
       );
 
-      // TODO: البحث في قاعدة البيانات
-      await Future.delayed(const Duration(milliseconds: 300));
-
-      List<Chat> searchResults;
+      // إذا كان البحث فارغاً، عرض جميع المحادثات
       if (query.trim().isEmpty) {
-        searchResults = state.allChats;
-      } else {
-        searchResults = state.searchChats(query);
+        final filteredResults = state.applyFilter(state.allChats, state.filter);
+        state = state.copyWith(
+          filteredChats: filteredResults,
+          isSearching: false,
+        );
+        return;
       }
 
-      // تطبيق الفلتر الحالي
-      final filteredResults = state.applyFilter(searchResults, state.filter);
-
-      state = state.copyWith(
-        filteredChats: filteredResults,
-        isSearching: false,
+      // البحث من API باستخدام /api/Search/SearchChats
+      print('[ChatHistory] 🔍 البحث في API: "$query"');
+      print('[ChatHistory] 📝 Query trimmed: "${query.trim()}"');
+      print('[ChatHistory] 📝 Query isEmpty: ${query.trim().isEmpty}');
+      
+      // التحقق من أن Query ليس فارغاً
+      final trimmedQuery = query.trim();
+      if (trimmedQuery.isEmpty) {
+        print('[ChatHistory] ⚠️ Query فارغ بعد trim، عرض جميع المحادثات');
+        final filteredResults = state.applyFilter(state.allChats, state.filter);
+        state = state.copyWith(
+          filteredChats: filteredResults,
+          isSearching: false,
+        );
+        return;
+      }
+      
+      final searchRequest = SearchChatsRequest(
+        query: trimmedQuery, // استخدام trimmed query
+        type: SearchType.all, // صراحة تحديد النوع
+        sortBy: SortBy.relevance, // صراحة تحديد الترتيب
+        page: 1,
+        pageSize: 100, // جلب عدد كبير من النتائج
       );
+
+      print('[ChatHistory] 📤 Request created: ${searchRequest.toString()}');
+      print('[ChatHistory] ✅ Request isValid: ${searchRequest.isValid}');
+
+      final response = await _apiManager.search.searchChats(searchRequest);
+
+      if (response.success && response.data != null) {
+        print('[ChatHistory] ✅ تم الحصول على ${response.data!.length} نتيجة من API');
+        
+        // تحويل SessionDto إلى Chat
+        final searchResults = response.data!
+            .map((sessionDto) => _convertSessionDtoToChat(sessionDto))
+            .toList();
+
+        // تطبيق الفلتر الحالي
+        final filteredResults = state.applyFilter(searchResults, state.filter);
+
+        state = state.copyWith(
+          filteredChats: filteredResults,
+          isSearching: false,
+          searchError: null,
+        );
+      } else {
+        print('[ChatHistory] ❌ فشل البحث: ${response.error}');
+        state = state.copyWith(
+          isSearching: false,
+          searchError: response.error ?? 'فشل في البحث',
+        );
+      }
     } catch (e) {
+      print('[ChatHistory] ❌ خطأ في البحث: $e');
       state = state.copyWith(
         isSearching: false,
         searchError: 'فشل في البحث: ${e.toString()}',
@@ -375,13 +424,16 @@ class ChatHistoryNotifier extends StateNotifier<ChatHistoryState> {
   Future<void> _applyCurrentFilters(List<Chat> chats) async {
     List<Chat> filteredChats = chats;
 
-    // تطبيق البحث
+    // إذا كان هناك بحث نشط، استخدم نتائج البحث من API
     if (state.searchQuery.isNotEmpty) {
-      filteredChats = state.searchChats(state.searchQuery);
+      // البحث يتم من خلال searchChats method الذي يستدعي API
+      // لذلك لا نحتاج لإعادة البحث هنا
+      // فقط نطبق الفلتر على النتائج الحالية
+      filteredChats = state.applyFilter(state.filteredChats, state.filter);
+    } else {
+      // تطبيق الفلتر على جميع المحادثات
+      filteredChats = state.applyFilter(chats, state.filter);
     }
-
-    // تطبيق الفلتر
-    filteredChats = state.applyFilter(filteredChats, state.filter);
 
     state = state.copyWith(filteredChats: filteredChats);
   }
@@ -406,7 +458,7 @@ class ChatHistoryNotifier extends StateNotifier<ChatHistoryState> {
     final now = DateTime.now();
 
     // حساب آخر نشاط
-    final lastActivity = sessionDto.updatedAt ?? sessionDto.createdAt;
+    final lastActivity = sessionDto.updatedAt;
     final timeDiff = now.difference(lastActivity);
 
     String lastActivityText;

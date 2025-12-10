@@ -14,44 +14,56 @@ import '../../features/folders/presentation/screens/folder_list_screen.dart';
 import '../../features/folders/presentation/screens/create_folder_screen.dart';
 import '../../features/folders/presentation/screens/folder_content_screen.dart';
 import '../../features/folders/domain/models/folder.dart';
+import '../../state/folder_state.dart';
 import '../theme/icons.dart';
 import '../extensions/context_extensions.dart';
+import '../localization/l10n.dart';
 import '../providers/sidebar_provider.dart';
 import '../../app/app.dart';
+import 'dashed_border.dart';
 
 /// القائمة الجانبية الرئيسية للتطبيق
-class AppDrawer extends ConsumerWidget {
+class AppDrawer extends ConsumerStatefulWidget {
   final bool isSidebar;
 
   const AppDrawer({super.key, this.isSidebar = false});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends ConsumerState<AppDrawer> {
+  String? _drawerDraggingFolderId;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = context.theme;
     final authState = ref.watch(authProvider);
-    
+
     // الحصول على اسم المستخدم من loginResponse
-    String userName = 'مستخدم';
+    final l10n = context.l10n;
+    String userName = l10n.sidebarUserDefault;
     if (authState.loginResponse != null) {
       final loginResponse = authState.loginResponse!;
-      
+
       // محاولة الحصول من profile
       if (loginResponse.profile != null) {
         final profile = loginResponse.profile!;
-        userName = profile['fullName'] ?? 
-                   profile['FullName'] ?? 
-                   profile['full_name'] ??
-                   'مستخدم';
+        userName =
+            profile['fullName'] ??
+            profile['FullName'] ??
+            profile['full_name'] ??
+            l10n.sidebarUserDefault;
       }
-      
+
       // إذا لم يكن في profile، نستخدم userId كبديل مؤقت
-      if (userName == 'مستخدم') {
-        userName = loginResponse.userId.isNotEmpty 
-            ? 'مستخدم ${loginResponse.userId.substring(0, 8)}...'
-            : 'مستخدم';
+      if (userName == l10n.sidebarUserDefault) {
+        userName = loginResponse.userId.isNotEmpty
+            ? '${l10n.sidebarUserDefault} ${loginResponse.userId.substring(0, 8)}...'
+            : l10n.sidebarUserDefault;
       }
     }
-    
+
     final userId = authState.userId ?? authState.loginResponse?.userId ?? '';
 
     final content = SafeArea(
@@ -72,8 +84,8 @@ class AppDrawer extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-          // قسم المجلدات
-          _buildFoldersSection(context, theme, ref),
+                  // قسم المجلدات
+                  _buildFoldersSection(context, theme, ref),
 
                   // قسم المحادثات الأخيرة
                   _buildRecentChatsSection(context, theme, ref),
@@ -89,9 +101,9 @@ class AppDrawer extends ConsumerWidget {
     );
 
     // إذا كان sidebar، نعيده كـ Container عادي
-    if (isSidebar) {
+    if (widget.isSidebar) {
       return Container(
-        width: 320,
+        width: 400,
         color: theme.colorScheme.surface,
         child: content,
       );
@@ -100,7 +112,7 @@ class AppDrawer extends ConsumerWidget {
     // وإلا نعيده كـ Drawer عادي
     return Drawer(
       backgroundColor: theme.colorScheme.surface,
-      width: 320,
+      width: 400,
       child: content,
     );
   }
@@ -132,7 +144,7 @@ class AppDrawer extends ConsumerWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              'مساعد كفو',
+              context.l10n.appName,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -140,7 +152,7 @@ class AppDrawer extends ConsumerWidget {
             ),
           ),
           // زر إغلاق في وضع sidebar
-          if (isSidebar)
+          if (widget.isSidebar)
             IconButton(
               onPressed: () {
                 ref.read(sidebarProvider.notifier).close();
@@ -150,7 +162,7 @@ class AppDrawer extends ConsumerWidget {
                 size: 20,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
-              tooltip: 'إغلاق القائمة',
+              tooltip: context.l10n.sidebarClose,
             ),
         ],
       ),
@@ -195,7 +207,9 @@ class AppDrawer extends ConsumerWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  userId.isNotEmpty ? 'ID: ${userId.substring(0, 8)}...' : '',
+                  userId.isNotEmpty 
+                      ? context.l10n.sidebarUserIdDisplay(userId.substring(0, 8))
+                      : '',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -222,7 +236,7 @@ class AppDrawer extends ConsumerWidget {
               size: 18,
               color: theme.colorScheme.onSurfaceVariant,
             ),
-            tooltip: 'تسجيل الخروج',
+            tooltip: context.l10n.sidebarSignOut,
           ),
         ],
       ),
@@ -244,13 +258,13 @@ class AppDrawer extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () {
-                if (!isSidebar) {
+                if (!widget.isSidebar) {
                   Navigator.pop(context);
                 }
                 ref.read(chatProvider.notifier).createNewChat();
               },
               icon: Icon(AppIcons.getIcon(AppIcon.plus), size: 16),
-              label: const Text('محادثة جديدة'),
+              label: Text(context.l10n.chatNew),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   vertical: 10,
@@ -268,7 +282,7 @@ class AppDrawer extends ConsumerWidget {
             width: double.infinity,
             child: OutlinedButton.icon(
               onPressed: () {
-                if (!isSidebar) {
+                if (!widget.isSidebar) {
                   Navigator.pop(context);
                 }
                 Navigator.push(
@@ -277,7 +291,7 @@ class AppDrawer extends ConsumerWidget {
                 );
               },
               icon: Icon(AppIcons.getIcon(AppIcon.search), size: 16),
-              label: const Text('بحث في المحادثات'),
+              label: Text(context.l10n.sidebarSearchInChats),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
                   vertical: 10,
@@ -322,7 +336,7 @@ class AppDrawer extends ConsumerWidget {
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      if (!isSidebar) {
+                      if (!widget.isSidebar) {
                         Navigator.pop(context);
                       }
                       Navigator.push(
@@ -333,7 +347,7 @@ class AppDrawer extends ConsumerWidget {
                       );
                     },
                     child: Text(
-                      'المجلدات',
+                      context.l10n.foldersTitle,
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurfaceVariant,
@@ -344,7 +358,7 @@ class AppDrawer extends ConsumerWidget {
                 // زر فتح شاشة المجلدات
                 IconButton(
                   onPressed: () {
-                    if (!isSidebar) {
+                    if (!widget.isSidebar) {
                       Navigator.pop(context);
                     }
                     Navigator.push(
@@ -361,12 +375,12 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
-                  tooltip: 'فتح شاشة المجلدات',
+                  tooltip: context.l10n.sidebarOpenFoldersScreen,
                 ),
                 // زر إضافة مجلد جديد
                 IconButton(
                   onPressed: () {
-                    if (!isSidebar) {
+                    if (!widget.isSidebar) {
                       Navigator.pop(context);
                     }
                     Navigator.push(
@@ -386,7 +400,7 @@ class AppDrawer extends ConsumerWidget {
                   ),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
-                  tooltip: 'إنشاء مجلد جديد',
+                  tooltip: context.l10n.foldersCreate,
                 ),
               ],
             ),
@@ -423,7 +437,7 @@ class AppDrawer extends ConsumerWidget {
             ),
             child: InkWell(
               onTap: () {
-                if (!isSidebar) {
+                if (!widget.isSidebar) {
                   Navigator.pop(context);
                 }
                 Navigator.of(context).push(
@@ -443,7 +457,7 @@ class AppDrawer extends ConsumerWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'المحادثات الأخيرة',
+                      context.l10n.chatHistoryFilterRecent,
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurfaceVariant,
@@ -467,7 +481,7 @@ class AppDrawer extends ConsumerWidget {
                     ),
                     constraints: const BoxConstraints(),
                     padding: EdgeInsets.zero,
-                    tooltip: 'تحديث',
+                    tooltip: context.l10n.chatHistoryRefresh,
                   ),
                 ],
               ),
@@ -498,9 +512,9 @@ class AppDrawer extends ConsumerWidget {
           _buildFooterMenuItem(
             theme,
             icon: AppIcons.getIcon(AppIcon.settings),
-            title: 'الإعدادات',
+            title: context.l10n.settingsTitle,
             onTap: () {
-              if (!isSidebar) {
+              if (!widget.isSidebar) {
                 Navigator.pop(context);
               }
               Navigator.of(context).push(
@@ -514,9 +528,9 @@ class AppDrawer extends ConsumerWidget {
           _buildFooterMenuItem(
             theme,
             icon: AppIcons.getIcon(AppIcon.help),
-            title: 'المساعدة',
+            title: context.l10n.helpTitle,
             onTap: () {
-              if (!isSidebar) {
+              if (!widget.isSidebar) {
                 Navigator.pop(context);
               }
               Navigator.of(context).push(
@@ -602,7 +616,7 @@ class AppDrawer extends ConsumerWidget {
               onPressed: () {
                 ref.read(folderProvider.notifier).refresh();
               },
-              child: const Text('إعادة المحاولة'),
+              child: Text(context.l10n.commonRetry),
             ),
           ],
         ),
@@ -623,7 +637,7 @@ class AppDrawer extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'لا توجد مجلدات',
+              context.l10n.sidebarNoFolders,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -633,105 +647,141 @@ class AppDrawer extends ConsumerWidget {
       );
     }
 
-    return Column(
-      children: folders.map((folder) {
-        return ListTile(
-          dense: true,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 2,
-          ),
-          leading: Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              color: _getFolderColor(folder, theme),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Icon(
-              folder.icon.iconData,
-              size: 14,
-              color: Colors.white,
-            ),
-          ),
-          title: Text(
-            folder.name,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (folder.hasChats)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    folder.chatCount.toString(),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
-                    ),
-                  ),
-                ),
-              const SizedBox(width: 4),
-              PopupMenuButton<String>(
-                icon: Icon(
-                  AppIcons.getIcon(AppIcon.menu),
+    return ReorderableListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      buildDefaultDragHandles: false,
+      proxyDecorator: (child, index, animation) {
+        return AnimatedBuilder(
+          animation: animation,
+          builder: (context, childWidget) {
+            return DashedBorder(
+              show: true,
+              color: theme.colorScheme.primary,
+              child: childWidget!,
+            );
+          },
+          child: child,
+        );
+      },
+      onReorderStart: (index) {
+        setState(() {
+          _drawerDraggingFolderId = folders[index].id;
+        });
+      },
+      onReorderEnd: (_) {
+        setState(() {
+          _drawerDraggingFolderId = null;
+        });
+      },
+      itemCount: folders.length,
+      onReorder: (oldIndex, newIndex) => _handleDrawerFolderReorder(
+        folderState,
+        folders,
+        ref,
+        oldIndex,
+        newIndex,
+      ),
+      itemBuilder: (context, index) {
+        final folder = folders[index];
+        return KeyedSubtree(
+          key: ValueKey(folder.id),
+          child: _buildDrawerFolderTile(context, theme, folder, ref, index),
+        );
+      },
+    );
+  }
+
+  Widget _buildDrawerFolderTile(
+    BuildContext context,
+    ThemeData theme,
+    Folder folder,
+    WidgetRef ref,
+    int itemIndex,
+  ) {
+    final isFixedFolder = folder.isFixed;
+    final folderColor = _getFolderColor(folder, theme);
+    final l10n = context.l10n;
+    final protectedTooltip = isFixedFolder
+        ? l10n.sidebarFixedFolderTooltip
+        : folder.isSystem
+        ? l10n.sidebarSystemFolderTooltip
+        : l10n.sidebarProtectedFolderTooltip;
+    final rowBackgroundColor = isFixedFolder
+        ? folderColor.withAlpha(16)
+        : Colors.transparent;
+    final iconBackgroundColor = isFixedFolder
+        ? folderColor.withAlpha(64)
+        : folderColor;
+    final folderIconColor = isFixedFolder ? folderColor : Colors.white;
+    final canShowMenu = !isFixedFolder;
+    final isDragging = _drawerDraggingFolderId == folder.id;
+
+    Widget? actionWidget;
+    if (canShowMenu) {
+      actionWidget = PopupMenuButton<String>(
+        onSelected: (value) =>
+            _handleFolderMenuAction(context, ref, folder, value),
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            value: 'edit',
+            child: Row(
+              children: [
+                Icon(
+                  AppIcons.getIcon(AppIcon.edit),
                   size: 16,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
-                onSelected: (value) => _handleFolderMenuAction(
-                  context,
-                  ref,
-                  folder,
-                  value,
-                ),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 'edit',
-                    child: Row(
-                      children: [
-                        Icon(
-                          AppIcons.getIcon(AppIcon.edit),
-                          size: 16,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                        const SizedBox(width: 8),
-                        const Text('تعديل'),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'delete',
-                    child: Row(
-                      children: [
-                        Icon(
-                          AppIcons.getIcon(AppIcon.delete),
-                          size: 16,
-                          color: theme.colorScheme.error,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'حذف',
-                          style: TextStyle(color: theme.colorScheme.error),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                const SizedBox(width: 8),
+                Text(l10n.commonEdit),
+              ],
+            ),
           ),
+          PopupMenuItem(
+            value: 'delete',
+            child: Row(
+              children: [
+                Icon(
+                  AppIcons.getIcon(AppIcon.delete),
+                  size: 16,
+                  color: theme.colorScheme.error,
+                ),
+                const SizedBox(width: 8),
+                Text(l10n.commonDelete, style: TextStyle(color: theme.colorScheme.error)),
+              ],
+            ),
+          ),
+        ],
+        icon: Icon(
+          AppIcons.getIcon(AppIcon.menu),
+          size: 16,
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      );
+    } else if (isFixedFolder) {
+      actionWidget = Tooltip(
+        message: protectedTooltip,
+        child: Icon(
+          AppIcons.getIcon(AppIcon.lock),
+          size: 16,
+          color: folderColor,
+        ),
+      );
+    }
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 2),
+      decoration: BoxDecoration(
+        color: rowBackgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
           onTap: () {
-            if (!isSidebar) {
+            if (!widget.isSidebar) {
               Navigator.pop(context);
             }
             Navigator.push(
@@ -741,9 +791,223 @@ class AppDrawer extends ConsumerWidget {
               ),
             );
           },
-        );
-      }).toList(),
+          child: DashedBorder(
+            show: isDragging,
+            color: theme.colorScheme.primary,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _buildDrawerDragHandle(
+                      theme: theme,
+                      folder: folder,
+                      itemIndex: itemIndex,
+                      isHandleEnabled: !isFixedFolder,
+                      iconBackgroundColor: iconBackgroundColor,
+                      iconColor: folderIconColor,
+                    ),
+                  ),
+                  if (actionWidget != null) ...[
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: Center(child: actionWidget),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
+  }
+
+  Widget _buildDrawerDragHandle({
+    required ThemeData theme,
+    required Folder folder,
+    required int itemIndex,
+    required bool isHandleEnabled,
+    required Color iconBackgroundColor,
+    required Color iconColor,
+  }) {
+    final handleContent = Container(
+      height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      alignment: Alignment.centerLeft,
+      child: Row(
+        children: [
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              color: iconBackgroundColor,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Icon(folder.icon.iconData, size: 14, color: iconColor),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  folder.name,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (folder.description != null &&
+                    folder.description!.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    folder.description!,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          if (folder.hasChats) ...[
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                folder.chatCount.toString(),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+
+    if (!isHandleEnabled) {
+      return handleContent;
+    }
+
+    return ReorderableDragStartListener(index: itemIndex, child: handleContent);
+  }
+
+  void _handleDrawerFolderReorder(
+    FolderState folderState,
+    List<Folder> currentOrder,
+    WidgetRef ref,
+    int oldIndex,
+    int newIndex,
+  ) {
+    if (oldIndex == newIndex) return;
+
+    final updatedVisibleOrder = _reorderNonFixedVisibleFolders(
+      currentOrder,
+      oldIndex,
+      newIndex,
+    );
+
+    if (_areOrdersEqual(currentOrder, updatedVisibleOrder)) {
+      return;
+    }
+
+    final mergedOrder = _mergeVisibleAndHiddenOrders(
+      folderState,
+      updatedVisibleOrder,
+    );
+
+    ref.read(folderProvider.notifier).reorderFolders(mergedOrder);
+  }
+
+  List<Folder> _reorderNonFixedVisibleFolders(
+    List<Folder> currentOrder,
+    int oldIndex,
+    int newIndex,
+  ) {
+    if (currentOrder.isEmpty) return currentOrder;
+
+    var targetIndex = newIndex;
+    if (targetIndex > oldIndex) {
+      targetIndex -= 1;
+    }
+    targetIndex = targetIndex.clamp(0, currentOrder.length - 1);
+
+    final movingFolder = currentOrder[oldIndex];
+    if (movingFolder.isFixed) {
+      return currentOrder;
+    }
+
+    final nonFixedFolders = currentOrder
+        .where((folder) => !folder.isFixed)
+        .toList();
+
+    final customOldIndex = currentOrder
+        .take(oldIndex)
+        .where((f) => !f.isFixed)
+        .length;
+    final customTargetIndex = currentOrder
+        .take(targetIndex)
+        .where((f) => !f.isFixed)
+        .length;
+
+    final folderToMove = nonFixedFolders.removeAt(customOldIndex);
+    final clampedTarget = customTargetIndex.clamp(0, nonFixedFolders.length);
+    nonFixedFolders.insert(clampedTarget, folderToMove);
+
+    final updatedOrder = <Folder>[];
+    var customPointer = 0;
+    for (final folder in currentOrder) {
+      if (folder.isFixed) {
+        updatedOrder.add(folder);
+      } else {
+        updatedOrder.add(nonFixedFolders[customPointer++]);
+      }
+    }
+
+    return updatedOrder;
+  }
+
+  List<Folder> _mergeVisibleAndHiddenOrders(
+    FolderState folderState,
+    List<Folder> visibleOrder,
+  ) {
+    final merged = <Folder>[];
+    var visibleIndex = 0;
+
+    for (final folder in folderState.folders) {
+      if (folder.isHidden) {
+        merged.add(folder);
+      } else {
+        merged.add(visibleOrder[visibleIndex++]);
+      }
+    }
+
+    return merged;
+  }
+
+  bool _areOrdersEqual(List<Folder> a, List<Folder> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i].id != b[i].id) {
+        return false;
+      }
+    }
+    return true;
   }
 
   Color _getFolderColor(Folder folder, ThemeData theme) {
@@ -765,7 +1029,7 @@ class AppDrawer extends ConsumerWidget {
     String action,
   ) {
     if (action == 'edit') {
-      if (!isSidebar) {
+      if (!widget.isSidebar) {
         Navigator.pop(context);
       }
       Navigator.push(
@@ -788,15 +1052,18 @@ class AppDrawer extends ConsumerWidget {
     WidgetRef ref,
     Folder folder,
   ) {
+    final l10n = context.l10n;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('حذف المجلد'),
-        content: Text('هل أنت متأكد من حذف المجلد "${folder.name}"؟\n\nهذا الإجراء لا يمكن التراجع عنه.'),
+        title: Text(l10n.sidebarDeleteFolderTitle),
+        content: Text(
+          l10n.sidebarDeleteFolderMessage(folder.name),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء'),
+            child: Text(l10n.commonCancel),
           ),
           TextButton(
             onPressed: () async {
@@ -807,11 +1074,11 @@ class AppDrawer extends ConsumerWidget {
                 if (folderState.deleteError == null && context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Row(
+                      content: Row(
                         children: [
-                          Icon(Icons.check_circle, color: Colors.white),
-                          SizedBox(width: 8),
-                          Text('تم حذف المجلد بنجاح'),
+                          const Icon(Icons.check_circle, color: Colors.white),
+                          const SizedBox(width: 8),
+                          Text(context.l10n.sidebarFolderDeletedSuccess),
                         ],
                       ),
                       backgroundColor: Colors.green,
@@ -843,7 +1110,7 @@ class AppDrawer extends ConsumerWidget {
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,
             ),
-            child: const Text('حذف'),
+            child: Text(l10n.commonDelete),
           ),
         ],
       ),
@@ -858,7 +1125,7 @@ class AppDrawer extends ConsumerWidget {
         selectedSessionId: null, // لا يوجد محادثة محددة في القائمة الجانبية
         onSessionSelected: (sessionId) {
           print('🔥🔥🔥 تم اختيار المحادثة من AppDrawer: $sessionId 🔥🔥🔥');
-          if (!isSidebar) {
+          if (!widget.isSidebar) {
             Navigator.pop(context);
           }
           // تحميل المحادثة المحددة

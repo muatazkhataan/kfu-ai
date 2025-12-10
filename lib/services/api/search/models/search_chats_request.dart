@@ -68,7 +68,7 @@ class SearchChatsRequest {
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{
-      'Query': query,
+      'Query': query.trim(), // إزالة المسافات الزائدة
       'Type': type.value,
       'SortBy': sortBy.value,
       'Page': page,
@@ -76,11 +76,17 @@ class SearchChatsRequest {
     };
 
     // إضافة الفلاتر الاختيارية
-    if (folderId != null) json['FolderId'] = folderId;
+    if (folderId != null && folderId!.isNotEmpty) json['FolderId'] = folderId;
     if (startDate != null) json['StartDate'] = startDate!.toIso8601String();
     if (endDate != null) json['EndDate'] = endDate!.toIso8601String();
     if (minMessageCount != null) json['MinMessageCount'] = minMessageCount;
     if (maxMessageCount != null) json['MaxMessageCount'] = maxMessageCount;
+
+    // تسجيل تفصيلي للطلب
+    print('[SearchChatsRequest.toJson] 📤 Request JSON: $json');
+    print('[SearchChatsRequest.toJson] 📝 Query: "${json['Query']}"');
+    print('[SearchChatsRequest.toJson] 📝 Type: ${json['Type']}');
+    print('[SearchChatsRequest.toJson] 📝 SortBy: ${json['SortBy']}');
 
     return json;
   }

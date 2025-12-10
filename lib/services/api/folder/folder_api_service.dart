@@ -77,8 +77,18 @@ class FolderApiService {
         endpoint: ApiEndpoints.getFolderChats,
         queryParameters: {'folderId': folderId},
         fromJson: (json) {
+          // API يعيد object مع FolderMessages array (مثل GetRecentChats مع Results)
+          if (json is Map<String, dynamic> && json['FolderMessages'] != null) {
+            final folderMessages = json['FolderMessages'] as List<dynamic>;
+            return folderMessages
+                .map((item) => SessionDto.fromJson(item as Map<String, dynamic>))
+                .toList();
+          }
+          // fallback: array مباشر
           if (json is List) {
-            return json.map((item) => SessionDto.fromJson(item)).toList();
+            return json
+                .map((item) => SessionDto.fromJson(item as Map<String, dynamic>))
+                .toList();
           }
           return [];
         },

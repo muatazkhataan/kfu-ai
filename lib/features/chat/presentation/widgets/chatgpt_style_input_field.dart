@@ -57,7 +57,7 @@ class _ChatGPTStyleInputFieldState extends ConsumerState<ChatGPTStyleInputField>
   static const double _verticalPadding = 12.0; // الحشو العمودي
 
   bool _hasText = false;
-  GlobalKey _inputFieldKey = GlobalKey();
+  final GlobalKey _inputFieldKey = GlobalKey();
 
   @override
   void initState() {

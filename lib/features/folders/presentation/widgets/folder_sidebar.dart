@@ -4,11 +4,12 @@ import '../../domain/models/folder.dart';
 import '../providers/folder_provider.dart';
 import '../../../../state/folder_state.dart';
 import '../../../../core/theme/icons.dart';
+import '../../../../core/widgets/dashed_border.dart';
 
 /// مكون الشريط الجانبي للمجلدات
 ///
 /// يعرض قائمة المجلدات مع إمكانية التنقل والتفاعل
-class FolderSidebar extends ConsumerWidget {
+class FolderSidebar extends ConsumerStatefulWidget {
   /// المجلد المحدد حالياً
   final String? selectedFolderId;
 
@@ -46,21 +47,28 @@ class FolderSidebar extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FolderSidebar> createState() => _FolderSidebarState();
+}
+
+class _FolderSidebarState extends ConsumerState<FolderSidebar> {
+  String? _draggingFolderId;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final folderState = ref.watch(folderProvider);
-    
+
     // تحميل المجلدات عند أول بناء
     if (!folderState.hasLoadedInitial && !folderState.isLoadingFolders) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(folderProvider.notifier).loadFolders();
       });
     }
-    
+
     final folders = _getOrderedFolders(folderState);
 
     return Container(
-      width: width ?? 280,
+      width: widget.width ?? 280,
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         border: Border(
@@ -73,7 +81,7 @@ class FolderSidebar extends ConsumerWidget {
       child: Column(
         children: [
           _buildHeader(context, theme),
-          _buildFoldersList(context, theme, folders, ref),
+          _buildFoldersList(context, theme, folders, ref, folderState),
           _buildFooter(context, theme),
         ],
       ),
@@ -111,7 +119,7 @@ class FolderSidebar extends ConsumerWidget {
             ),
           ),
           IconButton(
-            onPressed: onCreateFolder,
+            onPressed: widget.onCreateFolder,
             icon: Icon(
               AppIcons.getIcon(AppIcon.plus),
               size: 20,
@@ -130,18 +138,48 @@ class FolderSidebar extends ConsumerWidget {
     ThemeData theme,
     List<Folder> folders,
     WidgetRef ref,
+    FolderState folderState,
   ) {
     if (folders.isEmpty) {
       return _buildEmptyState(context, theme);
     }
 
     return Expanded(
-      child: ListView.builder(
+      child: ReorderableListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: folders.length,
+        buildDefaultDragHandles: false,
+        proxyDecorator: (child, index, animation) {
+          return AnimatedBuilder(
+            animation: animation,
+            builder: (context, childWidget) {
+              return DashedBorder(
+                show: true,
+                color: theme.colorScheme.primary,
+                child: childWidget!,
+              );
+            },
+            child: child,
+          );
+        },
+        onReorderStart: (index) {
+          setState(() {
+            _draggingFolderId = folders[index].id;
+          });
+        },
+        onReorderEnd: (_) {
+          setState(() {
+            _draggingFolderId = null;
+          });
+        },
+        onReorder: (oldIndex, newIndex) =>
+            _handleFolderReorder(folderState, folders, ref, oldIndex, newIndex),
         itemBuilder: (context, index) {
           final folder = folders[index];
-          return _buildFolderItem(context, theme, folder, ref);
+          return KeyedSubtree(
+            key: ValueKey(folder.id),
+            child: _buildFolderItem(context, theme, folder, ref, index),
+          );
         },
       ),
     );
@@ -153,173 +191,245 @@ class FolderSidebar extends ConsumerWidget {
     ThemeData theme,
     Folder folder,
     WidgetRef ref,
+    int itemIndex,
   ) {
-    final isSelected = selectedFolderId == folder.id;
+    final isSelected = widget.selectedFolderId == folder.id;
     final isPinned = folder.isPinned;
+    final isFixedFolder = folder.isFixed;
+    final protectedTooltip = isFixedFolder
+        ? 'مجلد ثابت لا يمكن تعديله'
+        : folder.isSystem
+        ? 'مجلد نظامي لا يمكن تعديله'
+        : 'هذا المجلد غير قابل للتعديل';
+    final baseFolderColor = folder.folderColor.toColor();
+    final rowBackgroundColor = isSelected
+        ? theme.colorScheme.primaryContainer
+        : isFixedFolder
+        ? baseFolderColor.withAlpha(32)
+        : Colors.transparent;
+    final iconBackgroundColor = isFixedFolder
+        ? baseFolderColor.withAlpha(64)
+        : baseFolderColor;
+    final folderIconColor = isFixedFolder ? baseFolderColor : Colors.white;
+    final isReorderable = !isFixedFolder;
+    final showMenu = !isFixedFolder;
+    final isDragging = _draggingFolderId == folder.id;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => onFolderSelected?.call(folder.id),
+          onTap: () => widget.onFolderSelected?.call(folder.id),
           onLongPress: folder.isEditable
               ? () => _showFolderMenu(context, folder, ref)
               : null,
           borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? theme.colorScheme.primaryContainer
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(12),
-              border: isSelected
-                  ? Border.all(color: theme.colorScheme.primary, width: 1)
-                  : null,
-            ),
-            child: Row(
-              children: [
-                if (isPinned) ...[
-                  Icon(
-                    AppIcons.getIcon(AppIcon.star),
-                    size: 12,
-                    color: theme.colorScheme.primary,
+          child: DashedBorder(
+            show: isDragging,
+            color: theme.colorScheme.primary,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: rowBackgroundColor,
+                borderRadius: BorderRadius.circular(12),
+                border: isSelected
+                    ? Border.all(color: theme.colorScheme.primary, width: 1)
+                    : null,
+              ),
+              child: Row(
+                children: [
+                  if (isPinned) ...[
+                    Icon(
+                      AppIcons.getIcon(AppIcon.star),
+                      size: 12,
+                      color: theme.colorScheme.primary,
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                  Expanded(
+                    child: _buildDragHandle(
+                      theme: theme,
+                      folder: folder,
+                      itemIndex: itemIndex,
+                      isSelected: isSelected,
+                      showChatCount: widget.showChatCount,
+                      isReorderable: isReorderable,
+                      iconBackgroundColor: iconBackgroundColor,
+                      iconColor: folderIconColor,
+                    ),
                   ),
-                  const SizedBox(width: 4),
-                ],
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: folder.folderColor.toColor(),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(folder.folderIcon, size: 16, color: Colors.white),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        folder.name,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: isSelected
-                              ? FontWeight.w600
-                              : FontWeight.normal,
-                          color: isSelected
-                              ? theme.colorScheme.onPrimaryContainer
-                              : theme.colorScheme.onSurface,
+                  if (showMenu) ...[
+                    const SizedBox(width: 8),
+                    PopupMenuButton<String>(
+                      onSelected: (value) =>
+                          _handleMenuAction(context, folder, value, ref),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          enabled: folder.isEditable,
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              Icon(
+                                AppIcons.getIcon(AppIcon.edit),
+                                size: 16,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                              const SizedBox(width: 8),
+                              const Text('تحرير'),
+                            ],
+                          ),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (showChatCount && folder.hasChats) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          folder.formattedChatCount,
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: isSelected
-                                ? theme.colorScheme.onPrimaryContainer
-                                      .withOpacity(0.7)
-                                : theme.colorScheme.onSurfaceVariant,
+                        PopupMenuItem(
+                          enabled: folder.isEditable,
+                          value: 'pin',
+                          child: Row(
+                            children: [
+                              Icon(
+                                AppIcons.getIcon(AppIcon.star),
+                                size: 16,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(folder.isPinned ? 'إلغاء التثبيت' : 'تثبيت'),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          enabled: folder.isDeletable,
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(
+                                AppIcons.getIcon(AppIcon.trash),
+                                size: 16,
+                                color: theme.colorScheme.error,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'حذف',
+                                style: TextStyle(
+                                  color: theme.colorScheme.error,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    ],
-                  ),
-                ),
-                if (folder.hasChats) ...[
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      folder.chatCount.toString(),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: isSelected
-                            ? theme.colorScheme.onPrimary
-                            : theme.colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.bold,
+                      child: Icon(
+                        AppIcons.getIcon(AppIcon.ellipsis),
+                        size: 16,
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
-                  ),
+                  ] else if (isFixedFolder) ...[
+                    const SizedBox(width: 8),
+                    Tooltip(
+                      message: protectedTooltip,
+                      child: Icon(
+                        AppIcons.getIcon(AppIcon.lock),
+                        size: 16,
+                        color: baseFolderColor,
+                      ),
+                    ),
+                  ],
                 ],
-                if (folder.isEditable) ...[
-                  const SizedBox(width: 8),
-                  PopupMenuButton<String>(
-                    onSelected: (value) =>
-                        _handleMenuAction(context, folder, value, ref),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 'edit',
-                        child: Row(
-                          children: [
-                            Icon(
-                              AppIcons.getIcon(AppIcon.edit),
-                              size: 16,
-                              color: theme.colorScheme.onSurface,
-                            ),
-                            const SizedBox(width: 8),
-                            Text('تحرير'),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'pin',
-                        child: Row(
-                          children: [
-                            Icon(
-                              folder.isPinned
-                                  ? AppIcons.getIcon(AppIcon.star)
-                                  : AppIcons.getIcon(AppIcon.star),
-                              size: 16,
-                              color: theme.colorScheme.onSurface,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(folder.isPinned ? 'إلغاء التثبيت' : 'تثبيت'),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 'delete',
-                        child: Row(
-                          children: [
-                            Icon(
-                              AppIcons.getIcon(AppIcon.trash),
-                              size: 16,
-                              color: theme.colorScheme.error,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'حذف',
-                              style: TextStyle(color: theme.colorScheme.error),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                    child: Icon(
-                      AppIcons.getIcon(AppIcon.ellipsis),
-                      size: 16,
-                      color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDragHandle({
+    required ThemeData theme,
+    required Folder folder,
+    required int itemIndex,
+    required bool isSelected,
+    required bool showChatCount,
+    required bool isReorderable,
+    required Color iconBackgroundColor,
+    required Color iconColor,
+  }) {
+    final dragContent = Container(
+      height: 48,
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      alignment: Alignment.centerLeft,
+      child: Row(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: iconBackgroundColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(folder.folderIcon, size: 16, color: iconColor),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  folder.name,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
+                    color: isSelected
+                        ? theme.colorScheme.onPrimaryContainer
+                        : theme.colorScheme.onSurface,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (showChatCount && folder.hasChats) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    folder.formattedChatCount,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: isSelected
+                          ? theme.colorScheme.onPrimaryContainer.withAlpha(179)
+                          : theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
               ],
             ),
           ),
-        ),
+          if (folder.hasChats) ...[
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                folder.chatCount.toString(),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: isSelected
+                      ? theme.colorScheme.onPrimary
+                      : theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ],
       ),
     );
+
+    if (!isReorderable) {
+      return dragContent;
+    }
+
+    return ReorderableDragStartListener(index: itemIndex, child: dragContent);
   }
 
   /// بناء حالة فارغة
@@ -402,17 +512,116 @@ class FolderSidebar extends ConsumerWidget {
   List<Folder> _getOrderedFolders(FolderState folderState) {
     final folders = List<Folder>.from(folderState.visibleFolders);
 
-    if (showPinnedFirst) {
-      folders.sort((a, b) {
-        if (a.isPinned && !b.isPinned) return -1;
-        if (!a.isPinned && b.isPinned) return 1;
-        return a.name.compareTo(b.name);
-      });
-    } else {
-      folders.sort((a, b) => a.name.compareTo(b.name));
+    if (widget.showPinnedFirst) {
+      final pinned = folders.where((folder) => folder.isPinned).toList();
+      final others = folders.where((folder) => !folder.isPinned).toList();
+      return [...pinned, ...others];
     }
 
     return folders;
+  }
+
+  void _handleFolderReorder(
+    FolderState folderState,
+    List<Folder> currentOrder,
+    WidgetRef ref,
+    int oldIndex,
+    int newIndex,
+  ) {
+    if (oldIndex == newIndex) return;
+
+    final updatedVisibleOrder = _reorderNonFixedVisibleFolders(
+      currentOrder,
+      oldIndex,
+      newIndex,
+    );
+
+    if (_areOrdersEqual(currentOrder, updatedVisibleOrder)) {
+      return;
+    }
+
+    final mergedOrder = _mergeVisibleAndHiddenOrders(
+      folderState,
+      updatedVisibleOrder,
+    );
+
+    ref.read(folderProvider.notifier).reorderFolders(mergedOrder);
+  }
+
+  List<Folder> _reorderNonFixedVisibleFolders(
+    List<Folder> currentOrder,
+    int oldIndex,
+    int newIndex,
+  ) {
+    if (currentOrder.isEmpty) return currentOrder;
+    var targetIndex = newIndex;
+    if (targetIndex > oldIndex) {
+      targetIndex -= 1;
+    }
+    targetIndex = targetIndex.clamp(0, currentOrder.length - 1);
+
+    final movingFolder = currentOrder[oldIndex];
+    if (movingFolder.isFixed) {
+      return currentOrder;
+    }
+
+    final nonFixedFolders = currentOrder
+        .where((folder) => !folder.isFixed)
+        .toList();
+
+    final customOldIndex = currentOrder
+        .take(oldIndex)
+        .where((f) => !f.isFixed)
+        .length;
+    final customTargetIndex = currentOrder
+        .take(targetIndex)
+        .where((f) => !f.isFixed)
+        .length;
+
+    final folderToMove = nonFixedFolders.removeAt(customOldIndex);
+    final clampedTarget = customTargetIndex.clamp(0, nonFixedFolders.length);
+    nonFixedFolders.insert(clampedTarget, folderToMove);
+
+    final updatedOrder = <Folder>[];
+    var customPointer = 0;
+    for (final folder in currentOrder) {
+      if (folder.isFixed) {
+        updatedOrder.add(folder);
+      } else {
+        updatedOrder.add(nonFixedFolders[customPointer++]);
+      }
+    }
+
+    return updatedOrder;
+  }
+
+  List<Folder> _mergeVisibleAndHiddenOrders(
+    FolderState folderState,
+    List<Folder> visibleOrder,
+  ) {
+    final merged = <Folder>[];
+    var visibleIndex = 0;
+
+    for (final folder in folderState.folders) {
+      if (folder.isHidden) {
+        merged.add(folder);
+      } else {
+        merged.add(visibleOrder[visibleIndex++]);
+      }
+    }
+
+    return merged;
+  }
+
+  bool _areOrdersEqual(List<Folder> a, List<Folder> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i].id != b[i].id) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /// عرض قائمة المجلد
@@ -440,7 +649,7 @@ class FolderSidebar extends ConsumerWidget {
             title: Text('تحرير المجلد'),
             onTap: () {
               Navigator.pop(context);
-              onEditFolder?.call(folder);
+              widget.onEditFolder?.call(folder);
             },
           ),
           ListTile(
@@ -495,7 +704,7 @@ class FolderSidebar extends ConsumerWidget {
             onPressed: () {
               Navigator.pop(context);
               ref.read(folderProvider.notifier).deleteFolder(folder.id);
-              onDeleteFolder?.call(folder);
+              widget.onDeleteFolder?.call(folder);
             },
             child: Text(
               'حذف',
@@ -516,7 +725,7 @@ class FolderSidebar extends ConsumerWidget {
   ) {
     switch (action) {
       case 'edit':
-        onEditFolder?.call(folder);
+        widget.onEditFolder?.call(folder);
         break;
       case 'pin':
         ref.read(folderProvider.notifier).toggleFolderPin(folder.id);

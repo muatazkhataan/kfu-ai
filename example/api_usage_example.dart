@@ -19,8 +19,8 @@ Future<void> fullWorkflowExample() async {
   // ==================== 1. تسجيل الدخول ====================
   print('📝 الخطوة 1: تسجيل الدخول...');
   final loginRequest = LoginRequest(
-    studentNumber: '123456',
-    password: 'password123',
+    studentNumber: 'mkhataan',
+    password: 'Vova@2009',
   );
 
   final loginResponse = await apiManager.auth.login(loginRequest);

@@ -15,7 +15,12 @@ class SearchApiService {
     SearchChatsRequest request,
   ) async {
     try {
+      print('[SearchApiService] 🔍 بدء البحث...');
+      print('[SearchApiService] 📝 Query: "${request.query}"');
+      print('[SearchApiService] ✅ isValid: ${request.isValid}');
+      
       if (!request.isValid) {
+        print('[SearchApiService] ❌ طلب البحث غير صحيح');
         return ApiResponse.error(
           error: 'يرجى إدخال نص البحث',
           errorCode: 'INVALID_INPUT',
@@ -23,18 +28,43 @@ class SearchApiService {
         );
       }
 
+      final requestBody = request.toJson();
+      print('[SearchApiService] 📤 إرسال الطلب إلى: ${ApiEndpoints.searchChats}');
+      print('[SearchApiService] 📦 Request Body: $requestBody');
+
       final response = await _apiClient.post<List<SessionDto>>(
         endpoint: ApiEndpoints.searchChats,
-        body: request.toJson(),
+        body: requestBody,
         fromJson: (json) {
+          print('[SearchApiService] 📥 استلام الاستجابة...');
+          print('[SearchApiService] 📋 Response Type: ${json.runtimeType}');
+          
           if (json is List) {
+            print('[SearchApiService] ✅ Response is List with ${json.length} items');
             return json.map((item) => SessionDto.fromJson(item)).toList();
           }
+          
+          // قد يكون API يعيد object مع Results array
+          if (json is Map<String, dynamic> && json['Results'] != null) {
+            final results = json['Results'] as List;
+            print('[SearchApiService] ✅ Response is Map with Results array (${results.length} items)');
+            return results.map((item) => SessionDto.fromJson(item)).toList();
+          }
+          
+          print('[SearchApiService] ⚠️ Response format not recognized, returning empty list');
           return [];
         },
       );
+      
+      print('[SearchApiService] 📊 Response Success: ${response.success}');
+      if (!response.success) {
+        print('[SearchApiService] ❌ Error: ${response.error}');
+      }
+      
       return response;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('[SearchApiService] 💥 Exception: $e');
+      print('[SearchApiService] 📚 Stack: $stackTrace');
       return ApiResponse.error(
         error: 'فشل البحث: ${e.toString()}',
         errorCode: 'SEARCH_FAILED',

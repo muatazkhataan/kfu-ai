@@ -11,8 +11,8 @@ import 'package:http/http.dart' as http;
 
 void main() async {
   // ⚠️ ضع بياناتك الحقيقية هنا ⚠️
-  const studentNumber = '2284896111'; // الرقم الجامعي
-  const password = 'Kfu@ai@2025'; // كلمة مرورك
+  const studentNumber = 'mkhataan'; // الرقم الجامعي
+  const password = 'Vova@2009'; // كلمة مرورك
 
   final baseUrl = 'https://kfusmartapi.kfu.edu.sa';
 

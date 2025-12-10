@@ -45,6 +45,21 @@ class MessageBubble extends ConsumerWidget {
   /// دالة الاستدعاء عند الرد على الرسالة
   final VoidCallback? onReply;
 
+  /// دالة الاستدعاء عند نسخ الرسالة
+  final VoidCallback? onCopy;
+
+  /// دالة الاستدعاء عند تحرير رسالة المستخدم (إعادة إضافة للتحرير)
+  final VoidCallback? onEditMessage;
+
+  /// دالة الاستدعاء عند الإعجاب بالإجابة
+  final VoidCallback? onThumbUp;
+
+  /// دالة الاستدعاء عند عدم الإعجاب بالإجابة
+  final VoidCallback? onThumbDown;
+
+  /// دالة الاستدعاء عند إعادة المحاولة
+  final VoidCallback? onRetry;
+
   const MessageBubble({
     super.key,
     required this.message,
@@ -58,6 +73,11 @@ class MessageBubble extends ConsumerWidget {
     this.onEdit,
     this.onDelete,
     this.onReply,
+    this.onCopy,
+    this.onEditMessage,
+    this.onThumbUp,
+    this.onThumbDown,
+    this.onRetry,
   });
 
   @override
@@ -313,15 +333,6 @@ class MessageBubble extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  if (showTimestamp) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      message.formattedTime,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
                   if (message.state.isFailed) ...[
                     const SizedBox(height: 4),
                     Row(
@@ -342,6 +353,9 @@ class MessageBubble extends ConsumerWidget {
                       ],
                     ),
                   ],
+                  // أزرار التفاعل لرسائل المستخدم
+                  const SizedBox(height: 8),
+                  _buildUserMessageActions(context, theme),
                 ],
               ),
             ),
@@ -406,13 +420,17 @@ class MessageBubble extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // عرض المحتوى (HTML أو نص عادي)
-                          _buildMessageText(
-                            context,
-                            theme,
-                            isUser,
-                            isAssistant,
-                            message.content,
-                          ),
+                          // إذا كانت الرسالة فارغة أو في حالة إرسال، اعرض مؤشر تحميل
+                          if (isAssistant && (message.content.isEmpty || message.state.isSending))
+                            _buildLoadingIndicator(theme)
+                          else
+                            _buildMessageText(
+                              context,
+                              theme,
+                              isUser,
+                              isAssistant,
+                              message.content,
+                            ),
                           if (message.hasAttachments) ...[
                             const SizedBox(height: 8),
                             _buildAttachments(theme),
@@ -421,15 +439,6 @@ class MessageBubble extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  if (showTimestamp) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      message.formattedTime,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
                   if (message.state.isFailed) ...[
                     const SizedBox(height: 4),
                     Row(
@@ -450,6 +459,11 @@ class MessageBubble extends ConsumerWidget {
                       ],
                     ),
                   ],
+                  // أزرار التفاعل لرسائل المساعد (لا تظهر إذا كانت الرسالة فارغة)
+                  if (message.content.isNotEmpty && !message.state.isSending) ...[
+                    const SizedBox(height: 8),
+                    _buildAssistantMessageActions(context, theme),
+                  ],
                 ],
               ),
             ),
@@ -457,6 +471,104 @@ class MessageBubble extends ConsumerWidget {
         ],
       );
     }
+  }
+
+  /// بناء أزرار التفاعل لرسائل المستخدم
+  Widget _buildUserMessageActions(BuildContext context, ThemeData theme) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // زر النسخ
+        _buildActionButton(
+          context,
+          theme,
+          icon: AppIcon.copy,
+          tooltip: context.l10n.chatMessageCopy,
+          onTap: onCopy,
+        ),
+        const SizedBox(width: 8),
+        // زر التحرير
+        _buildActionButton(
+          context,
+          theme,
+          icon: AppIcon.edit,
+          tooltip: context.l10n.chatMessageEdit,
+          onTap: onEditMessage,
+        ),
+      ],
+    );
+  }
+
+  /// بناء أزرار التفاعل لرسائل المساعد
+  Widget _buildAssistantMessageActions(BuildContext context, ThemeData theme) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // زر النسخ
+        _buildActionButton(
+          context,
+          theme,
+          icon: AppIcon.copy,
+          tooltip: context.l10n.chatMessageCopy,
+          onTap: onCopy,
+        ),
+        const SizedBox(width: 8),
+        // زر الإعجاب
+        _buildActionButton(
+          context,
+          theme,
+          icon: AppIcon.thumbsUp,
+          tooltip: context.l10n.chatMessageThumbUp,
+          onTap: onThumbUp,
+        ),
+        const SizedBox(width: 8),
+        // زر عدم الإعجاب
+        _buildActionButton(
+          context,
+          theme,
+          icon: AppIcon.thumbsDown,
+          tooltip: context.l10n.chatMessageThumbDown,
+          onTap: onThumbDown,
+        ),
+        const SizedBox(width: 8),
+        // زر إعادة المحاولة
+        _buildActionButton(
+          context,
+          theme,
+          icon: AppIcon.refresh,
+          tooltip: context.l10n.chatMessageRetry,
+          onTap: onRetry,
+        ),
+      ],
+    );
+  }
+
+  /// بناء زر إجراء واحد
+  Widget _buildActionButton(
+    BuildContext context,
+    ThemeData theme, {
+    required AppIcon icon,
+    required String tooltip,
+    required VoidCallback? onTap,
+  }) {
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.all(6),
+            child: Icon(
+              AppIcons.getIcon(icon),
+              size: 16,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   /// بناء محتوى الرسالة (HTML أو نص عادي)
@@ -541,8 +653,9 @@ class MessageBubble extends ConsumerWidget {
 
           // حساب عرض العناصر الثابتة (الأيقونة + النص + المسافات)
           final iconWidth = 14.0 + 4.0; // حجم الأيقونة + المسافة
+          final sourcesText = context.l10n.chatSources;
           final textWidth = _measureTextWidth(
-            'المصادر',
+            sourcesText,
             theme.textTheme.labelMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ) ??
@@ -581,7 +694,7 @@ class MessageBubble extends ConsumerWidget {
                 GestureDetector(
                   onTap: () => _showSourcesDrawer(context, theme, sources),
                   child: Text(
-                    'المصادر',
+                    context.l10n.chatSources,
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: theme.colorScheme.primary,
                       fontWeight: FontWeight.bold,
@@ -631,7 +744,7 @@ class MessageBubble extends ConsumerWidget {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
-      barrierLabel: 'إغلاق',
+      barrierLabel: context.l10n.commonCancel,
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) {
@@ -693,7 +806,7 @@ class MessageBubble extends ConsumerWidget {
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        'المصادر',
+                        context.l10n.chatSources,
                         style: theme.textTheme.titleLarge?.copyWith(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.bold,
@@ -963,6 +1076,33 @@ class MessageBubble extends ConsumerWidget {
         return AppIcons.getIcon(AppIcon.file);
     }
   }
+
+  /// بناء مؤشر التحميل للرسالة الفارغة
+  Widget _buildLoadingIndicator(ThemeData theme) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: 16,
+          height: 16,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            valueColor: AlwaysStoppedAnimation<Color>(
+              theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          'جاري الكتابة...',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 /// مكون قائمة الإجراءات للرسالة
@@ -1024,7 +1164,7 @@ class MessageActionsMenu extends StatelessWidget {
                   color: theme.colorScheme.onSurface,
                 ),
                 const SizedBox(width: 12),
-                Text('الرد'),
+                Text(context.l10n.chatReply),
               ],
             ),
           ),
@@ -1038,7 +1178,7 @@ class MessageActionsMenu extends StatelessWidget {
                   color: theme.colorScheme.onSurface,
                 ),
                 const SizedBox(width: 12),
-                Text('نسخ'),
+                Text(context.l10n.chatCopy),
               ],
             ),
           ),
@@ -1052,7 +1192,7 @@ class MessageActionsMenu extends StatelessWidget {
                   color: theme.colorScheme.onSurface,
                 ),
                 const SizedBox(width: 12),
-                Text('مشاركة'),
+                Text(context.l10n.chatShare),
               ],
             ),
           ),
@@ -1069,7 +1209,7 @@ class MessageActionsMenu extends StatelessWidget {
                   color: theme.colorScheme.onSurface,
                 ),
                 const SizedBox(width: 12),
-                Text('تحرير'),
+                Text(context.l10n.chatEdit),
               ],
             ),
           ),

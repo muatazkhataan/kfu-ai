@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../domain/models/app_settings.dart';
 import '../../domain/models/settings_category.dart';
+import '../../../../services/storage/settings_storage_service.dart';
+import '../../../../services/storage/hive_box_manager.dart';
 
 /// مستودع البيانات للإعدادات
 abstract class SettingsRepository {
@@ -30,24 +32,38 @@ abstract class SettingsRepository {
 
 /// تطبيق محلي لمستودع الإعدادات باستخدام Hive
 class LocalSettingsRepository implements SettingsRepository {
-  static const String _settingsBoxName = 'app_settings';
   static const String _usageInfoBoxName = 'usage_info';
 
-  Box<String>? _settingsBox;
+  /// خدمة تخزين الإعدادات
+  final SettingsStorageService _storageService = SettingsStorageService();
+  
+  /// مدير Boxes
+  final HiveBoxManager _boxManager = HiveBoxManager();
+  
+  /// Box لمعلومات الاستخدام
   Box<String>? _usageInfoBox;
+  
+  /// حالة التهيئة
+  bool _initialized = false;
 
   /// تهيئة المستودع
   Future<void> initialize() async {
-    if (!Hive.isBoxOpen(_settingsBoxName)) {
-      _settingsBox = await Hive.openBox<String>(_settingsBoxName);
-    } else {
-      _settingsBox = Hive.box<String>(_settingsBoxName);
+    if (_initialized) {
+      return;
     }
 
-    if (!Hive.isBoxOpen(_usageInfoBoxName)) {
-      _usageInfoBox = await Hive.openBox<String>(_usageInfoBoxName);
-    } else {
-      _usageInfoBox = Hive.box<String>(_usageInfoBoxName);
+    try {
+      // تهيئة خدمة التخزين
+      await _storageService.initialize();
+      
+      // فتح Box لمعلومات الاستخدام
+      _usageInfoBox = await _boxManager.openBox<String>(_usageInfoBoxName);
+      
+      _initialized = true;
+      debugPrint('[LocalSettingsRepository] ✅ تم تهيئة المستودع بنجاح');
+    } catch (e) {
+      debugPrint('[LocalSettingsRepository] ❌ خطأ في تهيئة المستودع: $e');
+      rethrow;
     }
   }
 
@@ -56,16 +72,14 @@ class LocalSettingsRepository implements SettingsRepository {
     try {
       await initialize();
 
-      final settingsJson = _settingsBox!.get('settings');
-      if (settingsJson == null) {
+      final settings = await _storageService.loadSettings();
+      
+      if (settings == null) {
         debugPrint(
           '[SettingsRepository] 📥 لا توجد إعدادات محفوظة، استخدام الافتراضية',
         );
         return const AppSettings();
       }
-
-      final settingsMap = json.decode(settingsJson) as Map<String, dynamic>;
-      final settings = AppSettings.fromJson(settingsMap);
 
       debugPrint('[SettingsRepository] ✅ تم تحميل الإعدادات بنجاح');
       return settings;
@@ -87,14 +101,8 @@ class LocalSettingsRepository implements SettingsRepository {
         );
       }
 
-      final settingsJson = json.encode(settings.toJson());
-      await _settingsBox!.put('settings', settingsJson);
-
-      // تحديث تاريخ آخر حفظ
-      await _settingsBox!.put(
-        'last_settings_save',
-        DateTime.now().toIso8601String(),
-      );
+      // حفظ الإعدادات باستخدام خدمة التخزين
+      await _storageService.saveSettings(settings);
 
       debugPrint('[SettingsRepository] ✅ تم حفظ الإعدادات بنجاح');
       return SettingsSaveSuccess(
@@ -116,8 +124,7 @@ class LocalSettingsRepository implements SettingsRepository {
       await initialize();
 
       // حذف الإعدادات المحفوظة
-      await _settingsBox!.delete('settings');
-      await _settingsBox!.delete('last_settings_save');
+      await _storageService.deleteSettings();
 
       debugPrint('[SettingsRepository] 🔄 تم إعادة تعيين الإعدادات');
       return SettingsSaveSuccess(
@@ -182,12 +189,21 @@ class LocalSettingsRepository implements SettingsRepository {
 
       final usageJson = _usageInfoBox!.get('usage_info');
       if (usageJson == null) {
-        return const SettingsUsageInfo();
+        // حساب حجم التخزين من خدمة الإعدادات
+        final storageSize = await _storageService.getStorageSize();
+        return SettingsUsageInfo(
+          storageUsedMB: storageSize,
+        );
       }
 
       final usageMap = json.decode(usageJson) as Map<String, dynamic>;
+      
+      // إضافة حجم تخزين الإعدادات
+      final settingsSize = await _storageService.getStorageSize();
+      final totalStorage = (usageMap['storageUsedMB'] as num?)?.toDouble() ?? 0;
+      
       return SettingsUsageInfo(
-        storageUsedMB: (usageMap['storageUsedMB'] as num?)?.toDouble() ?? 0,
+        storageUsedMB: totalStorage + settingsSize,
         storageLimitMB: (usageMap['storageLimitMB'] as num?)?.toDouble() ?? 100,
         totalChats: usageMap['totalChats'] as int? ?? 0,
         totalMessages: usageMap['totalMessages'] as int? ?? 0,
@@ -230,15 +246,14 @@ class LocalSettingsRepository implements SettingsRepository {
     try {
       await initialize();
 
-      // تنظيف البيانات القديمة (أكثر من 30 يوم)
-      await initialize();
-      final keys = _settingsBox!.keys.toList();
+      // تنظيف البيانات القديمة من Box معلومات الاستخدام
+      final keys = _usageInfoBox!.keys.toList();
       final now = DateTime.now();
 
       for (final key in keys) {
         if (key.toString().startsWith('temp_') ||
             key.toString().startsWith('cache_')) {
-          final value = _settingsBox!.get(key);
+          final value = _usageInfoBox!.get(key);
           if (value != null) {
             try {
               final data = json.decode(value) as Map<String, dynamic>;
@@ -247,18 +262,20 @@ class LocalSettingsRepository implements SettingsRepository {
               );
 
               if (timestamp != null && now.difference(timestamp).inDays > 30) {
-                await _settingsBox!.delete(key);
+                await _usageInfoBox!.delete(key);
                 debugPrint(
                   '[SettingsRepository] 🗑️ تم حذف البيانات القديمة: $key',
                 );
               }
             } catch (e) {
               // تجاهل الأخطاء في البيانات التالفة
-              await _settingsBox!.delete(key);
+              await _usageInfoBox!.delete(key);
             }
           }
         }
       }
+      
+      debugPrint('[SettingsRepository] ✅ تم تنظيف البيانات القديمة');
     } catch (e) {
       debugPrint('[SettingsRepository] ❌ خطأ في تنظيف البيانات: $e');
     }
@@ -269,27 +286,21 @@ class LocalSettingsRepository implements SettingsRepository {
     try {
       await initialize();
 
-      final keys = _settingsBox!.keys.toList();
-      int totalSize = 0;
-
-      for (final key in keys) {
-        final value = _settingsBox!.get(key);
-        if (value != null) {
-          totalSize += value.toString().length;
-        }
-      }
-
-      // إضافة حجم صندوق معلومات الاستخدام
+      // حجم تخزين الإعدادات
+      final settingsSize = await _storageService.getStorageSize();
+      
+      // حجم Box معلومات الاستخدام
+      int usageSize = 0;
       final usageKeys = _usageInfoBox!.keys.toList();
       for (final key in usageKeys) {
         final value = _usageInfoBox!.get(key);
         if (value != null) {
-          totalSize += value.toString().length;
+          usageSize += value.toString().length;
         }
       }
-
-      // تحويل من bytes إلى MB
-      return totalSize / (1024 * 1024);
+      
+      final totalSize = settingsSize + (usageSize / (1024 * 1024));
+      return totalSize;
     } catch (e) {
       debugPrint('[SettingsRepository] ❌ خطأ في حساب حجم التخزين: $e');
       return 0.0;

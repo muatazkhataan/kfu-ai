@@ -467,22 +467,23 @@ class FolderNotifier extends StateNotifier<FolderState> {
 
   /// إعادة ترتيب المجلدات
   Future<void> reorderFolders(List<Folder> reorderedFolders) async {
+    final previousFolders = List<Folder>.from(state.folders);
     try {
-      state = state.copyWith(isUpdatingFolder: true, updateError: null);
+      state = state.copyWith(
+        folders: reorderedFolders,
+        isUpdatingFolder: true,
+        updateError: null,
+      );
 
       // استخراج معرفات المجلدات بالترتيب الجديد
       final folderIds = reorderedFolders.map((f) => f.id).toList();
 
       // استخدام Use Case لتحديث الترتيب
       await _updateFolderOrderUseCase(folderIds);
-
-      // تحديث الحالة
-      state = state.copyWith(
-        folders: reorderedFolders,
-        isUpdatingFolder: false,
-      );
+      state = state.copyWith(isUpdatingFolder: false);
     } catch (e) {
       state = state.copyWith(
+        folders: previousFolders,
         isUpdatingFolder: false,
         updateError: 'فشل في إعادة ترتيب المجلدات: ${e.toString()}',
       );

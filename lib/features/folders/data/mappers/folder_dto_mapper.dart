@@ -1,6 +1,7 @@
 import '../../domain/models/folder.dart';
 import '../../domain/models/folder_icon.dart';
 import '../../domain/models/folder_type.dart';
+import '../../domain/models/folder_permissions.dart';
 import '../../../../services/api/folder/models/folder_dto.dart';
 import '../../../../core/theme/icons.dart';
 
@@ -38,12 +39,21 @@ class FolderDtoMapper {
     // تحديد نوع المجلد
     final folderType = isFixed ? FolderType.fixed : FolderType.custom;
 
+    // تحديد الصلاحيات بناءً على نوع المجلد
+    // المجلدات المخصصة يجب أن يكون لديها canManage = true لتتمكن من تغيير الأيقونة والاسم
+    final permissions = folderType.isCustom || folderType.isTemporary
+        ? FolderPermissions.full // صلاحيات كاملة للمجلدات المخصصة
+        : isFixed
+            ? FolderPermissions.system // صلاحيات النظام للمجلدات الثابتة
+            : FolderPermissions.full; // افتراضي: صلاحيات كاملة
+
     return Folder(
       id: dto.folderId,
       name: dto.name,
       userId: 'current_user', // TODO: الحصول من Auth Service
       type: folderType,
       icon: folderIcon,
+      permissions: permissions,
       createdAt: dto.createdAt,
       updatedAt: dto.updatedAt,
       chatCount: dto.chatCount,

@@ -39,7 +39,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('المحادثات الأخيرة'),
+        title: Text(context.l10n.chatHistoryFilterRecent),
         backgroundColor: theme.colorScheme.surface,
         foregroundColor: theme.colorScheme.onSurface,
         elevation: 0,
@@ -73,8 +73,14 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
             controller: _searchController,
             onChanged: (value) {
               setState(() {
-                _searchQuery = value.toLowerCase();
+                _searchQuery = value;
               });
+              // استدعاء البحث من API
+              if (value.trim().isEmpty) {
+                ref.read(chatHistoryProvider.notifier).searchChats('');
+              } else {
+                ref.read(chatHistoryProvider.notifier).searchChats(value);
+              }
             },
             decoration: InputDecoration(
               hintText: context.l10n.chatHistorySearchPlaceholder,
@@ -89,6 +95,8 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                         setState(() {
                           _searchQuery = '';
                         });
+                        // إعادة تعيين البحث
+                        ref.read(chatHistoryProvider.notifier).searchChats('');
                       },
                       icon: Icon(
                         Icons.clear,
@@ -233,34 +241,53 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
   Widget _buildChatHistoryList(ThemeData theme) {
     final chatHistoryState = ref.watch(chatHistoryProvider);
 
-    // حالة التحميل
+    // حالة التحميل الأولي
     if (chatHistoryState.isLoadingChats && !chatHistoryState.hasLoadedInitial) {
       return _buildLoadingState(theme);
     }
 
-    // فلترة المحادثات حسب البحث
-    final allChats = chatHistoryState.allChats;
-    final filteredChats = _searchQuery.isEmpty
-        ? allChats
-        : allChats
-              .where(
-                (chat) =>
-                    chat.title.toLowerCase().contains(
-                      _searchQuery.toLowerCase(),
-                    ) ||
-                    (chat.lastMessagePreview?.toLowerCase().contains(
-                          _searchQuery.toLowerCase(),
-                        ) ??
-                        false) ||
-                    (chat.description?.toLowerCase().contains(
-                          _searchQuery.toLowerCase(),
-                        ) ??
-                        false),
-              )
-              .toList();
+    // حالة البحث جاري
+    if (chatHistoryState.isSearching) {
+      return _buildLoadingState(theme);
+    }
+
+    // استخدام المحادثات المفلترة من Provider (التي تأتي من API)
+    final filteredChats = chatHistoryState.filteredChats;
+
+    // عرض رسالة خطأ البحث إذا وجدت
+    if (chatHistoryState.searchError != null && filteredChats.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 48,
+                color: theme.colorScheme.error,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'خطأ في البحث',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                chatHistoryState.searchError!,
+                style: theme.textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     if (filteredChats.isEmpty) {
-      return _buildEmptyState(theme, chatHistoryState.error);
+      return _buildEmptyState(theme, chatHistoryState.error ?? chatHistoryState.searchError);
     }
 
     return Column(
@@ -554,7 +581,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
     ref.read(chatProvider.notifier).loadChat(chat.id);
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text('جاري فتح المحادثة: ${chat.title}')));
+    ).showSnackBar(SnackBar(content: Text(context.l10n.chatOpeningChat(chat.title))));
   }
 
   /// Show chat menu
@@ -572,7 +599,9 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                 color: theme.colorScheme.error,
               ),
               title: Text(
-                chat.isFavorite ? 'إزالة من المفضلة' : 'إضافة للمفضلة',
+                chat.isFavorite 
+                    ? context.l10n.chatRemoveFromFavorites 
+                    : context.l10n.chatAddToFavorites,
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -584,7 +613,9 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
                 chat.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
                 color: theme.colorScheme.primary,
               ),
-              title: Text(chat.isPinned ? 'إلغاء التثبيت' : 'تثبيت'),
+              title: Text(chat.isPinned 
+                  ? context.l10n.chatUnpin 
+                  : context.l10n.chatPin),
               onTap: () {
                 Navigator.pop(context);
                 // TODO: Toggle pin status
@@ -650,7 +681,7 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
               // حذف المحادثة
               ref.read(chatHistoryProvider.notifier).deleteChat(chat.id);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('تم حذف المحادثة: ${chat.title}')),
+                SnackBar(content: Text(context.l10n.chatDeleted(chat.title))),
               );
             },
             style: TextButton.styleFrom(
@@ -668,6 +699,6 @@ class _ChatHistoryScreenState extends ConsumerState<ChatHistoryScreen> {
     ref.read(chatHistoryProvider.notifier).refresh();
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('تم تحديث سجل المحادثات')));
+    ).showSnackBar(SnackBar(content: Text(context.l10n.chatHistoryUpdated)));
   }
 }

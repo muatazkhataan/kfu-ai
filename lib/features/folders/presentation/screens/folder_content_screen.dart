@@ -5,6 +5,9 @@ import '../../domain/usecases/get_folder_chats_usecase.dart';
 import '../../data/providers/folder_repository_provider.dart';
 import '../widgets/folder_chat_list_widget.dart';
 import '../../../../core/theme/icons.dart';
+import '../../../../core/localization/l10n.dart';
+import '../../../../services/api/chat/models/session_dto.dart';
+import '../../../../features/chat/presentation/providers/chat_provider.dart';
 
 /// شاشة محتوى المجلد
 ///
@@ -22,7 +25,7 @@ class FolderContentScreen extends ConsumerStatefulWidget {
 }
 
 class _FolderContentScreenState extends ConsumerState<FolderContentScreen> {
-  List<dynamic> _chats = [];
+  List<SessionDto> _chats = [];
   bool _isLoading = false;
   String? _error;
 
@@ -44,8 +47,13 @@ class _FolderContentScreenState extends ConsumerState<FolderContentScreen> {
       );
       final chats = await useCase(widget.folder.id);
       
+      // تحويل dynamic إلى SessionDto (البيانات بالفعل List<SessionDto> من API)
+      final sessionDtos = chats
+          .map((chat) => chat as SessionDto)
+          .toList();
+      
       setState(() {
-        _chats = chats;
+        _chats = sessionDtos;
         _isLoading = false;
       });
     } catch (e) {
@@ -102,7 +110,7 @@ class _FolderContentScreenState extends ConsumerState<FolderContentScreen> {
           IconButton(
             icon: Icon(AppIcons.getIcon(AppIcon.refresh)),
             onPressed: _loadFolderChats,
-            tooltip: 'تحديث',
+            tooltip: context.l10n.chatHistoryRefresh,
           ),
         ],
       ),
@@ -176,11 +184,22 @@ class _FolderContentScreenState extends ConsumerState<FolderContentScreen> {
     return FolderChatListWidget(
       chats: _chats,
       onChatTap: (chat) {
-        // TODO: Navigate to chat screen
-        final sessionId = chat['Id'] ?? chat['SessionId'] ?? chat['sessionId'];
-        if (sessionId != null) {
-          // Navigator.push(...)
+        final sessionId = chat.sessionId;
+        if (sessionId.isNotEmpty) {
+          // إغلاق الشاشة الحالية والعودة للشاشة السابقة
+          Navigator.pop(context);
+          
+          // تحميل المحادثة في ChatScreen
+          // سيتم تحميلها حتى لو لم نكن في ChatScreen حالياً
+          ref.read(chatProvider.notifier).loadChat(sessionId);
+          
+          // ignore: avoid_print
+          print('✅ تم فتح المحادثة من FolderContentScreen: $sessionId');
         }
+      },
+      onChatDeletedOrMoved: () {
+        // إعادة تحميل محادثات المجلد بعد الحذف أو النقل
+        _loadFolderChats();
       },
     );
   }

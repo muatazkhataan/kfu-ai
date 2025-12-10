@@ -194,6 +194,8 @@ enum AppIcon {
   folderOpen,
   heart,
   thumbtack,
+  thumbsUp,
+  thumbsDown,
 
   // Settings & Configuration
   settings,
@@ -634,6 +636,10 @@ class AppIcons {
         return FontAwesomeIcons.heart;
       case AppIcon.thumbtack:
         return FontAwesomeIcons.thumbtack;
+      case AppIcon.thumbsUp:
+        return FontAwesomeIcons.thumbsUp;
+      case AppIcon.thumbsDown:
+        return FontAwesomeIcons.thumbsDown;
 
       // Settings & Configuration
       case AppIcon.settings:
@@ -1060,6 +1066,8 @@ const Map<String, AppIcon> _fontAwesomeToAppIconMap = {
   'folder-open': AppIcon.folderOpen,
   'heart': AppIcon.heart,
   'thumbtack': AppIcon.thumbtack,
+  'thumbs-up': AppIcon.thumbsUp,
+  'thumbs-down': AppIcon.thumbsDown,
 
   // Settings & Configuration
   'gear': AppIcon.settings,
